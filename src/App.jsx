@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 // --- FOTO DARI GITHUB KAMU ---
-const fotoProfil = "https://avatars.githubusercontent.com/u/125689177?v=4"; 
+const fotoProfil = "/profile.jpg";
 // -----------------------------
 
 // =================================================================
