@@ -1,21 +1,23 @@
 import { useState } from 'react';
 import { 
   ArrowUpRight, Github, Linkedin, Mail, ChevronRight, 
-  Code, Layout, Database, Smartphone, Download, Zap
+  Code, Layout, Database, Smartphone, Download, Zap,
+  Menu, X 
 } from 'lucide-react';
 
 // --- FOTO DARI GITHUB KAMU ---
-const fotoProfil = "https://avatars.githubusercontent.com/u/125689177?v=4"; 
+const fotoProfil = "/profile.jpg"; 
 // -----------------------------
 
 // =================================================================
-// KOMPONEN CARD DAN STUB UTAMA (Tidak Berubah)
+// 1. KOMPONEN CARD DAN STUB UTAMA
 // =================================================================
 
+// Komponen Reusable untuk Kartu Keahlian di Services Page (DENGAN ANIMASI HOVER)
 const SkillCard = ({ title, description, techs, icon }) => (
-    <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
+    <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-blue-500">
         <div className="flex items-start mb-4">
-            <div className="bg-blue-100 text-blue-600 p-3 rounded-full mr-4 flex-shrink-0">{icon}</div>
+            <div className="bg-blue-100 text-blue-600 p-3 rounded-full mr-4 flex-shrink-0 flex items-center justify-center">{icon}</div>
             <div>
                 <h3 className="text-2xl font-bold text-slate-900">{title}</h3>
                 <p className="text-slate-500 text-sm">{description}</p>
@@ -31,6 +33,7 @@ const SkillCard = ({ title, description, techs, icon }) => (
     </div>
 );
 
+// Komponen Reusable untuk Kartu Project di Portfolio Page
 const ProjectCard = ({ title, description, stack, link, icon }) => (
     <div className="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 hover:shadow-xl hover:border-amber-400 transition-all duration-300 group">
         <div className="flex items-center justify-between mb-4">
@@ -53,9 +56,8 @@ const ProjectCard = ({ title, description, stack, link, icon }) => (
 
 
 // =================================================================
-// FUNGSI PAGES (ServicesPage, PortfolioPage, ContactPage) - Tidak Berubah
+// 2. HALAMAN SERVICE (Detail Tools)
 // =================================================================
-
 const ServicesPage = () => (
     <div className="pt-12 pb-24">
         <header className="mb-10 text-center">
@@ -96,6 +98,10 @@ const ServicesPage = () => (
     </div>
 );
 
+
+// =================================================================
+// 3. HALAMAN PORTFOLIO (Daftar Project)
+// =================================================================
 const PortfolioPage = () => {
     const projects = [
         {
@@ -150,6 +156,10 @@ const PortfolioPage = () => {
     );
 };
 
+
+// =================================================================
+// 4. HALAMAN KONTAK
+// =================================================================
 const ContactPage = () => (
     <div className="p-12 bg-white min-h-[60vh] rounded-2xl shadow-lg border border-slate-100 text-center flex flex-col justify-center items-center">
         <h2 className="text-4xl font-extrabold text-slate-900 mb-4">CONTACT ME</h2>
@@ -160,8 +170,9 @@ const ContactPage = () => (
     </div>
 );
 
+
 // =================================================================
-// KOMPONEN HOME - PERUBAHAN DI SINI
+// 5. KOMPONEN HOME
 // =================================================================
 const HomePageContent = ({ setActivePage }) => (
   <>
@@ -179,7 +190,7 @@ const HomePageContent = ({ setActivePage }) => (
           Mobile Dev.
         </h1>
         <p className="text-slate-500 text-lg mb-8 max-w-md leading-relaxed">
-          Mahasiswa Teknik Informatika. Spesialisasi di Mobile (Flutter/Kotlin), membangun Backend (Flask, Node.js), dan memiliki keahlian vital dalam Deployment (Docker, CI/CD).
+          Mahasiswa Teknik Informatika. Spesialisasi di Mobile (Flutter/Kotlin), membangun Backend (Flask, Node.js), dan memiliki keahlian vital dalam Deployment (Docker, CI/CD)*.
         </p>
         
         <div className="flex flex-wrap gap-4">
@@ -190,7 +201,6 @@ const HomePageContent = ({ setActivePage }) => (
             VIEW MY PROJECTS
           </button>
           
-          {/* PERUBAHAN DI SINI: Tombol Download menjadi link <a> */}
           <a 
             href="/CV_Azuzu.pdf" 
             download="CV_Azuzu_FullStack.pdf"
@@ -308,6 +318,7 @@ const HomePageContent = ({ setActivePage }) => (
 
 const App = () => {
   const [activePage, setActivePage] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // STATE BARU UNTUK MOBILE NAV
 
   const navLinks = [
     { id: 'home', label: 'Home' },
@@ -337,7 +348,7 @@ const App = () => {
     <div className="min-h-screen bg-white font-sans text-slate-900 overflow-x-hidden">
       
       {/* --- NAVBAR --- */}
-      <nav className="flex justify-between items-center px-6 py-6 md:px-12 max-w-7xl mx-auto">
+      <nav className="flex justify-between items-center px-6 py-6 md:px-12 max-w-7xl mx-auto relative">
         <div className="flex items-center gap-2">
           <div className="bg-slate-900 text-white p-2 rounded-lg">
             <Code size={24} />
@@ -345,22 +356,40 @@ const App = () => {
           <span className="text-xl font-bold tracking-tight">Vio<span className="text-amber-500">Stack</span></span>
         </div>
         
-        <div className="hidden md:flex gap-8 bg-slate-50 px-8 py-3 rounded-full border border-slate-200 shadow-sm">
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center gap-4">
+            <a href="mailto:sequadtaswan@gmail.com" className="text-sm font-bold text-slate-900 hover:text-amber-500">
+                HIRE
+            </a>
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 border border-slate-200 rounded-md">
+                {isMenuOpen ? <X size={24}/> : <Menu size={24}/>}
+            </button>
+        </div>
+
+
+        {/* Nav Links Container */}
+        <div className={`
+          md:flex md:relative absolute top-full left-0 right-0 z-50 
+          md:w-auto bg-white md:bg-slate-50 shadow-lg md:shadow-none p-4 md:p-0 
+          transition-all duration-300
+          ${isMenuOpen ? 'block' : 'hidden'} 
+        `}>
           {navLinks.map((link) => (
             <button 
               key={link.id}
-              onClick={() => setActivePage(link.id)}
-              className={`text-sm font-semibold transition-colors ${activePage === link.id ? 'text-amber-600' : 'text-slate-500 hover:text-slate-900'}`}
+              onClick={() => { setActivePage(link.id); setIsMenuOpen(false); }} // Tutup menu setelah klik
+              className={`text-sm font-semibold transition-colors w-full md:w-auto text-left md:text-center py-2 md:py-0 px-0 md:px-8 
+                          ${activePage === link.id ? 'text-amber-600' : 'text-slate-500 hover:text-slate-900'}`}
             >
               {link.label.toUpperCase()}
             </button>
           ))}
         </div>
 
-        {/* Tombol HIRE ME (Kembali ke Routing) */}
+        {/* Tombol HIRE ME (Desktop Only) */}
         <button
           onClick={() => setActivePage('contact')} 
-          className="bg-slate-900 text-white px-6 py-2 rounded-full font-bold hover:bg-slate-800 transition-all flex items-center gap-2 shadow-lg shadow-slate-900/20"
+          className="bg-slate-900 text-white px-6 py-2 rounded-full font-bold hover:bg-slate-800 transition-all flex items-center gap-2 shadow-lg shadow-slate-900/20 hidden md:flex"
         >
           HIRE ME
         </button>
