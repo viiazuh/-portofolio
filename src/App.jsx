@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 // --- FOTO DARI GITHUB KAMU ---
-const fotoProfil = "/profile.jpg";
+const fotoProfil = "https://avatars.githubusercontent.com/u/125689177?v=4"; 
 // -----------------------------
 
 // =================================================================
@@ -53,7 +53,7 @@ const ProjectCard = ({ title, description, stack, link, icon }) => (
 
 
 // =================================================================
-// FUNGSI PAGES (ServicesPage, PortfolioPage, ContactPage, HomePageContent) - Tidak Berubah
+// FUNGSI PAGES (ServicesPage, PortfolioPage, ContactPage) - Tidak Berubah
 // =================================================================
 
 const ServicesPage = () => (
@@ -160,6 +160,9 @@ const ContactPage = () => (
     </div>
 );
 
+// =================================================================
+// KOMPONEN HOME - PERUBAHAN DI SINI
+// =================================================================
 const HomePageContent = ({ setActivePage }) => (
   <>
     {/* --- HERO SECTION --- */}
@@ -186,9 +189,15 @@ const HomePageContent = ({ setActivePage }) => (
           >
             VIEW MY PROJECTS
           </button>
-          <button className="bg-white border-2 border-slate-200 px-8 py-4 rounded-full font-bold hover:border-slate-900 transition-colors flex items-center gap-2">
+          
+          {/* PERUBAHAN DI SINI: Tombol Download menjadi link <a> */}
+          <a 
+            href="/CV_Azuzu.pdf" 
+            download="CV_Azuzu_FullStack.pdf"
+            className="bg-white border-2 border-slate-200 px-8 py-4 rounded-full font-bold hover:border-slate-900 transition-colors flex items-center gap-2"
+          >
             Download CV <Download size={20}/>
-          </button>
+          </a>
         </div>
       </div>
 
@@ -348,7 +357,7 @@ const App = () => {
           ))}
         </div>
 
-        {/* PERUBAHAN DI SINI: Tombol HIRE ME dikembalikan ke routing */}
+        {/* Tombol HIRE ME (Kembali ke Routing) */}
         <button
           onClick={() => setActivePage('contact')} 
           className="bg-slate-900 text-white px-6 py-2 rounded-full font-bold hover:bg-slate-800 transition-all flex items-center gap-2 shadow-lg shadow-slate-900/20"
