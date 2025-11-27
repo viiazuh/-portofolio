@@ -23,56 +23,56 @@ const CertificatesPage = () => {
             title: "Unity", 
             issuer: "SkillPedia", 
             file: "public/sertifikat-unity-platform.png", 
-            verifyLink: "#" 
+           
         },
          { 
             id: 4,
             title: "Pengembangan Aplikasi Android Intermediate", 
             issuer: "Dicoding",  
             file: "public/Android-Intermediate.png", 
-            verifyLink: "#" 
+         
         },
          { 
             id: 5,
             title: "Belajar Dasar AI", 
             issuer: "Dicoding", 
             file: "public/Belajar-Dasar.Ai.png", 
-            verifyLink: "#" 
+           
         },
         { 
             id: 6,
             title: "Fundamental APlikasi Android", 
             issuer: "Dicoding", 
             file: "public/Fundamental-Aplikasi-Android.png", 
-            verifyLink: "#" 
+           
         },
          { 
             id: 7,
             title: "Fundamental APlikasi Android", 
             issuer: "Dicoding", 
             file: "public/Fundamental-Aplikasi-Android.png", 
-            verifyLink: "#" 
+           
         },
         { 
             id: 8,
             title: "Penerapan Machine Learning pada Android", 
             issuer: "Dicoding", 
             file: "public/ml-android.png", 
-            verifyLink: "#" 
+          
         },
          { 
             id: 9,
             title: "redhat linux Sertifikat", 
             issuer: "huawei", 
             file: "public/redhat.png", 
-            verifyLink: "#" 
+         
         },
         { 
             id: 10,
             title: "Kampus Merdeka", 
             issuer: "huawei", 
             file: "public/sertifikat kampus merdeka.pdf", 
-            verifyLink: "#" 
+           
         },
 
 
