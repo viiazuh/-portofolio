@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
+// PERHATIKAN: ArrowRight sudah saya masukkan di sini
 import { 
   Download, Database, Zap, Code, Smartphone, 
-  ChevronRight, Layout // <-- ArrowRight sudah diganti ChevronRight
+  ArrowRight, Layout 
 } from 'lucide-react';
 
 // --- KOMPONEN TAMBAHAN: TECH MARQUEE ---
@@ -68,9 +69,8 @@ const Home = () => {
 
                 {/* Tombol Aksi */}
                 <div className="flex flex-wrap gap-4 mb-10">
-                    {/* Mengganti ArrowRight dengan ChevronRight */}
                     <Link to="/projects" className="group bg-slate-900 text-white px-8 py-4 rounded-full font-bold shadow-xl shadow-slate-900/30 hover:bg-slate-800 transition-all hover:-translate-y-1 flex items-center gap-2">
-                        VIEW PROJECTS <ChevronRight size={20} className="ml-1" />
+                        VIEW PROJECTS <ArrowRight size={20} />
                     </Link>
                     <a href="/CV_Azuzu.pdf" download="CV_Azuzu_FullStack.pdf" className="group bg-white border-2 border-slate-200 px-8 py-4 rounded-full font-bold hover:border-slate-900 transition-colors flex items-center gap-2">
                         Download CV <Download size={20} className="group-hover:translate-y-1 transition-transform"/>
@@ -87,33 +87,25 @@ const Home = () => {
 
             {/* --- FOTO KANAN --- */}
             <div className="order-1 lg:order-2 relative flex justify-center lg:justify-end group">
-                {/* Lingkaran Dekorasi Berputar */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-dashed border-slate-300 rounded-full animate-[spin_20s_linear_infinite]"></div>
                 
-                {/* Frame Foto Utama */}
                 <div className="relative z-10 w-72 h-80 md:w-80 md:h-[450px] overflow-hidden rounded-2xl border-4 border-white shadow-2xl bg-white rotate-3 hover:rotate-0 transition-transform duration-500">
                     <img src={fotoProfil} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-700" alt="Profile" />
                 </div>
                 
-                {/* 1. Badge Backend (Kiri Atas) */}
+                {/* Badges */}
                 <div className="hidden md:flex absolute top-20 left-0 bg-white p-3 rounded-xl shadow-lg items-center gap-3 animate-[bounce_3s_infinite] border border-slate-100 z-20">
                     <div className="bg-blue-100 p-2 rounded-lg text-blue-600"><Database size={20}/></div>
                     <div><p className="text-xs text-slate-400 font-bold">Backend</p><p className="text-xs font-bold">Flask/Node</p></div>
                 </div>
-
-                {/* 2. Badge Frontend (Kanan Atas - FIX POSITION) */}
                 <div className="hidden md:flex absolute top-4 -right-4 bg-white p-3 rounded-xl shadow-lg items-center gap-3 animate-[bounce_5s_infinite] border border-slate-100 z-20">
                     <div className="bg-amber-100 p-2 rounded-lg text-amber-600"><Layout size={20}/></div>
                     <div><p className="text-xs text-slate-400 font-bold">Frontend</p><p className="text-xs font-bold">React/Vue</p></div>
                 </div>
-
-                {/* 3. Badge Infra (Kanan Bawah) */}
                 <div className="hidden md:flex absolute bottom-32 -right-8 bg-white p-3 rounded-xl shadow-lg items-center gap-3 animate-[bounce_4s_infinite] delay-700 border border-slate-100 z-20">
                     <div className="bg-green-100 p-2 rounded-lg text-green-600"><Zap size={20}/></div>
                     <div><p className="text-xs text-slate-400 font-bold">DevOps</p><p className="text-xs font-bold">Docker/CI-CD</p></div>
                 </div>
-
-                {/* 4. Badge Mobile (Kiri Bawah) */}
                 <div className="hidden md:flex absolute bottom-10 left-10 bg-white p-3 rounded-xl shadow-lg items-center gap-3 animate-[bounce_5s_infinite] delay-1000 border border-slate-100 z-20">
                     <div className="bg-purple-100 p-2 rounded-lg text-purple-600"><Smartphone size={20}/></div>
                     <div><p className="text-xs text-slate-400 font-bold">Mobile</p><p className="text-xs font-bold">Flutter/Kotlin</p></div>
