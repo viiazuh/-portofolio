@@ -47,28 +47,28 @@ const CertificatesPage = () => {
             verifyLink: "#" 
         },
          { 
-            id: 6,
+            id: 7,
             title: "Fundamental APlikasi Android", 
             issuer: "Dicoding", 
             file: "public/Fundamental-Aplikasi-Android.png", 
             verifyLink: "#" 
         },
         { 
-            id: 7,
+            id: 8,
             title: "Penerapan Machine Learning pada Android", 
             issuer: "Dicoding", 
             file: "public/ml-android.png", 
             verifyLink: "#" 
         },
          { 
-            id: 8,
+            id: 9,
             title: "redhat linux Sertifikat", 
             issuer: "huawei", 
             file: "public/redhat.png", 
             verifyLink: "#" 
         },
         { 
-            id: 9,
+            id: 10,
             title: "Kampus Merdeka", 
             issuer: "huawei", 
             file: "public/sertifikat kampus merdeka.pdf", 

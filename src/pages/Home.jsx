@@ -79,7 +79,7 @@ const Home = () => {
                 {/* Stats Row */}
                 <div className="grid grid-cols-3 gap-4 max-w-md border-t border-slate-200 pt-8">
                     <StatCard number="10+" label="Projects" />
-                    <StatCard number="9+" label="Certificates" />
+                    <StatCard number="10+" label="Certificates" />
                     <StatCard number="2y" label="Experience" />
                 </div>
             </div>
