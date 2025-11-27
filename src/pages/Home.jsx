@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { 
-  Download, Database, Zap, Code, Smartphone, 
-  ArrowRight, Layout // <-- Ikon Layout untuk Frontend sudah diimport
+  ArrowRight, Download, Database, Zap, Code, Smartphone, // <-- ArrowRight di awal
+  Layout 
 } from 'lucide-react';
 
 // --- KOMPONEN TAMBAHAN: TECH MARQUEE ---
