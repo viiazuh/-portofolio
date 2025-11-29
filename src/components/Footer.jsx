@@ -9,7 +9,7 @@ const Footer = () => {
         <a href="https://www.linkedin.com/in/vio-azuhri-b5a25530a" target="_blank" rel="noopener noreferrer" className="p-3 bg-white shadow-sm rounded-full hover:text-white hover:bg-blue-600 transition-all"><Linkedin size={20}/></a>
         <a href="mailto:sequadtaswan@gmail.com" className="p-3 bg-white shadow-sm rounded-full hover:text-white hover:bg-red-500 transition-all"><Mail size={20}/></a>
         </div>
-        <p className="text-slate-400 text-sm font-medium">© 2025 Azuzu Full-Stack Portfolio. Built with React & Tailwind.</p>
+        <p className="text-slate-400 text-sm font-medium">© 2025 Azuzu Full-Stack Portfoli</p>
     </footer>
   );
 };
