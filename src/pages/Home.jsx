@@ -49,7 +49,7 @@ const StatCard = ({ number, label }) => (
 );
 
 const Home = () => {
-  const fotoProfil = "/profile.jpg"; 
+  const fotoProfil = "profile.jpg"; 
 
   return (
     <div className="relative overflow-hidden min-h-screen flex flex-col">

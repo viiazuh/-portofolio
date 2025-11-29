@@ -18,7 +18,8 @@ const ProjectCard = ({ title, description, stack, link, icon }) => (
     </div>
 );
 
-const Portfolio = () => {
+// GANTI NAMA KOMPONEN JADI PROJECTS
+const Projects = () => {
     const projects = [
         { title: "ML Prediction Deployment", description: "Web monitor diabetes dengan Flask & Docker.", stack: ["Flask", "Docker", "CI/CD", "React"], link: "https://github.com/viiazuh/diabetes-app_UTsDevops", icon: <Database size={24} /> },
         { title: "Mobile E-Wallet", description: "Aplikasi E-Wallet dengan Flutter UI/UX.", stack: ["Flutter", "Dart", "State Management"], link: "https://github.com/viiazuh/infoin_ewallet", icon: <Smartphone size={24} /> },
@@ -36,4 +37,4 @@ const Portfolio = () => {
     );
 };
 
-export default Portfolio;
+export default Projects;
