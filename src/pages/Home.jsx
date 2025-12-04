@@ -49,7 +49,7 @@ const StatCard = ({ number, label }) => (
 );
 
 const Home = () => {
-  const fotoProfil = "profile.jpg"; 
+  const fotoProfil = "/profile.jpg"; 
 
   return (
     <div className="relative overflow-hidden min-h-screen flex flex-col">
@@ -87,7 +87,7 @@ const Home = () => {
                     <Link to="/projects" className="group bg-slate-900 text-white px-8 py-4 rounded-full font-bold shadow-xl shadow-slate-900/30 hover:bg-slate-800 transition-all hover:-translate-y-1 flex items-center gap-2">
                         VIEW PROJECTS <ArrowRight size={20} />
                     </Link>
-                    <a href="/CV_Azuzu.pdf" download="CV_Azuzu_FullStack.pdf" className="group bg-white border-2 border-slate-200 px-8 py-4 rounded-full font-bold hover:border-slate-900 transition-colors flex items-center gap-2">
+                    <a href="public/VioAzuhri.pdf" download="CV-VioAzuhri.pdf" className="group bg-white border-2 border-slate-200 px-8 py-4 rounded-full font-bold hover:border-slate-900 transition-colors flex items-center gap-2">
                         Download CV <Download size={20} className="group-hover:translate-y-1 transition-transform"/>
                     </a>
                 </div>
