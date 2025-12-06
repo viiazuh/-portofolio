@@ -137,7 +137,7 @@ const Home = () => {
                     </Link>
 
                     {/* Tombol DOWNLOAD CV dengan Hover Border */}
-                    <a href="/CV_Azuzu.pdf" download="CV_Azuzu_FullStack.pdf" className="relative inline-flex items-center justify-center px-8 py-4 font-bold text-slate-900 transition-all duration-200 bg-white border-2 border-slate-200 rounded-full hover:border-blue-600 hover:text-blue-600 hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 group">
+                    <a href="/VioAzuhri.pdf" download="CV_Azuzu_FullStack.pdf" className="relative inline-flex items-center justify-center px-8 py-4 font-bold text-slate-900 transition-all duration-200 bg-white border-2 border-slate-200 rounded-full hover:border-blue-600 hover:text-blue-600 hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 group">
                         <span className="flex items-center gap-2">
                             Download CV <Download size={20} className="group-hover:translate-y-1 transition-transform"/>
                         </span>
@@ -186,4 +186,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home;s
