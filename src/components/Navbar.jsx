@@ -10,7 +10,7 @@ const Navbar = () => {
     { path: '/', label: 'Home' },
     { path: '/services', label: 'Services' },
     { path: '/certificates', label: 'Certificates' },
-    { path: '/projects', label: 'Projects' }, // <--- GANTI JADI PROJECTS
+    { path: '/projects', label: 'Projects' },
     { path: '/contact', label: 'Contact' },
   ];
 
@@ -21,9 +21,8 @@ const Navbar = () => {
         <span className="text-xl font-bold tracking-tight">Vio<span className="text-amber-500">Stack</span></span>
       </div>
       
-      {/* Mobile Menu Toggle */}
+      {/* Mobile Menu Toggle (Teks 'HIRE' sudah dihapus) */}
       <div className="md:hidden flex items-center gap-4">
-          <Link to="/contact" className="text-sm font-bold text-slate-900 hover:text-amber-500">HIRE</Link>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 border border-slate-200 rounded-md">
               {isMenuOpen ? <X size={24}/> : <Menu size={24}/>}
           </button>
@@ -43,10 +42,6 @@ const Navbar = () => {
           </Link>
         ))}
       </div>
-
-      <Link to="/contact" className="bg-slate-900 text-white px-6 py-2 rounded-full font-bold hover:bg-slate-800 transition-all flex items-center gap-2 shadow-lg shadow-slate-900/20 hidden md:flex">
-        HIRE ME
-      </Link>
     </nav>
   );
 };
