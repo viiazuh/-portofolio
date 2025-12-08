@@ -2,9 +2,6 @@
 
 Selamat datang di repositori kode sumber untuk Portfolio Pribadi saya. Website ini dibangun untuk menampilkan perjalanan saya sebagai **Full-Stack & Mobile Developer**.
 
-![Vio Portfolio Preview](/public/profile.jpg)
-*(Note: Gambar preview akan muncul jika dibuka)*
-
 ## 🌐 Live Demo
 Kunjungi website langsung: **[dashboard-vio-azuhri.vercel.app](https://dashboard-vio-azuhri.vercel.app)**
 
