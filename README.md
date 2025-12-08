@@ -1,16 +1,47 @@
-# React + Vite
+# 🚀 Vio Azuhri - Professional Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Selamat datang di repositori kode sumber untuk Portfolio Pribadi saya. Website ini dibangun untuk menampilkan perjalanan saya sebagai **Full-Stack & Mobile Developer**.
 
-Currently, two official plugins are available:
+![Vio Portfolio Preview](/public/profile.jpg)
+*(Note: Gambar preview akan muncul jika dibuka)*
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Demo
+Kunjungi website langsung: **[dashboard-vio-azuhri.vercel.app](https://dashboard-vio-azuhri.vercel.app)**
 
-## React Compiler
+## 🛠️ Tech Stack
+Project ini dibangun menggunakan teknologi modern yang cepat dan efisien:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Core:** [React JS](https://react.dev/) (Vite)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **Icons:** [Lucide React](https://lucide.dev/)
+* **Routing:** React Router DOM
+* **Animation:** Framer Motion & CSS Animations
+* **Deployment:** Vercel
 
-## Expanding the ESLint configuration
+## ✨ Fitur Utama
+* **Responsive Design:** Tampilan optimal di Desktop & Mobile.
+* **Clean UI:** Menggunakan konsep Bento Grid & Minimalist.
+* **Interactive:** Efek Magnetic Hover pada Tech Stack & Animasi Intro.
+* **Dynamic Routing:** Navigasi halaman tanpa reload (SPA).
+* **Certificate Gallery:** Showcase sertifikat dengan preview modal.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 💻 Cara Menjalankan di Lokal (Localhost)
+
+Jika ingin mencoba kode ini di komputer Anda:
+
+1.  **Clone Repositori**
+    ```bash
+    git clone [https://github.com/viiazuh/-portofolio.git](https://github.com/viiazuh/-portofolio.git)
+    ```
+2.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
+3.  **Jalankan Server**
+    ```bash
+    npm run dev
+    ```
+4.  Buka `http://localhost:5173` di browser.
+
+---
+© 2025 Vio Azuhri. Built with ❤️ and Code.
