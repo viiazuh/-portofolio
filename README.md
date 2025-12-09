@@ -3,7 +3,7 @@
 Selamat datang di repositori kode sumber untuk Portfolio Pribadi saya. Website ini dibangun untuk menampilkan perjalanan saya sebagai **Full-Stack & Mobile Developer**.
 
 ## 🌐 Live Demo
-Kunjungi website langsung: **[dashboard-vio-azuhri.vercel.app](https://dashboard-vio-azuhri.vercel.app)**
+Kunjungi website langsung: **[dashboard-vio-azuhri.vercel.app](https://vio-azuhri.vercel.app)**
 
 ## 🛠️ Tech Stack
 Project ini dibangun menggunakan teknologi modern yang cepat dan efisien:
