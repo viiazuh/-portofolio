@@ -1,0 +1,157 @@
+---
+// certificates.astro — Certificates page (converted from Certificates.jsx)
+// Modal is handled by vanilla JS below
+import Layout from '../layouts/Layout.astro';
+
+const certs = [
+  { id: 1, title: "Data Science Python", issuer: "SkillPedia", file: "/sertifikat-data-science-python.png", isPdf: false },
+  { id: 2, title: "HTML & CSS", issuer: "SkillPedia", file: "/sertifikat-html-css.png", isPdf: false },
+  { id: 3, title: "Unity", issuer: "SkillPedia", file: "/sertifikat-unity-platform.png", isPdf: false },
+  { id: 4, title: "Pengembangan Aplikasi Android Intermediate", issuer: "Dicoding", file: "/Android-Intermediate.png", isPdf: false },
+  { id: 5, title: "Belajar Dasar AI", issuer: "Dicoding", file: "/Belajar-Dasar.Ai.png", isPdf: false },
+  { id: 6, title: "Fundamental Aplikasi Android", issuer: "Dicoding", file: "/Fundamental-Aplikasi-Android.png", isPdf: false },
+  { id: 7, title: "Fundamental Aplikasi Android", issuer: "Dicoding", file: "/Fundamental-Aplikasi-Android.png", isPdf: false },
+  { id: 8, title: "Penerapan Machine Learning pada Android", issuer: "Dicoding", file: "/ml-android.png", isPdf: false },
+  { id: 9, title: "RedHat Linux Sertifikat", issuer: "Huawei", file: "/redhat.png", isPdf: false },
+  { id: 10, title: "Kampus Merdeka", issuer: "Huawei", file: "/sertifikat kampus merdeka.pdf", isPdf: true },
+];
+---
+
+<Layout 
+  title="Certificates | Vio Azuhri"
+  description="Professional certificates and achievements by Vio Azuhri"
+>
+  <div class="pt-12 pb-24 animate-fade-in-up relative">
+    <header class="mb-12 text-center max-w-2xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">
+        My <span class="text-green-600">Certificates</span>
+      </h1>
+      <p class="text-lg text-slate-600">Bukti kompetensi dan sertifikasi profesional</p>
+    </header>
+
+    <!-- Gallery Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0">
+      {certs.map((cert) => (
+        <div
+          class="cert-card group relative cursor-pointer rounded-xl overflow-hidden shadow-lg border border-slate-200 aspect-[4/3] bg-slate-100"
+          data-title={cert.title}
+          data-issuer={cert.issuer}
+          data-file={cert.file}
+          data-is-pdf={cert.isPdf ? 'true' : 'false'}
+        >
+          {cert.isPdf ? (
+            <div class="w-full h-full flex flex-col items-center justify-center bg-slate-50 text-slate-400 group-hover:scale-110 transition-transform duration-500">
+              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span class="text-sm font-bold mt-2">PDF DOCUMENT</span>
+            </div>
+          ) : (
+            <img
+              src={cert.file}
+              alt={cert.title}
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          )}
+
+          <!-- Hover Overlay -->
+          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white p-4 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2 text-amber-400"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <h3 class="font-bold text-lg leading-tight mb-1">{cert.title}</h3>
+            <p class="text-xs text-slate-300">{cert.issuer}</p>
+            <span class="mt-4 px-4 py-2 border border-white/30 rounded-full text-xs font-semibold hover:bg-white hover:text-black transition-colors">
+              View Certificate
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="cert-modal" class="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm hidden justify-center items-center p-4">
+    <div class="bg-white rounded-xl overflow-hidden w-full max-w-5xl h-[85vh] flex flex-col relative shadow-2xl" id="modal-content">
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-white">
+        <div>
+          <h3 id="modal-title" class="text-lg font-bold text-slate-900"></h3>
+          <p id="modal-issuer" class="text-xs text-slate-500"></p>
+        </div>
+        <button id="modal-close" class="p-2 bg-slate-100 rounded-full hover:bg-red-100 hover:text-red-600 transition-colors" aria-label="Close modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="flex-1 bg-slate-200 overflow-hidden relative flex items-center justify-center p-4">
+        <iframe id="modal-iframe" src="" class="w-full h-full rounded-lg shadow-inner bg-white hidden" title="Certificate PDF"></iframe>
+        <img id="modal-img" src="" alt="" class="max-w-full max-h-full object-contain rounded shadow-lg hidden" />
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-slate-100 bg-white flex justify-end gap-3">
+        <a id="modal-download" href="" download class="px-4 py-2 bg-slate-900 text-white font-bold rounded-lg hover:bg-slate-700 flex items-center gap-2">
+          Download
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const modal = document.getElementById('cert-modal')!;
+  const modalTitle = document.getElementById('modal-title')!;
+  const modalIssuer = document.getElementById('modal-issuer')!;
+  const modalIframe = document.getElementById('modal-iframe') as HTMLIFrameElement;
+  const modalImg = document.getElementById('modal-img') as HTMLImageElement;
+  const modalDownload = document.getElementById('modal-download') as HTMLAnchorElement;
+  const modalClose = document.getElementById('modal-close')!;
+  const modalContent = document.getElementById('modal-content')!;
+
+  function openModal(title: string, issuer: string, file: string, isPdf: boolean) {
+    modalTitle.textContent = title;
+    modalIssuer.textContent = `Issued by: ${issuer}`;
+    modalDownload.href = file;
+
+    if (isPdf) {
+      modalIframe.src = file;
+      modalIframe.classList.remove('hidden');
+      modalImg.classList.add('hidden');
+    } else {
+      modalImg.src = file;
+      modalImg.alt = title;
+      modalImg.classList.remove('hidden');
+      modalIframe.classList.add('hidden');
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    modalIframe.src = '';
+    modalImg.src = '';
+  }
+
+  document.querySelectorAll('.cert-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const el = card as HTMLElement;
+      openModal(
+        el.dataset.title ?? '',
+        el.dataset.issuer ?? '',
+        el.dataset.file ?? '',
+        el.dataset.isPdf === 'true'
+      );
+    });
+  });
+
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>

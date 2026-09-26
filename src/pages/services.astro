@@ -1,0 +1,64 @@
+---
+// services.astro — Services/Tech Stack page (converted from Services.jsx)
+import Layout from '../layouts/Layout.astro';
+
+const skills = [
+  {
+    title: "Full-Stack Development",
+    description: "Membangun aplikasi web mulai dari UI (FE) hingga logic server (BE) dan Database.",
+    techs: ["React", "Vue.js", "Flask", "Node.js", "MySQL", "SQLite 3", "Firebase", "RESTful API"],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>`,
+  },
+  {
+    title: "Mobile Development",
+    description: "Fokus pada pengembangan aplikasi native dan cross-platform yang efisien.",
+    techs: ["Flutter", "Kotlin", "Dart", "Android Native", "Firebase"],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>`,
+  },
+  {
+    title: "Deployment & CI/CD",
+    description: "Otomatisasi pengiriman kode ke produksi, manajemen container, dan hosting ML Model.",
+    techs: ["Docker", "GitHub Actions", "GitLab CI/CD", "Linux Server Mgmt", "MLOps Basics"],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+  },
+  {
+    title: "Tools & Utility",
+    description: "Peralatan yang digunakan sehari-hari untuk meningkatkan efisiensi dan kolaborasi kerja.",
+    techs: ["Git", "Tailwind CSS", "Bootstrap", "VS Code", "Postman", "Cloudinary", "Figma"],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
+  },
+];
+---
+
+<Layout 
+  title="Services | Vio Azuhri"
+  description="Technical stack and services offered by Vio Azuhri"
+>
+  <div class="pt-12 pb-24 animate-fade-in-up">
+    <header class="mb-10 text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-2">
+        Technical <span class="text-blue-600">Stack</span>
+      </h1>
+      <p class="text-lg text-slate-600">Melihat detail teknologi yang saya gunakan di setiap tahap pengembangan.</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      {skills.map((skill) => (
+        <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-blue-500">
+          <div class="flex items-start mb-4">
+            <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4 flex-shrink-0 flex items-center justify-center" set:html={skill.icon} />
+            <div>
+              <h3 class="text-2xl font-bold text-slate-900">{skill.title}</h3>
+              <p class="text-slate-500 text-sm">{skill.description}</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-3 mt-6">
+            {skill.techs.map((tech) => (
+              <span class="px-4 py-2 bg-slate-100 text-slate-800 rounded-lg font-medium text-sm">{tech}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* Custom Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes float-badge {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.animate-gradient {
+  background-size: 300% 300%;
+  animation: gradient 4s ease infinite;
+}
+
+.bg-300\% {
+  background-size: 300%;
+}
+
+/* Tech item magnetic hover */
+.tech-item {
+  transition: transform 0.15s ease;
+  cursor: pointer;
+}
+
+/* Shimmer button effect */
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: none;
+}
+.btn-shimmer:hover::after {
+  animation: shimmer 1.5s infinite;
+}
