@@ -264,92 +264,90 @@ const certs = [
     </section>
 
 
-  <!-- WORK & EXPERIENCE SECTION (Fixed Layout & Added Animations)       -->
-
-  <section id="experience" class="py-6 max-w-6xl mx-auto px-4 sm:px-6 md:px-8 mb-10">
-    <div class="relative overflow-hidden rounded-3xl p-6 sm:p-10 border border-slate-200/80 bg-white/70 backdrop-blur-md shadow-xl shadow-slate-100/50">
-      
-      <!-- Section Header -->
-      <div class="mb-8 md:mb-12 text-left">
-        <span class="text-xs font-bold tracking-widest text-indigo-600 uppercase block mb-1">
-          CAREER TIMELINE
-        </span>
-        <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Work & Experience
-        </h3>
-        <p class="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl">
-          Rekam jejak pengalaman kerja, proyek mandiri, magang, dan peran profesional saya.
-        </p>
-      </div>
-
-      <!-- Experience Items Timeline -->
-      <div class="relative">
-        <!-- Central Line for Desktop Only -->
-        <div class="hidden md:block absolute left-1/2 top-3 bottom-3 w-0.5 -translate-x-1/2 bg-gradient-to-b from-indigo-500 via-purple-400 to-indigo-200"></div>
-
-        <!-- 
-          KONTAINER UTAMA:
-          - Mobile: Flex Row Horizontal + Overflow Scroll X + Snap (Bisa Digeser)
-          - Desktop (md:): Kembali ke Space-y-14 Normal
-        -->
-        <div class="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scrollbar-none md:block md:space-y-14 md:overflow-visible md:pb-0">
-          {experiences.map((exp, index) => {
-            const isEven = index % 2 === 0;
-            return (
-              /* 
-                WRAPPER KARTU:
-                - Mobile: min-w-[85vw] (Lebar 85% layar HP biar kartu berikutnya 'ngintip' di kanan) + shrink-0
-                - Desktop (md:): Kembali ke flex-row / flex-row-reverse
-              */
-              <div class={`relative min-w-[85vw] sm:min-w-[65vw] shrink-0 snap-center md:min-w-0 md:shrink md:snap-none md:flex md:flex-col md:items-center md:justify-between ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
-                
-                <!-- Content Box -->
-                <div class="w-full md:w-[42%]">
-                  <div class="group relative p-6 rounded-2xl bg-white/90 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-indigo-300 hover:-translate-y-1.5 transition-all duration-300 ease-out h-full">
-                    
-                    <!-- Top Accent Line on Hover -->
-                    <div class="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-t-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                    <div class="flex items-center justify-between gap-2 mb-2">
-                      <h4 class="text-base sm:text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                        {exp.role}
-                      </h4>
-                      <span class="md:hidden text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600 shrink-0">
-                        {exp.period}
-                      </span>
-                    </div>
-
-                    <p class="text-xs font-bold text-indigo-600 mb-3 tracking-wide uppercase">
-                      {exp.company}
-                    </p>
-
-                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      {exp.description}
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Center Point Dot dengan Efek Pulsing Animation (Hanya Desktop) -->
-                <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center justify-center z-10">
-                  <span class="absolute inline-flex h-6 w-6 rounded-full bg-indigo-400/40 animate-ping"></span>
-                  <div class="w-4 h-4 rounded-full bg-indigo-600 border-4 border-white shadow-md"></div>
-                </div>
-
-                <!-- Year/Period Label (Hanya Desktop) -->
-                <div class={`hidden md:block w-[42%] ${isEven ? 'text-right pr-12' : 'text-left pl-12'}`}>
-                  <span class="inline-block text-base font-extrabold text-slate-700 bg-slate-100/80 px-3.5 py-1.5 rounded-xl border border-slate-200/60 shadow-sm">
-                    {exp.period}
-                  </span>
-                </div>
-
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
+<!-- WORK & EXPERIENCE SECTION -->
+<section id="experience" class="py-6 max-w-6xl mx-auto px-4 sm:px-6 md:px-8 mb-10">
+  <div class="relative overflow-hidden rounded-3xl p-5 sm:p-8 md:p-10 border border-slate-200/80 bg-white/70 backdrop-blur-md shadow-xl shadow-slate-100/50">
+    
+    <!-- Section Header -->
+    <div class="mb-6 sm:mb-8 md:mb-12 text-left">
+      <span class="text-xs font-bold tracking-widest text-indigo-600 uppercase block mb-1">
+        CAREER TIMELINE
+      </span>
+      <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Work & Experience
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl">
+        Rekam jejak pengalaman kerja, proyek mandiri, magang, dan peran profesional saya.
+      </p>
     </div>
-  </section>
+
+    <!-- Experience Items Timeline -->
+    <div class="relative w-full">
+      <!-- Central Line for Desktop Only -->
+      <div class="hidden md:block absolute left-1/2 top-3 bottom-3 w-0.5 -translate-x-1/2 bg-gradient-to-b from-indigo-500 via-purple-400 to-indigo-200"></div>
+
+      <!-- 
+        KONTAINER HORIZONTAL SCROLL (MOBILE):
+        - px-[calc(50%-140px)] membuat kartu pertama otomatis presisi DI TENGAH LAYAR HP
+      -->
+      <div class="flex overflow-x-auto gap-4 pb-6 -mx-5 px-[calc(50%-140px)] sm:px-[calc(50%-170px)] snap-x snap-mandatory scrollbar-none md:mx-0 md:px-0 md:block md:space-y-14 md:overflow-visible md:pb-0">
+        {experiences.map((exp, index) => {
+          const isEven = index % 2 === 0;
+          return (
+            /* 
+              WRAPPER KARTU:
+              - Mobile: Dibuat `flex-row` standar (TIDAK terpengaruh `isEven` di mobile)
+              - Desktop (md:): Baru membalik arah sesuai `isEven`
+            */
+            <div class={`relative w-[280px] sm:w-[340px] shrink-0 snap-center flex flex-col items-center justify-center md:w-full md:shrink md:snap-none md:flex-row md:justify-between ${isEven ? 'md:flex-row-reverse' : ''}`}>
+              
+              <!-- Content Box -->
+              <div class="w-full md:w-[42%]">
+                <div class="group relative p-5 sm:p-6 rounded-2xl bg-white/90 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-indigo-300 hover:-translate-y-1.5 transition-all duration-300 ease-out h-full">
+                  
+                  <!-- Top Accent Line on Hover -->
+                  <div class="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-t-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                  <div class="flex items-start justify-between gap-2 mb-1.5">
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-snug">
+                      {exp.role}
+                    </h4>
+                    <span class="md:hidden text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 shrink-0">
+                      {exp.period}
+                    </span>
+                  </div>
+
+                  <p class="text-[11px] sm:text-xs font-bold text-indigo-600 mb-2.5 tracking-wide uppercase">
+                    {exp.company}
+                  </p>
+
+                  <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {exp.description}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Center Point Dot (Hanya Desktop) -->
+              <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center justify-center z-10">
+                <span class="absolute inline-flex h-6 w-6 rounded-full bg-indigo-400/40 animate-ping"></span>
+                <div class="w-4 h-4 rounded-full bg-indigo-600 border-4 border-white shadow-md"></div>
+              </div>
+
+              <!-- Year/Period Label (Hanya Desktop) -->
+              <div class={`hidden md:block w-[42%] ${isEven ? 'text-right pr-12' : 'text-left pl-12'}`}>
+                <span class="inline-block text-base font-extrabold text-slate-700 bg-slate-100/80 px-3.5 py-1.5 rounded-xl border border-slate-200/60 shadow-sm">
+                  {exp.period}
+                </span>
+              </div>
+
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+  </div>
+</section>
     <!-- 3. SERVICES SECTION (Sticky / Parallax ScrollTrigger Cards)        -->
 
     <section id="services" class="py-20 relative">
