@@ -1,5 +1,5 @@
 ---
-// ModelViewer.astro
+// ModelViewer.astro (Optimized)
 interface Props {
   modelPath?: string;
   height?: string;
@@ -57,23 +57,32 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
 
   .model-aura-glow {
     position: absolute;
-    width: 380px;
-    height: 380px;
+    width: 320px;
+    height: 320px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: radial-gradient(
       circle,
-      rgba(147, 51, 234, 0.22) 0%,
-      rgba(59, 130, 246, 0.15) 45%,
-      rgba(245, 158, 11, 0.08) 70%,
-      transparent 80%
+      rgba(147, 51, 234, 0.2) 0%,
+      rgba(59, 130, 246, 0.12) 45%,
+      transparent 70%
     );
-    filter: blur(55px);
+    /* Mengurangi blur CSS agar GPU HP ringan */
+    filter: blur(30px);
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
-    animation: aura-pulse 6s ease-in-out infinite alternate;
+  }
+
+  /* Animasi blur dihilangkan pada layar mobile untuk menghemat FPS */
+  @media (min-width: 768px) {
+    .model-aura-glow {
+      width: 380px;
+      height: 380px;
+      filter: blur(50px);
+      animation: aura-pulse 6s ease-in-out infinite alternate;
+    }
   }
 
   @keyframes aura-pulse {
@@ -146,9 +155,8 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     gap: 6px;
     font-size: 11px;
     font-weight: 600;
-    color: rgba(100, 116, 139, 0.65);
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(8px);
+    color: rgba(100, 116, 139, 0.8);
+    background: rgba(255, 255, 255, 0.85);
     padding: 6px 14px;
     border-radius: 9999px;
     border: 1px solid rgba(226, 232, 240, 0.8);
@@ -158,6 +166,13 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     pointer-events: none;
     transition: opacity 0.5s ease;
     z-index: 5;
+  }
+
+  /* Hilangkan backdrop-blur kompleks pada mobile */
+  @media (min-width: 768px) {
+    .model-hint {
+      backdrop-filter: blur(8px);
+    }
   }
 
   .model-hint.fade-out {
@@ -180,7 +195,6 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     const containers = document.querySelectorAll(".model-container");
 
     containers.forEach((container) => {
-      // Hanya inisialisasi kontainer yang terlihat (width/height > 0) dan belum di-init
       if (!(container instanceof HTMLElement)) return;
       if (container.dataset.initialized === "true") return;
       if (container.clientWidth === 0 || container.clientHeight === 0) return;
@@ -195,16 +209,28 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
       const modelPath = container.dataset.modelPath || "/model.glb";
       const txt = loader?.querySelector(".loader-text");
 
-      // ── Renderer ──────────────────────────────────────────────────────────
+      // Detection Device
+      const isMobile = window.innerWidth < 768;
+
+      // ── Renderer Optimization ──────────────────────────────────────────────
       const renderer = new THREE.WebGLRenderer({
         canvas,
-        antialias: true,
+        antialias: !isMobile, // Matikan antialias di mobile untuk meningkatkan FPS
         alpha: true,
         powerPreference: "high-performance",
       });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFShadowMap;
+
+      // Batasi DPR max 1.2 di mobile, max 1.5 di desktop
+      renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio, isMobile ? 1.2 : 1.5),
+      );
+
+      // Matikan bayangan di mobile karena sangat berat
+      renderer.shadowMap.enabled = !isMobile;
+      if (!isMobile) {
+        renderer.shadowMap.type = THREE.PCFShadowMap;
+      }
+
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.25;
       renderer.setClearColor(0x000000, 0);
@@ -222,29 +248,24 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
         camera.updateProjectionMatrix();
       }
 
-      // ── Lighting ──────────────────────────────────────────────────────────
-      scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+      // ── Simplified Lighting ────────────────────────────────────────────────
+      scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 
-      const keyLight = new THREE.DirectionalLight(0xfff6ea, 2.6);
+      const keyLight = new THREE.DirectionalLight(0xfff6ea, 2.2);
       keyLight.position.set(2.5, 3.5, 3);
-      keyLight.castShadow = true;
+      if (!isMobile) keyLight.castShadow = true;
       scene.add(keyLight);
 
-      const fillLight = new THREE.DirectionalLight(0x93c5fd, 1.4);
+      const fillLight = new THREE.DirectionalLight(0x93c5fd, 1.0);
       fillLight.position.set(-2.5, 1.8, 1.5);
       scene.add(fillLight);
 
-      const purpleRim = new THREE.DirectionalLight(0xa855f7, 2.2);
-      purpleRim.position.set(-3, 3, -2.5);
-      scene.add(purpleRim);
-
-      const amberRim = new THREE.DirectionalLight(0xf59e0b, 2.0);
-      amberRim.position.set(3, 2.5, -2.5);
-      scene.add(amberRim);
-
-      const bottomGlow = new THREE.PointLight(0x6366f1, 0.8, 6);
-      bottomGlow.position.set(0, -1.2, 0.5);
-      scene.add(bottomGlow);
+      // Hanya tambahkan rim light di desktop
+      if (!isMobile) {
+        const purpleRim = new THREE.DirectionalLight(0xa855f7, 1.5);
+        purpleRim.position.set(-3, 3, -2.5);
+        scene.add(purpleRim);
+      }
 
       // ── OrbitControls ──────────────────────────────────────────────────────
       const controls = new OrbitControls(camera, canvas);
@@ -266,7 +287,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
         }, 800);
       });
 
-      // ── Mouse Tracking ─────────────────────────────────────────────────────
+      // ── Mouse Tracking (Desktop Only) ──────────────────────────────────────
       let mouseX = 0,
         mouseY = 0;
       let targetRotX = 0,
@@ -275,10 +296,12 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
       let baseModelY = 0;
       let baseScale = 1;
 
-      window.addEventListener("mousemove", (e) => {
-        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-      });
+      if (!isMobile) {
+        window.addEventListener("mousemove", (e) => {
+          mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+          mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+      }
 
       // ── Load GLB ───────────────────────────────────────────────────────────
       const gltfLoader = new GLTFLoader();
@@ -304,12 +327,14 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
           model.position.y = -center.y - size.y * baseScale * 0.16;
           baseModelY = model.position.y;
 
-          model.traverse((child) => {
-            if ((child as THREE.Mesh).isMesh) {
-              child.castShadow = true;
-              child.receiveShadow = true;
-            }
-          });
+          if (!isMobile) {
+            model.traverse((child) => {
+              if ((child as THREE.Mesh).isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+              }
+            });
+          }
 
           modelGroup = new THREE.Group();
           modelGroup.add(model);
@@ -357,12 +382,27 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
       const ro = new ResizeObserver(resize);
       ro.observe(container);
 
+      // ── Intersection Observer (Paus Render jika tidak terlihat di layar) ──
+      let isVisible = true;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            isVisible = entry.isIntersecting;
+          });
+        },
+        { threshold: 0.1 },
+      );
+      observer.observe(container);
+
       // ── Render loop ────────────────────────────────────────────────────────
       let startTime = performance.now();
       let prevTime = performance.now();
 
       function animate(currentTime: number) {
         requestAnimationFrame(animate);
+
+        // JIKA KONTEN TIDAK TERLIHAT DI LAYAR, PAUSE RENDER SAMA SEKALI
+        if (!isVisible) return;
 
         const elapsed = (currentTime - startTime) * 0.001;
         const delta = (currentTime - prevTime) * 0.001;
@@ -380,7 +420,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
             baseScale * breathScale,
           );
 
-          if (!userInteracting) {
+          if (!userInteracting && !isMobile) {
             targetRotY = mouseX * 0.45;
             targetRotX = mouseY * -0.22;
             modelGroup.rotation.y +=
@@ -398,7 +438,6 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     });
   }
 
-  // Menjalankan pengecekan baik saat load awal maupun resize layar
   window.addEventListener("DOMContentLoaded", initAllViewers);
   window.addEventListener("resize", initAllViewers);
   document.addEventListener("astro:page-load", initAllViewers);
