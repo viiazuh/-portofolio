@@ -201,13 +201,22 @@ const certs = [
           </div>
         </div>
 
-        <!-- CENTER: Seamless 3D Avatar (Free Floating, Breathing & Cursor Look-At) -->
-        <div id="hero-model-wrap" class="lg:col-span-4 relative flex items-center justify-center order-1 lg:order-2 my-2 lg:my-0 gs-hero-center">
-          <div class="w-full max-w-[440px] relative">
-            <ModelViewer modelPath="/model.glb" height="540px" />
+       <!-- CENTER: Seamless 3D Avatar (Responsive Height untuk Mobile & Desktop) -->
+        <div id="hero-model-wrap" class="lg:col-span-4 relative flex items-center justify-center order-1 lg:order-2 my-0 gs-hero-center w-full">
+          <div class="w-full max-w-[280px] sm:max-w-[350px] lg:max-w-[440px] relative">
+            
+            <!-- Di Mobile pakai height 320px (Tampilan Proporsional seperti Gambar 3) -->
+            <div class="block lg:hidden">
+              <ModelViewer modelPath="/model.glb" height="320px" />
+            </div>
+
+            <!-- Di Laptop/Desktop (lg:) tetap tinggi 540px -->
+            <div class="hidden lg:block">
+              <ModelViewer modelPath="/model.glb" height="540px" />
+            </div>
+
           </div>
         </div>
-
         <!-- RIGHT: Big Typography Role & Metrics (Like Aden Kesuma) -->
         <div class="lg:col-span-4 text-center lg:text-left flex flex-col justify-center order-3 space-y-5 gs-hero-right">
           <div>
@@ -260,7 +269,7 @@ const certs = [
     <div class="relative overflow-hidden rounded-3xl p-6 sm:p-10 border border-slate-200/80 bg-white/70 backdrop-blur-md shadow-xl shadow-slate-100/50">
       
       <!-- Section Header -->
-      <div class="mb-12 text-left">
+      <div class="mb-8 md:mb-12 text-left">
         <span class="text-xs font-bold tracking-widest text-indigo-600 uppercase block mb-1">
           CAREER TIMELINE
         </span>
@@ -274,18 +283,28 @@ const certs = [
 
       <!-- Experience Items Timeline -->
       <div class="relative">
-        <!-- Central Line for Desktop -->
+        <!-- Central Line for Desktop Only -->
         <div class="hidden md:block absolute left-1/2 top-3 bottom-3 w-0.5 -translate-x-1/2 bg-gradient-to-b from-indigo-500 via-purple-400 to-indigo-200"></div>
 
-        <div class="space-y-10 md:space-y-14">
+        <!-- 
+          KONTAINER UTAMA:
+          - Mobile: Flex Row Horizontal + Overflow Scroll X + Snap (Bisa Digeser)
+          - Desktop (md:): Kembali ke Space-y-14 Normal
+        -->
+        <div class="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scrollbar-none md:block md:space-y-14 md:overflow-visible md:pb-0">
           {experiences.map((exp, index) => {
             const isEven = index % 2 === 0;
             return (
-              <div class={`relative flex flex-col md:flex-row items-center justify-between ${isEven ? 'md:flex-row-reverse' : ''}`}>
+              /* 
+                WRAPPER KARTU:
+                - Mobile: min-w-[85vw] (Lebar 85% layar HP biar kartu berikutnya 'ngintip' di kanan) + shrink-0
+                - Desktop (md:): Kembali ke flex-row / flex-row-reverse
+              */
+              <div class={`relative min-w-[85vw] sm:min-w-[65vw] shrink-0 snap-center md:min-w-0 md:shrink md:snap-none md:flex md:flex-col md:items-center md:justify-between ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
                 
-                <!-- Content Box (42% width agar beri jarak aman ke tengah) -->
+                <!-- Content Box -->
                 <div class="w-full md:w-[42%]">
-                  <div class="group relative p-6 rounded-2xl bg-white/90 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-indigo-300 hover:-translate-y-1.5 transition-all duration-300 ease-out">
+                  <div class="group relative p-6 rounded-2xl bg-white/90 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-indigo-300 hover:-translate-y-1.5 transition-all duration-300 ease-out h-full">
                     
                     <!-- Top Accent Line on Hover -->
                     <div class="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-t-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -294,7 +313,7 @@ const certs = [
                       <h4 class="text-base sm:text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
                         {exp.role}
                       </h4>
-                      <span class="md:hidden text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600">
+                      <span class="md:hidden text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600 shrink-0">
                         {exp.period}
                       </span>
                     </div>
@@ -309,13 +328,13 @@ const certs = [
                   </div>
                 </div>
 
-                <!-- Center Point Dot dengan Efek Pulsing Animation -->
+                <!-- Center Point Dot dengan Efek Pulsing Animation (Hanya Desktop) -->
                 <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center justify-center z-10">
                   <span class="absolute inline-flex h-6 w-6 rounded-full bg-indigo-400/40 animate-ping"></span>
                   <div class="w-4 h-4 rounded-full bg-indigo-600 border-4 border-white shadow-md"></div>
                 </div>
 
-                <!-- Year/Period Label (Diberi padding offset lebih besar: pr-12 / pl-12) -->
+                <!-- Year/Period Label (Hanya Desktop) -->
                 <div class={`hidden md:block w-[42%] ${isEven ? 'text-right pr-12' : 'text-left pl-12'}`}>
                   <span class="inline-block text-base font-extrabold text-slate-700 bg-slate-100/80 px-3.5 py-1.5 rounded-xl border border-slate-200/60 shadow-sm">
                     {exp.period}
@@ -330,7 +349,6 @@ const certs = [
 
     </div>
   </section>
-
     <!-- 3. SERVICES SECTION (Sticky / Parallax ScrollTrigger Cards)        -->
 
     <section id="services" class="py-20 relative">
@@ -726,3 +744,4 @@ const certs = [
   }
   document.addEventListener('astro:page-load', initAnimations);
 </script>
+
