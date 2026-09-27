@@ -201,14 +201,22 @@ const certs = [
           </div>
         </div>
 
-          <!-- CENTER: Seamless 3D Avatar -->
-    <div id="hero-model-wrap" class="lg:col-span-4 relative flex items-center justify-center order-1 lg:order-2 my-0 gs-hero-center w-full">
-      <div class="w-full max-w-[280px] sm:max-w-[350px] lg:max-w-[440px] relative">
-        
-        <!-- Panggil CUKUP 1 KALI saja -->
-        <ModelViewer modelPath="/model.glb" />
+     <!-- CENTER: Seamless 3D Avatar (Responsive Height untuk Mobile & Desktop) -->
+<div id="hero-model-wrap" class="lg:col-span-4 relative flex items-center justify-center order-1 lg:order-2 my-0 gs-hero-center w-full">
+  <div class="w-full max-w-[280px] sm:max-w-[350px] lg:max-w-[440px] relative">
+    
+    <!-- Tampilan Mobile (Height 320px) -->
+    <div class="block lg:hidden">
+      <ModelViewer modelPath="/model.glb" height="320px" />
+    </div>
 
-      </div>
+    <!-- Tampilan Laptop/Desktop (Height 540px) -->
+    <div class="hidden lg:block">
+      <ModelViewer modelPath="/model.glb" height="540px" />
+    </div>
+
+  </div>
+</div>
     </div>
         <!-- RIGHT: Big Typography Role & Metrics (Like Aden Kesuma) -->
         <div class="lg:col-span-4 text-center lg:text-left flex flex-col justify-center order-3 space-y-5 gs-hero-right">
