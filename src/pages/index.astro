@@ -263,44 +263,82 @@ const certs = [
       </div>
     </section>
 
-<!-- EXPERIENCE SECTION - MICRO TIMELINE -->
-<section id="experience" class="py-6 max-w-3xl mx-auto px-4 sm:px-6 mb-10">
-  <div class="mb-8 text-left">
-    <span class="text-xs font-bold tracking-widest text-indigo-600 uppercase block mb-1">CAREER TIMELINE</span>
-    <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Work & Experience</h3>
-  </div>
+<!-- EXPERIENCE SECTION - ACCORDION UI -->
+<section class="experience-section py-16 px-4 max-w-4xl mx-auto overflow-x-clip">
+  <div class="relative border-l-2 border-indigo-200 ml-4 md:ml-32 space-y-12 pl-6">
+    {experiences.map((item, index) => (
+      <div 
+        class="experience-card relative"
+        data-index={index}
+      >
+        <!-- Circle Indicator -->
+        <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full border-2 border-indigo-500 bg-white shadow-sm"></div>
 
-  <div class="relative ml-2">
-    <!-- Garis Utama (Super tipis) -->
-    <div class="absolute left-[7px] top-2 bottom-2 w-[2px] bg-slate-200"></div>
-
-    <div class="space-y-8">
-      {experiences.map((exp) => (
-        <div class="relative pl-8">
-          
-          <!-- Titik Lingkaran (Bulatan penanda) -->
-          <span class="absolute left-0 top-1 h-4 w-4 rounded-full border-2 border-indigo-600 bg-white ring-4 ring-white"></span>
-          
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
-            <h4 class="text-sm sm:text-base font-bold text-slate-900">{exp.role}</h4>
-            <span class="text-[10px] font-bold px-2 py-1 rounded-md bg-slate-100 text-slate-600 w-fit">
-              {exp.period}
+        <!-- Card Container -->
+        <div class="bg-white/80 backdrop-blur-sm p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="flex flex-wrap justify-between items-start gap-2 mb-1">
+            <h3 class="text-lg font-bold text-slate-800">{item.role}</h3>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 text-slate-500 tracking-wider uppercase">
+              {item.period}
             </span>
           </div>
-          
-          <p class="text-[11px] font-bold text-indigo-600 mb-2 uppercase tracking-wide">
-            {exp.company}
+          <p class="text-xs font-bold text-indigo-600 mb-2 uppercase tracking-wide">
+            {item.company}
           </p>
-          
-          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            {exp.description}
+          <p class="text-sm text-slate-600 leading-relaxed">
+            {item.description}
           </p>
-          
         </div>
-      ))}
-    </div>
+      </div>
+    ))}
   </div>
 </section>
+
+<style>
+  /* Posisi awal: Jauh di luar kanan layar dengan transisi luwes */
+  .experience-card {
+    opacity: 0;
+    transform: translateX(100vw);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+    will-change: transform, opacity;
+  }
+
+  /* Posisi saat aktif di tengah */
+  .experience-card.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  function setupScrollAnimations() {
+    const cards = document.querySelectorAll('.experience-card');
+    if (!cards.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const target = entry.target as HTMLElement;
+
+        if (entry.isIntersecting) {
+          // Begitu kartu menyentuh area bawah layar saat disinggung scroll, jalankan animasi
+          target.classList.add('show');
+          // Opsional: unobserve kalau animasinya cukup sekali diputar saat pertama kali disinggung
+          observer.unobserve(target);
+        }
+      });
+    }, {
+      // rootMargin bagian bawah minus (-) membuat kartu benar-benar harus naik dulu 
+      // mendekati tengah/bawah layar baru dia terpicu meluncur satu persatu.
+      rootMargin: "0px 0px -100px 0px",
+      threshold: 0.1
+    });
+
+    cards.forEach((card) => observer.observe(card));
+  }
+
+  document.addEventListener('DOMContentLoaded', setupScrollAnimations);
+  document.addEventListener('astro:page-load', setupScrollAnimations);
+</script>
     <!-- 3. SERVICES SECTION (Sticky / Parallax ScrollTrigger Cards)        -->
 
     <section id="services" class="py-20 relative">

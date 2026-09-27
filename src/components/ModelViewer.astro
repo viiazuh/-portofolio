@@ -1,5 +1,5 @@
 ---
-// ModelViewer.astro (Optimized)
+// ModelViewer.astro (Full Optimized Version)
 interface Props {
   modelPath?: string;
   height?: string;
@@ -57,8 +57,8 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
 
   .model-aura-glow {
     position: absolute;
-    width: 320px;
-    height: 320px;
+    width: 300px;
+    height: 300px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -68,14 +68,13 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
       rgba(59, 130, 246, 0.12) 45%,
       transparent 70%
     );
-    /* Mengurangi blur CSS agar GPU HP ringan */
     filter: blur(30px);
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
   }
 
-  /* Animasi blur dihilangkan pada layar mobile untuk menghemat FPS */
+  /* Efek aura yang lebih kompleks hanya diaktifkan pada desktop */
   @media (min-width: 768px) {
     .model-aura-glow {
       width: 380px;
@@ -168,7 +167,6 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     z-index: 5;
   }
 
-  /* Hilangkan backdrop-blur kompleks pada mobile */
   @media (min-width: 768px) {
     .model-hint {
       backdrop-filter: blur(8px);
@@ -209,13 +207,13 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
       const modelPath = container.dataset.modelPath || "/model.glb";
       const txt = loader?.querySelector(".loader-text");
 
-      // Detection Device
+      // Deteksi Tipe Perangkat
       const isMobile = window.innerWidth < 768;
 
       // ── Renderer Optimization ──────────────────────────────────────────────
       const renderer = new THREE.WebGLRenderer({
         canvas,
-        antialias: !isMobile, // Matikan antialias di mobile untuk meningkatkan FPS
+        antialias: !isMobile, // Matikan antialias di HP
         alpha: true,
         powerPreference: "high-performance",
       });
@@ -225,7 +223,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
         Math.min(window.devicePixelRatio, isMobile ? 1.2 : 1.5),
       );
 
-      // Matikan bayangan di mobile karena sangat berat
+      // Shadow Map dimatikan total di mobile
       renderer.shadowMap.enabled = !isMobile;
       if (!isMobile) {
         renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -248,7 +246,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
         camera.updateProjectionMatrix();
       }
 
-      // ── Simplified Lighting ────────────────────────────────────────────────
+      // ── Lighting Optimization ──────────────────────────────────────────────
       scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 
       const keyLight = new THREE.DirectionalLight(0xfff6ea, 2.2);
@@ -260,7 +258,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
       fillLight.position.set(-2.5, 1.8, 1.5);
       scene.add(fillLight);
 
-      // Hanya tambahkan rim light di desktop
+      // Hanya tambahkan Rim Light tambahan pada Desktop
       if (!isMobile) {
         const purpleRim = new THREE.DirectionalLight(0xa855f7, 1.5);
         purpleRim.position.set(-3, 3, -2.5);
@@ -287,7 +285,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
         }, 800);
       });
 
-      // ── Mouse Tracking (Desktop Only) ──────────────────────────────────────
+      // ── Mouse Tracking (Hanya Desktop) ─────────────────────────────────────
       let mouseX = 0,
         mouseY = 0;
       let targetRotX = 0,
@@ -394,39 +392,48 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
       );
       observer.observe(container);
 
-      // ── Render loop ────────────────────────────────────────────────────────
-      let startTime = performance.now();
+      // ── FPS Capping & Render Loop ──────────────────────────────────────────
+      const targetFPS = isMobile ? 30 : 60; // Kunci ke 30 FPS di Mobile
+      const fpsInterval = 1000 / targetFPS;
+      let then = performance.now();
       let prevTime = performance.now();
 
       function animate(currentTime: number) {
         requestAnimationFrame(animate);
 
-        // JIKA KONTEN TIDAK TERLIHAT DI LAYAR, PAUSE RENDER SAMA SEKALI
+        // 1. Jangan jalankan render jika kanvas di luar viewport HP
         if (!isVisible) return;
 
-        const elapsed = (currentTime - startTime) * 0.001;
+        // 2. Batasi FPS khusus di mobile agar GPU dingin
+        const elapsed = currentTime - then;
+        if (elapsed < fpsInterval) return;
+        then = currentTime - (elapsed % fpsInterval);
+
         const delta = (currentTime - prevTime) * 0.001;
         prevTime = currentTime;
 
         if (mixer) mixer.update(delta);
 
         if (modelGroup) {
-          const floatOffset = Math.sin(elapsed * 1.6) * 0.045;
-          const breathScale = 1 + Math.sin(elapsed * 1.2) * 0.006;
-          modelGroup.position.y = baseModelY + floatOffset;
-          modelGroup.scale.set(
-            baseScale * breathScale,
-            baseScale * breathScale,
-            baseScale * breathScale,
-          );
+          // Animasi melayang & kalkulasi gerak mouse hanya dijalankan pada Desktop
+          if (!isMobile) {
+            const floatOffset = Math.sin(currentTime * 0.001 * 1.6) * 0.045;
+            const breathScale = 1 + Math.sin(currentTime * 0.001 * 1.2) * 0.006;
+            modelGroup.position.y = baseModelY + floatOffset;
+            modelGroup.scale.set(
+              baseScale * breathScale,
+              baseScale * breathScale,
+              baseScale * breathScale,
+            );
 
-          if (!userInteracting && !isMobile) {
-            targetRotY = mouseX * 0.45;
-            targetRotX = mouseY * -0.22;
-            modelGroup.rotation.y +=
-              (targetRotY - modelGroup.rotation.y) * 0.055;
-            modelGroup.rotation.x +=
-              (targetRotX - modelGroup.rotation.x) * 0.055;
+            if (!userInteracting) {
+              targetRotY = mouseX * 0.45;
+              targetRotX = mouseY * -0.22;
+              modelGroup.rotation.y +=
+                (targetRotY - modelGroup.rotation.y) * 0.055;
+              modelGroup.rotation.x +=
+                (targetRotX - modelGroup.rotation.x) * 0.055;
+            }
           }
         }
 
