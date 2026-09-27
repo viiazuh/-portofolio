@@ -1,5 +1,5 @@
 ---
-// ModelViewer.astro — Three.js GLB 3D Model Viewer (Seamless, Card-Free with Floating & Mouse Tracking)
+// ModelViewer.astro
 interface Props {
   modelPath?: string;
   height?: string;
@@ -8,24 +8,23 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
 ---
 
 <div
-  id="model-container"
-  class="model-wrapper"
+  class="model-container model-wrapper"
   data-model-path={modelPath}
   style={`height: ${height}`}
 >
-  <!-- Ambient Atmospheric Glow behind model (Aden Kesuma style) -->
+  <!-- Ambient Atmospheric Glow -->
   <div class="model-aura-glow"></div>
 
-  <canvas id="model-canvas"></canvas>
+  <canvas class="model-canvas"></canvas>
 
-  <!-- Elegant Loading state -->
-  <div id="model-loader" class="model-loader">
+  <!-- Loading state -->
+  <div class="model-loader">
     <div class="loader-ring"></div>
     <span class="loader-text">Loading 3D Model...</span>
   </div>
 
   <!-- Interactive Hint -->
-  <div id="model-hint" class="model-hint">
+  <div class="model-hint">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="14"
@@ -56,7 +55,6 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     justify-content: center;
   }
 
-  /* Seamless ambient glow behind the character */
   .model-aura-glow {
     position: absolute;
     width: 380px;
@@ -89,7 +87,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     }
   }
 
-  #model-canvas {
+  .model-canvas {
     position: relative;
     z-index: 1;
     display: block;
@@ -99,7 +97,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     cursor: grab;
   }
 
-  #model-canvas:active {
+  .model-canvas:active {
     cursor: grabbing;
   }
 
@@ -178,254 +176,231 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
   import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-  function initViewer() {
-    const container = document.getElementById("model-container");
-    const canvas = document.getElementById("model-canvas");
-    const loader = document.getElementById("model-loader");
-    const hint = document.getElementById("model-hint");
+  function initAllViewers() {
+    const containers = document.querySelectorAll(".model-container");
 
-    if (!container || !canvas || !(canvas instanceof HTMLCanvasElement)) return;
-    const modelPath = container.dataset.modelPath || "/model.glb";
-    const txt = loader?.querySelector(".loader-text");
+    containers.forEach((container) => {
+      // Hanya inisialisasi kontainer yang terlihat (width/height > 0) dan belum di-init
+      if (!(container instanceof HTMLElement)) return;
+      if (container.dataset.initialized === "true") return;
+      if (container.clientWidth === 0 || container.clientHeight === 0) return;
 
-    // ── Renderer ──────────────────────────────────────────────────────────
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: true,
-      alpha: true,
-      powerPreference: "high-performance",
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
-    renderer.setClearColor(0x000000, 0);
+      container.dataset.initialized = "true";
 
-    function resize() {
-      const w = container.clientWidth || 320;
-      const h = container.clientHeight || 520;
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    }
+      const canvas = container.querySelector(".model-canvas");
+      const loader = container.querySelector(".model-loader");
+      const hint = container.querySelector(".model-hint");
 
-    // ── Scene & Camera ─────────────────────────────────────────────────────
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-    camera.position.set(0, 0.4, 3.2);
+      if (!canvas || !(canvas instanceof HTMLCanvasElement)) return;
+      const modelPath = container.dataset.modelPath || "/model.glb";
+      const txt = loader?.querySelector(".loader-text");
 
-    // ── Cinematic Lighting Setup (Aden Kesuma inspired rim & fill) ────────
-    // Ambient fill
-    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+      // ── Renderer ──────────────────────────────────────────────────────────
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      renderer.setClearColor(0x000000, 0);
 
-    // Warm Key light (Front-Right)
-    const keyLight = new THREE.DirectionalLight(0xfff6ea, 2.6);
-    keyLight.position.set(2.5, 3.5, 3);
-    keyLight.castShadow = true;
-    scene.add(keyLight);
+      // ── Scene & Camera ─────────────────────────────────────────────────────
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+      camera.position.set(0, 0.4, 3.2);
 
-    // Cool Fill light (Front-Left)
-    const fillLight = new THREE.DirectionalLight(0x93c5fd, 1.4);
-    fillLight.position.set(-2.5, 1.8, 1.5);
-    scene.add(fillLight);
+      function resize() {
+        const w = container.clientWidth || 320;
+        const h = container.clientHeight || 520;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
 
-    // Purple Rim light (Behind Left - Silhouette accent)
-    const purpleRim = new THREE.DirectionalLight(0xa855f7, 2.2);
-    purpleRim.position.set(-3, 3, -2.5);
-    scene.add(purpleRim);
+      // ── Lighting ──────────────────────────────────────────────────────────
+      scene.add(new THREE.AmbientLight(0xffffff, 0.9));
 
-    // Amber Rim light (Behind Right - Hair & shoulder accent)
-    const amberRim = new THREE.DirectionalLight(0xf59e0b, 2.0);
-    amberRim.position.set(3, 2.5, -2.5);
-    scene.add(amberRim);
+      const keyLight = new THREE.DirectionalLight(0xfff6ea, 2.6);
+      keyLight.position.set(2.5, 3.5, 3);
+      keyLight.castShadow = true;
+      scene.add(keyLight);
 
-    // Subtle bottom glow
-    const bottomGlow = new THREE.PointLight(0x6366f1, 0.8, 6);
-    bottomGlow.position.set(0, -1.2, 0.5);
-    scene.add(bottomGlow);
+      const fillLight = new THREE.DirectionalLight(0x93c5fd, 1.4);
+      fillLight.position.set(-2.5, 1.8, 1.5);
+      scene.add(fillLight);
 
-    // ── OrbitControls ──────────────────────────────────────────────────────
-    const controls = new OrbitControls(camera, canvas);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
-    controls.minDistance = 1.5;
-    controls.maxDistance = 5.5;
-    controls.maxPolarAngle = Math.PI * 0.75;
-    controls.minPolarAngle = Math.PI * 0.25;
-    controls.enablePan = false;
-    controls.autoRotate = false; // We use mouse look-at as primary interactive motion
+      const purpleRim = new THREE.DirectionalLight(0xa855f7, 2.2);
+      purpleRim.position.set(-3, 3, -2.5);
+      scene.add(purpleRim);
 
-    let userInteracting = false;
-    canvas.addEventListener("pointerdown", () => {
-      userInteracting = true;
-    });
-    window.addEventListener("pointerup", () => {
-      // Resume soft look-at after brief delay
-      setTimeout(() => {
-        userInteracting = false;
-      }, 800);
-    });
+      const amberRim = new THREE.DirectionalLight(0xf59e0b, 2.0);
+      amberRim.position.set(3, 2.5, -2.5);
+      scene.add(amberRim);
 
-    // ── Mouse & Cursor Tracking ───────────────────────────────────────────
-    let mouseX = 0,
-      mouseY = 0;
-    let targetRotX = 0,
-      targetRotY = 0;
-    let modelGroup = null;
-    let baseModelY = 0;
-    let baseScale = 1;
+      const bottomGlow = new THREE.PointLight(0x6366f1, 0.8, 6);
+      bottomGlow.position.set(0, -1.2, 0.5);
+      scene.add(bottomGlow);
 
-    window.addEventListener("mousemove", (e) => {
-      // Normalized between -1 and 1
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-    });
+      // ── OrbitControls ──────────────────────────────────────────────────────
+      const controls = new OrbitControls(camera, canvas);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.minDistance = 1.5;
+      controls.maxDistance = 5.5;
+      controls.maxPolarAngle = Math.PI * 0.75;
+      controls.minPolarAngle = Math.PI * 0.25;
+      controls.enablePan = false;
 
-    window.addEventListener(
-      "touchmove",
-      (e) => {
-        if (e.touches.length === 1) {
-          mouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
-          mouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
-        }
-      },
-      { passive: true },
-    );
+      let userInteracting = false;
+      canvas.addEventListener("pointerdown", () => {
+        userInteracting = true;
+      });
+      window.addEventListener("pointerup", () => {
+        setTimeout(() => {
+          userInteracting = false;
+        }, 800);
+      });
 
-    // ── Load GLB Model ─────────────────────────────────────────────────────
-    const gltfLoader = new GLTFLoader();
-    let mixer = null;
+      // ── Mouse Tracking ─────────────────────────────────────────────────────
+      let mouseX = 0,
+        mouseY = 0;
+      let targetRotX = 0,
+        targetRotY = 0;
+      let modelGroup: THREE.Group | null = null;
+      let baseModelY = 0;
+      let baseScale = 1;
 
-    gltfLoader.load(
-      modelPath,
-      (gltf) => {
-        const model = gltf.scene;
+      window.addEventListener("mousemove", (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
 
-        // Auto center and scale
-        const box = new THREE.Box3().setFromObject(model);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
+      // ── Load GLB ───────────────────────────────────────────────────────────
+      const gltfLoader = new GLTFLoader();
+      let mixer: THREE.AnimationMixer | null = null;
 
-        // Target height ~2.4 for bust framing
-        const targetH = 2.4;
-        baseScale = size.y > 0 ? targetH / size.y : 1;
-        model.scale.setScalar(baseScale);
+      gltfLoader.load(
+        modelPath,
+        (gltf) => {
+          const model = gltf.scene;
 
-        // Center on X and Z, and adjust Y to crop bottom pedestal cleanly
-        box.setFromObject(model);
-        box.getCenter(center);
-        model.position.x = -center.x;
-        model.position.z = -center.z;
-        // Shift down slightly so the lower block remains out of view, framing chest up to head
-        model.position.y = -center.y - size.y * baseScale * 0.16;
-        baseModelY = model.position.y;
+          const box = new THREE.Box3().setFromObject(model);
+          const size = box.getSize(new THREE.Vector3());
+          const center = box.getCenter(new THREE.Vector3());
 
-        model.traverse((child) => {
-          if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
+          const targetH = 2.4;
+          baseScale = size.y > 0 ? targetH / size.y : 1;
+          model.scale.setScalar(baseScale);
+
+          box.setFromObject(model);
+          box.getCenter(center);
+          model.position.x = -center.x;
+          model.position.z = -center.z;
+          model.position.y = -center.y - size.y * baseScale * 0.16;
+          baseModelY = model.position.y;
+
+          model.traverse((child) => {
+            if ((child as THREE.Mesh).isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          });
+
+          modelGroup = new THREE.Group();
+          modelGroup.add(model);
+          scene.add(modelGroup);
+
+          camera.position.set(0, 0.35, 3.1);
+          controls.target.set(0, 0.1, 0);
+          controls.update();
+
+          if (gltf.animations && gltf.animations.length > 0) {
+            mixer = new THREE.AnimationMixer(model);
+            gltf.animations.forEach((clip) => mixer?.clipAction(clip).play());
           }
-        });
 
-        modelGroup = new THREE.Group();
-        modelGroup.add(model);
-        scene.add(modelGroup);
+          if (loader) {
+            loader.classList.add("hidden");
+            setTimeout(() => {
+              loader.style.display = "none";
+            }, 600);
+          }
 
-        camera.position.set(0, 0.35, 3.1);
-        controls.target.set(0, 0.1, 0);
+          if (hint) {
+            setTimeout(() => hint.classList.add("fade-out"), 5000);
+          }
+        },
+        (progress) => {
+          if (txt) {
+            if (progress.total > 0) {
+              const pct = Math.round((progress.loaded / progress.total) * 100);
+              txt.textContent = `Loading 3D Model... ${pct}%`;
+            } else {
+              const mb = (progress.loaded / (1024 * 1024)).toFixed(1);
+              txt.textContent = `Loading 3D Model... ${mb}MB`;
+            }
+          }
+        },
+        (err) => {
+          console.error("GLB load error:", err);
+          if (txt) txt.textContent = "Gagal memuat model 3D";
+        },
+      );
+
+      // ── Resize Observer ────────────────────────────────────────────────────
+      resize();
+      const ro = new ResizeObserver(resize);
+      ro.observe(container);
+
+      // ── Render loop ────────────────────────────────────────────────────────
+      let startTime = performance.now();
+      let prevTime = performance.now();
+
+      function animate(currentTime: number) {
+        requestAnimationFrame(animate);
+
+        const elapsed = (currentTime - startTime) * 0.001;
+        const delta = (currentTime - prevTime) * 0.001;
+        prevTime = currentTime;
+
+        if (mixer) mixer.update(delta);
+
+        if (modelGroup) {
+          const floatOffset = Math.sin(elapsed * 1.6) * 0.045;
+          const breathScale = 1 + Math.sin(elapsed * 1.2) * 0.006;
+          modelGroup.position.y = baseModelY + floatOffset;
+          modelGroup.scale.set(
+            baseScale * breathScale,
+            baseScale * breathScale,
+            baseScale * breathScale,
+          );
+
+          if (!userInteracting) {
+            targetRotY = mouseX * 0.45;
+            targetRotX = mouseY * -0.22;
+            modelGroup.rotation.y +=
+              (targetRotY - modelGroup.rotation.y) * 0.055;
+            modelGroup.rotation.x +=
+              (targetRotX - modelGroup.rotation.x) * 0.055;
+          }
+        }
+
         controls.update();
+        renderer.render(scene, camera);
+      }
 
-        // Animations if present in GLB
-        if (gltf.animations && gltf.animations.length > 0) {
-          mixer = new THREE.AnimationMixer(model);
-          gltf.animations.forEach((clip) => mixer.clipAction(clip).play());
-        }
-
-        // Hide loader smoothly
-        if (loader) {
-          loader.classList.add("hidden");
-          setTimeout(() => {
-            loader.style.display = "none";
-          }, 600);
-        }
-
-        if (hint) {
-          setTimeout(() => hint.classList.add("fade-out"), 5000);
-        }
-      },
-      (progress) => {
-        if (txt) {
-          if (progress.total > 0) {
-            const pct = Math.round((progress.loaded / progress.total) * 100);
-            txt.textContent = `Loading 3D Model... ${pct}%`;
-          } else {
-            const mb = (progress.loaded / (1024 * 1024)).toFixed(1);
-            txt.textContent = `Loading 3D Model... ${mb}MB`;
-          }
-        }
-      },
-      (err) => {
-        console.error("GLB load error:", err);
-        if (txt) txt.textContent = "Gagal memuat model 3D";
-      },
-    );
-
-    // ── Resize observer ────────────────────────────────────────────────────
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(container);
-
-    // ── Render loop with Floating, Breathing, & Look-At ────────────────────
-    let startTime = performance.now();
-    let prevTime = performance.now();
-    let isRunning = true;
-
-    function animate(currentTime) {
-      if (!isRunning) return;
       requestAnimationFrame(animate);
-
-      const elapsed = (currentTime - startTime) * 0.001;
-      const delta = (currentTime - prevTime) * 0.001;
-      prevTime = currentTime;
-
-      if (mixer) {
-        mixer.update(delta);
-      }
-
-      if (modelGroup) {
-        // 1. Idle Floating & Breathing effect (smooth sine wave)
-        const floatOffset = Math.sin(elapsed * 1.6) * 0.045;
-        const breathScale = 1 + Math.sin(elapsed * 1.2) * 0.006;
-        modelGroup.position.y = baseModelY + floatOffset;
-        modelGroup.scale.set(
-          baseScale * breathScale,
-          baseScale * breathScale,
-          baseScale * breathScale,
-        );
-
-        // 2. Smooth Cursor Look-At (Follows mouse like Aden's)
-        if (!userInteracting) {
-          targetRotY = mouseX * 0.45; // Turn head left/right
-          targetRotX = mouseY * -0.22; // Tilt head up/down
-          // Smooth damping (lerp)
-          modelGroup.rotation.y += (targetRotY - modelGroup.rotation.y) * 0.055;
-          modelGroup.rotation.x += (targetRotX - modelGroup.rotation.x) * 0.055;
-        }
-      }
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
-    requestAnimationFrame(animate);
+    });
   }
 
-  // Initialize on Astro page load (supports View Transitions / standard load)
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initViewer);
-  } else {
-    initViewer();
-  }
-  document.addEventListener("astro:page-load", initViewer);
+  // Menjalankan pengecekan baik saat load awal maupun resize layar
+  window.addEventListener("DOMContentLoaded", initAllViewers);
+  window.addEventListener("resize", initAllViewers);
+  document.addEventListener("astro:page-load", initAllViewers);
+  initAllViewers();
 </script>
