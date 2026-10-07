@@ -1,10 +1,9 @@
 ---
-// index.astro — Unified Single-Page Portfolio with GSAP ScrollTrigger, Parallax & Sticky Navigation
+// index.astro — Unified Single-Page Portfolio with GSAP ScrollTrigger, Lenis Smooth Scroll
 import Layout from '../layouts/Layout.astro';
 import ModelViewer from '../components/ModelViewer.astro';
 
 const experiences = [
-  
   {
     role: "IT Support & Data Entry",
     company: "Pustu (Puskesmas Pembantu)",
@@ -124,12 +123,12 @@ const projects = [
     highlight: "Team Project",
   },
   {
-    title: "Analisis sentimen ",
+    title: "Analisis Sentimen",
     description: "Proyek Tugas akhir Skripsi Analisis sentimen ulasan clash of champion menggunakan metode LSTM & GRU",
     stack: ["Python", "LSTM", "GRU"],
     link: "https://github.com/viiazuh/analisis-sentimen-mobile-legend",
     category: "AI",
-    highlight: "skripsi",
+    highlight: "Skripsi",
   },
 ];
 
@@ -148,7 +147,8 @@ const certs = [
 ---
 
 <Layout title="Vio Azuhri | Cross-Platform Developer">
-  <div class="relative overflow-hidden min-h-screen flex flex-col">
+  <!-- PERBAIKAN: ubah overflow-hidden menjadi overflow-x-hidden agar scroll vertikal tidak tertahan -->
+  <div class="relative overflow-x-hidden min-h-screen flex flex-col">
     
     <!-- BACKGROUND ATMOSPHERE & MESH DECORATION -->
     <div class="absolute inset-0 z-0 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:16px_28px] pointer-events-none"></div>
@@ -201,24 +201,19 @@ const certs = [
           </div>
         </div>
 
-          <!-- CENTER: Seamless 3D Avatar -->
-   <!-- CENTER: Seamless 3D Avatar (Responsive Height untuk Mobile & Desktop) -->
-      <div id="hero-model-wrap" class="lg:col-span-4 relative flex items-center justify-center order-1 lg:order-2 my-0 gs-hero-center w-full">
-        <div class="w-full max-w-[280px] sm:max-w-[350px] lg:max-w-[440px] relative">
-          
-          <!-- Tampilan Mobile (Height 320px) -->
-          <div class="block lg:hidden">
-            <ModelViewer modelPath="/model.glb" height="320px" />
+        <!-- CENTER: Seamless 3D Avatar (Responsive Height) -->
+        <div id="hero-model-wrap" class="lg:col-span-4 relative flex items-center justify-center order-1 lg:order-2 my-0 gs-hero-center w-full">
+          <div class="w-full max-w-[280px] sm:max-w-[350px] lg:max-w-[440px] relative">
+            <div class="block lg:hidden">
+              <ModelViewer modelPath="/model.glb" height="320px" />
+            </div>
+            <div class="hidden lg:block">
+              <ModelViewer modelPath="/model.glb" height="540px" />
+            </div>
           </div>
-
-          <!-- Tampilan Laptop/Desktop (Height 540px) -->
-          <div class="hidden lg:block">
-            <ModelViewer modelPath="/model.glb" height="540px" />
-          </div>
-
         </div>
-      </div>
-        <!-- RIGHT: Big Typography Role & Metrics (Like Aden Kesuma) -->
+
+        <!-- RIGHT: Big Typography Role & Metrics -->
         <div class="lg:col-span-4 text-center lg:text-left flex flex-col justify-center order-3 space-y-5 gs-hero-right">
           <div>
             <span class="text-xs uppercase tracking-widest font-extrabold text-indigo-600 block mb-1">
@@ -263,60 +258,55 @@ const certs = [
       </div>
     </section>
 
-<!-- EXPERIENCE SECTION - GSAP TIMELINE UI -->
-<section id="experience" class="py-24 px-4 max-w-5xl mx-auto overflow-hidden relative">
-  <div class="max-w-5xl mx-auto">
-  <div class="text-center mb-16 gs-section-header">
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-extrabold text-xs uppercase tracking-wider mb-3">
-      Journey
-    </div>
-    <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
-      Work <span class="text-indigo-600">Experience</span>
-    </h2>
-  </div>
+    <!-- EXPERIENCE SECTION - GSAP TIMELINE UI -->
+    <section id="experience" class="py-24 px-4 max-w-5xl mx-auto relative">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-16 gs-section-header">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-extrabold text-xs uppercase tracking-wider mb-3">
+            Journey
+          </div>
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+            Work <span class="text-indigo-600">Experience</span>
+          </h2>
+        </div>
 
-  <div class="relative ml-4 md:ml-12 lg:ml-24">
-    <!-- Timeline Line -->
-    <div class="absolute left-0 top-2 bottom-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-400 to-transparent rounded-full opacity-30 origin-top gs-timeline-line"></div>
+        <div class="relative ml-4 md:ml-12 lg:ml-24">
+          <!-- Timeline Line -->
+          <div class="absolute left-0 top-2 bottom-0 w-1 bg-gradient-to-b from-indigo-500 via-purple-400 to-transparent rounded-full opacity-30 origin-top gs-timeline-line"></div>
 
-    <div class="space-y-10 pl-8 md:pl-12">
-      {experiences.map((item, index) => (
-        <div class="experience-card relative group">
-          <!-- Animated Circle Indicator -->
-          <div class="absolute -left-[42px] md:-left-[58px] top-1.5 w-6 h-6 rounded-full bg-white border-4 border-indigo-500 shadow-md group-hover:scale-125 group-hover:border-purple-500 transition-all duration-300 z-10"></div>
-          
-          <!-- Ping Effect on Hover -->
-          <div class="absolute -left-[42px] md:-left-[58px] top-1.5 w-6 h-6 rounded-full bg-indigo-400 opacity-0 group-hover:animate-ping z-0"></div>
+          <div class="space-y-10 pl-8 md:pl-12">
+            {experiences.map((item, index) => (
+              <div class="experience-card relative group">
+                <div class="absolute -left-[42px] md:-left-[58px] top-1.5 w-6 h-6 rounded-full bg-white border-4 border-indigo-500 shadow-md group-hover:scale-125 group-hover:border-purple-500 transition-all duration-300 z-10"></div>
+                <div class="absolute -left-[42px] md:-left-[58px] top-1.5 w-6 h-6 rounded-full bg-indigo-400 opacity-0 group-hover:animate-ping z-0"></div>
 
-          <!-- Card Container -->
-          <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-            <!-- Subtle Background Gradient -->
-            <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-            
-            <div class="relative z-10 flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-3">
-              <div>
-                <h3 class="text-xl font-black text-slate-900 group-hover:text-indigo-600 transition-colors">{item.role}</h3>
-                <p class="text-sm font-bold text-indigo-500 mt-1 uppercase tracking-wider">
-                  {item.company}
-                </p>
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                  <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                  
+                  <div class="relative z-10 flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-3">
+                    <div>
+                      <h3 class="text-xl font-black text-slate-900 group-hover:text-indigo-600 transition-colors">{item.role}</h3>
+                      <p class="text-sm font-bold text-indigo-500 mt-1 uppercase tracking-wider">
+                        {item.company}
+                      </p>
+                    </div>
+                    <span class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold tracking-widest uppercase whitespace-nowrap">
+                      {item.period}
+                    </span>
+                  </div>
+                  
+                  <p class="relative z-10 text-slate-600 text-sm md:text-base leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-              <span class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold tracking-widest uppercase whitespace-nowrap">
-                {item.period}
-              </span>
-            </div>
-            
-            <p class="relative z-10 text-slate-600 text-sm md:text-base leading-relaxed">
-              {item.description}
-            </p>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-    </div>
-  </div>
-</section>
-    <!-- 3. SERVICES SECTION (Sticky / Parallax ScrollTrigger Cards)        -->
+      </div>
+    </section>
 
+    <!-- SERVICES SECTION -->
     <section id="services" class="py-24 relative">
       <div class="text-center max-w-2xl mx-auto mb-16 gs-section-header">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-extrabold text-xs uppercase tracking-wider mb-3">
@@ -328,11 +318,9 @@ const certs = [
         <p class="text-slate-500 text-base mt-3">Layanan profesional yang saya tawarkan dengan fokus pada kecepatan, keamanan, dan skalabilitas.</p>
       </div>
 
-      <!-- Sticky / Staggered Card Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto gs-services-cards">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto gs-services-cards px-4">
         {skills.map((skill, idx) => (
           <div class={`service-card relative p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xl shadow-slate-100/80 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 overflow-hidden group`}>
-            <!-- Subtle Top Accent Gradient -->
             <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-amber-500 opacity-80"></div>
             
             <div class="flex items-center justify-between mb-6">
@@ -361,137 +349,113 @@ const certs = [
         ))}
       </div>
     </section>
-    <!-- 4. FEATURED PROJECTS SECTION (Horizontal GSAP Scroll)             -->
-    <section id="projects" class="relative border-t border-slate-100">
-      <!-- This is the pin container — it will be pinned to viewport -->
-      <div class="gs-projects-pin-section h-screen flex flex-col overflow-hidden">
-        <!-- Header (stays visible during horizontal scroll) -->
-        <div class="pt-12 pb-6 flex-shrink-0">
-          <div class="text-center max-w-2xl mx-auto gs-section-header px-4">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-extrabold text-xs uppercase tracking-wider mb-3">
-              Selected Works
-            </div>
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
-              Featured <span class="text-amber-500">Projects</span>
-            </h2>
-            <p class="text-slate-500 text-base mt-3">Koleksi proyek nyata yang saya rancang dan kembangkan.</p>
-          </div>
 
-          <!-- Scroll hint -->
-          <div class="flex items-center justify-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest mt-4">
-            <span>Scroll to explore</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </div>
+    <!-- FEATURED PROJECTS SECTION (Grid Normal / Vertikal) -->
+    <section id="projects" class="py-24 relative border-t border-slate-100">
+      <div class="text-center max-w-2xl mx-auto mb-16 gs-section-header px-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-extrabold text-xs uppercase tracking-wider mb-3">
+          Selected Works
         </div>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+          Featured <span class="text-amber-500">Projects</span>
+        </h2>
+        <p class="text-slate-500 text-base mt-3">Koleksi proyek nyata yang saya rancang dan kembangkan.</p>
+      </div>
 
-        <!-- Horizontal track area — fills remaining height -->
-        <div class="flex-1 flex items-center overflow-hidden">
-          <div class="gs-projects-track flex gap-8 pl-6 md:pl-12 lg:pl-24 pr-[50vw] will-change-transform">
-            {projects.map((p, idx) => (
-              <div class={`project-card flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[420px] lg:w-[400px] h-fit flex flex-col justify-between p-7 rounded-3xl bg-white border border-slate-200/90 shadow-lg shadow-slate-100 hover:shadow-2xl hover:border-amber-400/80 transition-all duration-300 group hover:-translate-y-2`}>
-                <div>
-                  <div class="flex items-center justify-between mb-4">
-                    <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200/60">
-                      {p.category}
-                    </span>
-                    <span class="text-xs font-semibold text-emerald-600 flex items-center gap-1">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                      {p.highlight}
-                    </span>
-                  </div>
-
-                  <!-- Project number indicator -->
-                  <div class="text-[80px] font-black text-slate-100 leading-none -mb-6 pointer-events-none select-none">
-                    {String(idx + 1).padStart(2, '0')}
-                  </div>
-
-                  <h3 class="text-xl font-black text-slate-900 mb-3 group-hover:text-amber-600 transition-colors relative z-10">
-                    {p.title}
-                  </h3>
-
-                  <p class="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-3">
-                    {p.description}
-                  </p>
-                </div>
-
-                <div>
-                  <div class="flex flex-wrap gap-1.5 mb-6">
-                    {p.stack.map((t) => (
-                      <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  <a
-                    href={p.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-900 text-slate-700 hover:text-white font-bold text-xs transition-all duration-200"
-                  >
-                    <span>Lihat Repository</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                  </a>
-                </div>
+      <!-- Grid Vertikal Normal untuk Project -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-4 gs-projects-grid">
+        {projects.map((p, idx) => (
+          <div class="project-card flex flex-col justify-between p-7 rounded-3xl bg-white border border-slate-200/90 shadow-lg shadow-slate-100 hover:shadow-2xl hover:border-amber-400/80 transition-all duration-300 group hover:-translate-y-2">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200/60">
+                  {p.category}
+                </span>
+                <span class="text-xs font-semibold text-emerald-600 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  {p.highlight}
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
 
-        <!-- Progress bar (bottom of pinned area) -->
-        <div class="flex-shrink-0 px-6 md:px-12 lg:px-24 pb-6">
-          <div class="h-1 bg-slate-100 rounded-full overflow-hidden max-w-4xl mx-auto">
-            <div class="gs-projects-progress h-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 rounded-full" style="width: 0%"></div>
+              <!-- Project number indicator -->
+              <div class="text-[60px] font-black text-slate-100 leading-none -mb-4 pointer-events-none select-none">
+                {String(idx + 1).padStart(2, '0')}
+              </div>
+
+              <h3 class="text-xl font-black text-slate-900 mb-3 group-hover:text-amber-600 transition-colors relative z-10">
+                {p.title}
+              </h3>
+
+              <p class="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-3">
+                {p.description}
+              </p>
+            </div>
+
+            <div>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                {p.stack.map((t) => (
+                  <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              <a
+                href={p.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-900 text-slate-700 hover:text-white font-bold text-xs transition-all duration-200"
+              >
+                <span>Lihat Repository</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </a>
+            </div>
           </div>
-          <div class="flex justify-between max-w-4xl mx-auto mt-2">
-            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">01</span>
-            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest gs-projects-counter">01 / {String(projects.length).padStart(2, '0')}</span>
-            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">{String(projects.length).padStart(2, '0')}</span>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
-    <!-- 5. CERTIFICATES SECTION (Horizontal Velocity Scroll)-->
+
+    <!-- CERTIFICATES SECTION -->
     <section id="certificates" class="py-24 relative border-t border-slate-100">
       <div class="text-center max-w-2xl mx-auto mb-16 gs-section-header">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/40 text-emerald-400 font-extrabold text-xs uppercase tracking-wider mb-3 border border-emerald-500/20">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-extrabold text-xs uppercase tracking-wider mb-3 border border-emerald-500/20">
           Credentials
         </div>
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-          Verified <span class="text-emerald-400">Certificates</span>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+          Verified <span class="text-emerald-500">Certificates</span>
         </h2>
-        <p class="text-slate-400 text-base mt-3">Bukti kompetensi profesional dari Huawei, Dicoding, dan SkillPedia.</p>
+        <p class="text-slate-500 text-base mt-3">Bukti kompetensi profesional dari Huawei, Dicoding, dan SkillPedia.</p>
       </div>
 
       <!-- Certificates Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto gs-certs-grid px-4">
         {certs.map((cert) => (
           <div
-            class="cert-card group relative cursor-pointer rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:shadow-emerald-500/20 border border-slate-700 aspect-[4/3] bg-slate-800 transition-all duration-300 hover:-translate-y-1.5"
+            class="cert-card group relative cursor-pointer rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:shadow-emerald-500/20 border border-slate-200 aspect-[4/3] bg-slate-50 transition-all duration-300 hover:-translate-y-1.5"
             data-title={cert.title}
             data-issuer={cert.issuer}
             data-file={cert.file}
             data-is-pdf={cert.isPdf ? 'true' : 'false'}
           >
             {cert.isPdf ? (
-              <div class="w-full h-full flex flex-col items-center justify-center bg-slate-800 text-slate-400 group-hover:scale-105 transition-transform duration-500 p-6 text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500 mb-2">
+              <div class="w-full h-full flex flex-col items-center justify-center bg-slate-100 text-slate-500 group-hover:scale-105 transition-transform duration-500 p-6 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-600 mb-2">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                   <polyline points="14 2 14 8 20 8"></polyline>
                   <line x1="16" y1="13" x2="8" y2="13"></line>
                   <line x1="16" y1="17" x2="8" y2="17"></line>
                 </svg>
-                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">{cert.title}</span>
-                <span class="text-[10px] text-slate-500 mt-1">PDF DOCUMENT</span>
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">{cert.title}</span>
+                <span class="text-[10px] text-slate-400 mt-1">PDF DOCUMENT</span>
               </div>
             ) : (
               <img
                 src={cert.file}
                 alt={cert.title}
                 loading="lazy"
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
               />
             )}
 
@@ -509,10 +473,10 @@ const certs = [
         ))}
       </div>
     </section>
-    <!-- 6. CONTACT SECTION (High-Impact Direct Email & Outreach)          -->
+
+    <!-- CONTACT SECTION -->
     <section id="contact" class="py-24 relative border-t border-slate-100">
       <div class="max-w-4xl mx-auto rounded-3xl p-8 sm:p-12 md:p-16 bg-slate-900 text-white text-center relative overflow-hidden shadow-2xl gs-contact-card">
-        <!-- Ambient internal glow -->
         <div class="absolute -top-24 -left-24 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -560,10 +524,9 @@ const certs = [
 
   </div>
 
-  <!-- CERTIFICATE PREVIEW MODAL (Full Interactivity)                     -->
+  <!-- CERTIFICATE PREVIEW MODAL -->
   <div id="cert-modal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden justify-center items-center p-4">
     <div class="bg-white rounded-2xl overflow-hidden w-full max-w-4xl h-[85vh] flex flex-col relative shadow-2xl animate-fade-in-up" id="modal-content">
-      <!-- Modal Header -->
       <div class="p-4 px-6 border-b border-slate-100 flex justify-between items-center bg-white">
         <div>
           <h3 id="modal-title" class="text-base sm:text-lg font-bold text-slate-900"></h3>
@@ -574,13 +537,11 @@ const certs = [
         </button>
       </div>
 
-      <!-- Modal Body -->
       <div class="flex-1 bg-slate-100 overflow-hidden relative flex items-center justify-center p-4">
         <iframe id="modal-iframe" src="" class="w-full h-full rounded-xl shadow-inner bg-white hidden" title="Certificate PDF"></iframe>
         <img id="modal-img" src="" alt="" class="max-w-full max-h-full object-contain rounded-xl shadow-lg hidden" />
       </div>
 
-      <!-- Modal Footer -->
       <div class="p-3 px-6 border-t border-slate-100 bg-white flex justify-end gap-3">
         <a id="modal-download" href="" download class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-xl text-xs hover:bg-slate-800 flex items-center gap-2">
           Unduh File
@@ -591,14 +552,47 @@ const certs = [
   </div>
 </Layout>
 
+<!-- PERBAIKAN: CSS global untuk mengatasi scroll Lenis yang nyangkut -->
+<style is:global>
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+</style>
+
 <script>
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import Lenis from '@studio-freight/lenis';
 
   gsap.registerPlugin(ScrollTrigger);
 
   function initAnimations() {
-    // 1. Parallax subtle float for the 3D model when scrolling down past Hero
+    // === SETUP LENIS SMOOTH SCROLLING (PERBAIKAN: durasi lebih ringan) ===
+    const lenis = new Lenis({
+      duration: 0.8, // <-- lebih enteng
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+
+    // === ANIMASI GSAP BAWAAN ===
     const heroModel = document.getElementById('hero-model-wrap');
     if (heroModel) {
       gsap.to(heroModel, {
@@ -616,7 +610,6 @@ const certs = [
 
     let mm = gsap.matchMedia();
 
-    // 1.5 Experience Section Timeline Line
     const expLine = document.querySelector('.gs-timeline-line');
     if (expLine) {
       gsap.fromTo(expLine, 
@@ -624,12 +617,7 @@ const certs = [
         {
           scaleY: 1,
           ease: 'none',
-          scrollTrigger: {
-            trigger: '#experience',
-            start: 'top 60%',
-            end: 'bottom 80%',
-            scrub: true,
-          }
+          scrollTrigger: { trigger: '#experience', start: 'top 60%', end: 'bottom 80%', scrub: true }
         }
       );
     }
@@ -677,66 +665,16 @@ const certs = [
         );
       }
 
-      // Projects — Horizontal Scroll (pinned on both desktop & mobile)
-      const pinSection = document.querySelector('.gs-projects-pin-section') as HTMLElement;
-      const projectTrack = document.querySelector('.gs-projects-track') as HTMLElement;
-      const projectProgress = document.querySelector('.gs-projects-progress') as HTMLElement;
-      const projectCounter = document.querySelector('.gs-projects-counter') as HTMLElement;
+      // Projects Cards (KEMBALI KE VERTIKAL / GRID NORMAL)
       const projectCards = gsap.utils.toArray('.project-card');
-      const totalProjects = projectCards.length;
-
-      if (pinSection && projectTrack && projectCards.length) {
-        // Calculate how far we need to scroll horizontally
-        const getScrollAmount = () => {
-          return projectTrack.scrollWidth - window.innerWidth;
-        };
-
-        // Pin the section and translate the track horizontally
-        const hScrollTween = gsap.to(projectTrack, {
-          x: () => -getScrollAmount(),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: pinSection,
-            start: 'top top',
-            end: () => `+=${getScrollAmount()}`,
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              // Update progress bar
-              if (projectProgress) {
-                gsap.set(projectProgress, { width: `${self.progress * 100}%` });
-              }
-              // Update counter
-              if (projectCounter) {
-                const currentIdx = Math.min(
-                  Math.floor(self.progress * totalProjects) + 1,
-                  totalProjects
-                );
-                projectCounter.textContent = `${String(currentIdx).padStart(2, '0')} / ${String(totalProjects).padStart(2, '0')}`;
-              }
-            }
+      if (projectCards.length) {
+        gsap.fromTo(projectCards,
+          { opacity: 0, y: isMobile ? 30 : 50 },
+          {
+            opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'back.out(1.5)',
+            scrollTrigger: { trigger: '.gs-projects-grid', start: 'top 85%', toggleActions: 'play reverse play reverse' }
           }
-        });
-
-        // 3D entrance for each card as it scrolls into the viewport
-        projectCards.forEach((card: any) => {
-          gsap.fromTo(card,
-            { opacity: 0, scale: 0.85, rotateY: 15, y: 40 },
-            {
-              opacity: 1, scale: 1, rotateY: 0, y: 0,
-              duration: 1, ease: 'power3.out',
-              scrollTrigger: {
-                trigger: card,
-                containerAnimation: hScrollTween,
-                start: 'left 85%',
-                end: 'left 50%',
-                toggleActions: 'play none none reverse'
-              }
-            }
-          );
-        });
+        );
       }
 
       // Certificates Cards
@@ -764,10 +702,11 @@ const certs = [
       }
     });
 
-    // Hero Elements Entrance (Independent of scroll)
     gsap.fromTo('.gs-hero-left', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
     gsap.fromTo('.gs-hero-center', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 1.2, ease: 'back.out(1.5)', delay: 0.4 });
     gsap.fromTo('.gs-hero-right', { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.6 });
+
+    // === MODAL LOGIC ===
     const modal = document.getElementById('cert-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalIssuer = document.getElementById('modal-issuer');
@@ -829,17 +768,15 @@ const certs = [
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       window.addEventListener('loaderComplete', initAnimations, { once: true });
-      setTimeout(initAnimations, 3000); // Fallback
+      setTimeout(initAnimations, 3000); 
     });
   } else {
     window.addEventListener('loaderComplete', initAnimations, { once: true });
-    setTimeout(initAnimations, 3000); // Fallback
+    setTimeout(initAnimations, 3000);
   }
   
-  // Untuk transisi page di Astro (View Transitions)
   document.addEventListener('astro:page-load', () => {
     initAnimations();
     ScrollTrigger.refresh();
   });
 </script>
-
