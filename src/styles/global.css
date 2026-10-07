@@ -97,3 +97,17 @@
     /* Firefox */
   }
 }
+
+/* Horizontal Project Scroll — hide scrollbar */
+.gs-projects-horizontal-wrap {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.gs-projects-horizontal-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+/* 3D perspective for project cards */
+.gs-projects-track {
+  perspective: 1200px;
+}
