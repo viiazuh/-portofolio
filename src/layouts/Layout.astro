@@ -29,6 +29,8 @@ const {
   <body
     class="bg-white text-slate-900 antialiased selection:bg-amber-400 selection:text-slate-900 overflow-x-hidden"
   >
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress"></div>
     <div
       id="loader"
       class="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center overflow-hidden"
@@ -90,7 +92,7 @@ const {
       </div>
     </div>
     <Navbar />
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12" id="main-content">
+    <main class="w-full max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12" id="main-content">
       <slot />
     </main>
     <Footer />
@@ -112,7 +114,6 @@ const {
         if (loaderBar && percText && loader && mainContent) {
           gsap.set(mainContent, { opacity: 0, y: 30, scale: 0.98 });
 
-          // Initial Entrance animations for loader
           gsap.to(".loader-title", {
             y: 0,
             duration: 0.8,
@@ -143,36 +144,43 @@ const {
               percText.textContent = progress + "%";
             },
           })
-            .to(
-              ".loader-content",
-              {
-                scale: 0.9,
-                opacity: 0,
-                duration: 0.6,
-                ease: "power3.in",
-              },
-              "-=0.3",
-            )
+            .to(".loader-content", {
+              scale: 0.9,
+              opacity: 0,
+              duration: 0.6,
+              ease: "power3.in",
+            }, "-=0.3")
             .to(loader, {
-              yPercent: -100, // Slide up the whole loader screen
+              yPercent: -100,
               duration: 1,
               ease: "expo.inOut",
-              borderRadius: "0 0 50% 50%", // add cool curving effect as it goes up
+              borderRadius: "0 0 50% 50%",
             })
-            .to(
-              mainContent,
-              {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 1.2,
-                ease: "expo.out",
-                clearProps: "transform",
-              },
-              "-=0.7",
-            );
+            .to(mainContent, {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1.2,
+              ease: "expo.out",
+              clearProps: "transform",
+            }, "-=0.7");
         } else {
           window.dispatchEvent(new Event("loaderComplete"));
+        }
+
+        // ── Scroll Progress Bar ──
+        const progressBar = document.getElementById("scroll-progress");
+        if (progressBar) {
+          gsap.to(progressBar, {
+            scaleX: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: document.body,
+              start: "top top",
+              end: "bottom bottom",
+              scrub: 0.3,
+            },
+          });
         }
       });
     </script>

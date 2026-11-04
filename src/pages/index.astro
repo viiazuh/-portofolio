@@ -152,9 +152,9 @@ const certs = [
     
     <!-- BACKGROUND ATMOSPHERE & MESH DECORATION -->
     <div class="absolute inset-0 z-0 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:16px_28px] pointer-events-none"></div>
-    <div class="absolute top-12 left-10 w-[500px] h-[500px] bg-blue-400/15 rounded-full blur-[120px] pointer-events-none -z-10"></div>
-    <div class="absolute top-[600px] right-10 w-[500px] h-[500px] bg-purple-400/15 rounded-full blur-[130px] pointer-events-none -z-10"></div>
-    <div class="absolute top-[1600px] left-10 w-[500px] h-[500px] bg-amber-400/15 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+    <div class="bg-orb absolute top-12 left-10 w-[500px] h-[500px] bg-blue-400/15 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+    <div class="bg-orb absolute top-[600px] right-10 w-[500px] h-[500px] bg-purple-400/15 rounded-full blur-[130px] pointer-events-none -z-10"></div>
+    <div class="bg-orb absolute top-[1600px] left-10 w-[500px] h-[500px] bg-amber-400/15 rounded-full blur-[140px] pointer-events-none -z-10"></div>
 
     <section id="hero" class="relative z-10 pt-4 md:pt-10 pb-16 min-h-[calc(100vh-80px)] flex flex-col justify-center">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
@@ -177,8 +177,8 @@ const certs = [
             </span>
           </h1>
 
-          <p class="text-slate-600 text-sm md:text-base leading-relaxed mb-8 max-w-sm mx-auto lg:mx-0">
-            Seorang <b>Cross-Platform Developer</b>. Membangun aplikasi web dan mobile
+          <p class="text-slate-600 text-sm md:text-base leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
+            Seorang <b>Cross-Platform Developer</b>. Membangun aplikasi web dan mobile berkinerja tinggi, modern, dan skalabel.
           </p>
 
           <!-- Action Buttons -->
@@ -203,7 +203,7 @@ const certs = [
 
         <!-- CENTER: Seamless 3D Avatar (Responsive Height) -->
         <div id="hero-model-wrap" class="lg:col-span-4 relative flex items-center justify-center order-1 lg:order-2 my-0 gs-hero-center w-full">
-          <div class="w-full max-w-[280px] sm:max-w-[350px] lg:max-w-[440px] relative">
+          <div class="w-full max-w-[280px] sm:max-w-[360px] lg:max-w-[460px] relative">
             <div class="block lg:hidden">
               <ModelViewer modelPath="/model.glb" height="320px" />
             </div>
@@ -213,7 +213,7 @@ const certs = [
           </div>
         </div>
 
-        <!-- RIGHT: Big Typography Role & Metrics -->
+        <!-- RIGHT: Big Typography Role & Metrics (Tetap di Kanan) -->
         <div class="lg:col-span-4 text-center lg:text-left flex flex-col justify-center order-3 space-y-5 gs-hero-right">
           <div>
             <span class="text-xs uppercase tracking-widest font-extrabold text-indigo-600 block mb-1">
@@ -228,16 +228,16 @@ const certs = [
           </div>
 
           <!-- Quick Stats -->
-          <div class="grid grid-cols-3 gap-3 pt-5 border-t border-slate-200/80 max-w-sm mx-auto lg:mx-0">
-            <div class="p-3.5 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200/80 shadow-sm text-center hover:shadow-md transition-all">
-              <div class="text-2xl font-black text-slate-900">19+</div>
+          <div class="grid grid-cols-3 gap-3 pt-5 border-t border-slate-200/80 max-w-md mx-auto lg:mx-0">
+            <div class="p-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/90 shadow-sm text-center hover:shadow-md transition-all">
+              <div class="text-2xl font-black text-slate-900" data-count="19">19+</div>
               <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Projects</div>
             </div>
-            <div class="p-3.5 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200/80 shadow-sm text-center hover:shadow-md transition-all">
-              <div class="text-2xl font-black text-slate-900">9+</div>
+            <div class="p-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/90 shadow-sm text-center hover:shadow-md transition-all">
+              <div class="text-2xl font-black text-slate-900" data-count="9">9+</div>
               <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Certificates</div>
             </div>
-            <div class="p-3.5 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200/80 shadow-sm text-center hover:shadow-md transition-all">
+            <div class="p-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-sm text-center hover:shadow-md transition-all">
               <div class="text-2xl font-black text-slate-900">3y</div>
               <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Experience</div>
             </div>
@@ -306,8 +306,188 @@ const certs = [
       </div>
     </section>
 
-    <!-- SERVICES SECTION -->
-    <section id="services" class="py-24 relative">
+    <!-- MOBILE ONLY: PORTFOLIO SHOWCASE WITH SEGMENTED TABS (SESUAI TEMA LIGHT WEBPAGE) -->
+    <section id="portfolio-showcase" class="block md:hidden py-12 px-3 relative border-t border-slate-100">
+      
+      <!-- Header Section -->
+      <div class="text-center max-w-sm mx-auto mb-6 relative z-10 px-2 gs-section-header">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-extrabold text-xs uppercase tracking-wider mb-2.5">
+          Showcase
+        </div>
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight mb-2">
+          Portfolio <span class="text-indigo-600">Showcase</span>
+        </h2>
+        <p class="text-slate-500 text-xs leading-relaxed">
+          Koleksi proyek nyata, sertifikat terverifikasi, dan keahlian teknis saya dalam satu tempat.
+        </p>
+      </div>
+
+      <!-- 3 Segmented Buttons Container (Projects, Certificates, Tech Stack) -->
+      <div class="relative z-10 max-w-md mx-auto mb-6 p-1.5 bg-slate-100/90 border border-slate-200/80 rounded-2xl shadow-inner grid grid-cols-3 gap-1.5">
+        
+        <!-- Tab 1: Projects -->
+        <button
+          type="button"
+          data-tab-target="tab-projects"
+          class="mobile-showcase-tab flex flex-col items-center justify-center py-2.5 px-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-white/60"
+        >
+          <div class="mb-1 text-slate-500 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <span class="text-[11px] font-bold tracking-tight">Projects</span>
+        </button>
+
+        <!-- Tab 2: Certificates (Active Default) -->
+        <button
+          type="button"
+          data-tab-target="tab-certificates"
+          class="mobile-showcase-tab active-tab flex flex-col items-center justify-center py-2.5 px-1.5 rounded-xl transition-all duration-200 text-indigo-600 bg-white border border-slate-200/90 shadow-sm"
+        >
+          <div class="mb-1 text-indigo-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"></circle>
+              <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+            </svg>
+          </div>
+          <span class="text-[11px] font-bold tracking-tight">Certificates</span>
+        </button>
+
+        <!-- Tab 3: Tech Stack -->
+        <button
+          type="button"
+          data-tab-target="tab-tech"
+          class="mobile-showcase-tab flex flex-col items-center justify-center py-2.5 px-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-white/60"
+        >
+          <div class="mb-1 text-slate-500 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <span class="text-[11px] font-bold tracking-tight">Tech Stack</span>
+        </button>
+      </div>
+
+      <!-- Tab Content Panels -->
+      <div class="relative z-10 max-w-md mx-auto">
+        <!-- 1. PROJECTS PANEL -->
+        <div id="tab-projects" class="mobile-tab-panel hidden space-y-4">
+          {projects.map((p, idx) => (
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-md">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200/60">
+                  {p.category}
+                </span>
+                <span class="text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  {p.highlight}
+                </span>
+              </div>
+              <h3 class="text-base font-black text-slate-900 mb-1.5">{p.title}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">{p.description}</p>
+              <div class="flex flex-wrap gap-1.5 mb-3.5">
+                {p.stack.map((t) => (
+                  <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-medium">
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <a
+                href={p.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-colors"
+              >
+                <span>Lihat Repository</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <!-- 2. CERTIFICATES PANEL (Default Active Sesuai Gambar) -->
+        <div id="tab-certificates" class="mobile-tab-panel space-y-4">
+          {certs.map((cert) => (
+            <div
+              class="cert-card cursor-pointer rounded-2xl overflow-hidden shadow-md border border-slate-200/90 bg-white group transition-transform active:scale-[0.98]"
+              data-title={cert.title}
+              data-issuer={cert.issuer}
+              data-file={cert.file}
+              data-is-pdf={cert.isPdf ? 'true' : 'false'}
+            >
+              {cert.isPdf ? (
+                <div class="w-full aspect-[16/10] flex flex-col items-center justify-center bg-slate-50 text-slate-700 p-6 text-center border-b border-slate-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-600 mb-2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                  </svg>
+                  <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">{cert.title}</span>
+                  <span class="text-[10px] text-slate-400 mt-0.5">Dokumen Resmi PDF</span>
+                </div>
+              ) : (
+                <div class="w-full aspect-[16/10] bg-slate-50 overflow-hidden relative border-b border-slate-100">
+                  <img
+                    src={cert.file}
+                    alt={cert.title}
+                    loading="lazy"
+                    class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              )}
+              <div class="p-3.5 bg-white flex items-center justify-between">
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900 line-clamp-1">{cert.title}</h4>
+                  <p class="text-[10px] text-slate-500">{cert.issuer} • {cert.tag}</p>
+                </div>
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[10px] font-bold shrink-0">
+                  Preview
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- 3. TECH STACK PANEL -->
+        <div id="tab-tech" class="mobile-tab-panel hidden space-y-4">
+          {skills.map((skill) => (
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-md">
+              <div class="flex items-center justify-between mb-3">
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-800" set:html={skill.icon} />
+                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                  {skill.badge}
+                </span>
+              </div>
+              <h3 class="text-base font-black text-slate-900 mb-1.5">{skill.title}</h3>
+              {skill.description && (
+                <p class="text-xs text-slate-600 leading-relaxed mb-3">{skill.description}</p>
+              )}
+              <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                {skill.techs.map((tech) => (
+                  <span class="px-2.5 py-1 bg-slate-50 border border-slate-100 text-slate-700 rounded-md text-[10px] font-semibold">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SERVICES SECTION (DESKTOP) -->
+    <section id="services" class="hidden md:block py-24 relative">
       <div class="text-center max-w-2xl mx-auto mb-16 gs-section-header">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-extrabold text-xs uppercase tracking-wider mb-3">
           Specializations
@@ -350,8 +530,8 @@ const certs = [
       </div>
     </section>
 
-    <!-- FEATURED PROJECTS SECTION (Grid Normal / Vertikal) -->
-    <section id="projects" class="py-24 relative border-t border-slate-100">
+    <!-- FEATURED PROJECTS SECTION (DESKTOP) -->
+    <section id="projects" class="hidden md:block py-24 relative border-t border-slate-100">
       <div class="text-center max-w-2xl mx-auto mb-16 gs-section-header px-4">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-extrabold text-xs uppercase tracking-wider mb-3">
           Selected Works
@@ -417,8 +597,8 @@ const certs = [
       </div>
     </section>
 
-    <!-- CERTIFICATES SECTION -->
-    <section id="certificates" class="py-24 relative border-t border-slate-100">
+    <!-- CERTIFICATES SECTION (DESKTOP) -->
+    <section id="certificates" class="hidden md:block py-24 relative border-t border-slate-100">
       <div class="text-center max-w-2xl mx-auto mb-16 gs-section-header">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-extrabold text-xs uppercase tracking-wider mb-3 border border-emerald-500/20">
           Credentials
@@ -552,174 +732,261 @@ const certs = [
   </div>
 </Layout>
 
-<!-- PERBAIKAN: CSS global untuk mengatasi scroll Lenis yang nyangkut -->
-<style is:global>
-  html.lenis, html.lenis body {
-    height: auto;
-  }
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
-  }
-  .lenis.lenis-stopped {
-    overflow: hidden;
-  }
-  .lenis.lenis-scrolling iframe {
-    pointer-events: none;
-  }
-</style>
-
 <script>
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import Lenis from '@studio-freight/lenis';
+  import { TextPlugin } from 'gsap/TextPlugin';
+  import Lenis from 'lenis';
 
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+  // ─────────────────────────────────────────────
+  //  HELPERS
+  // ─────────────────────────────────────────────
+
+  function splitTextToWords(el: HTMLElement) {
+    const words = el.innerText.trim().split(/\s+/);
+    el.innerHTML = words
+      .map(w => `<span class="reveal-word"><span>${w}&nbsp;</span></span>`)
+      .join('');
+    return el.querySelectorAll<HTMLElement>('.reveal-word span');
+  }
+
+  // ─────────────────────────────────────────────
+  //  MAIN INIT
+  // ─────────────────────────────────────────────
 
   function initAnimations() {
-    // === SETUP LENIS SMOOTH SCROLLING (PERBAIKAN: durasi lebih ringan) ===
+
+    // ── 1. LENIS SMOOTH SCROLL ────────────────────
     const lenis = new Lenis({
-      duration: 0.8, // <-- lebih enteng
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.5,
     });
 
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
 
+    // ── 2. HERO SECTION ──────────────────────────
 
-    // === ANIMASI GSAP BAWAAN ===
+    const heroHeading = document.querySelector<HTMLElement>('#hero h1');
+    if (heroHeading) {
+      const words = splitTextToWords(heroHeading);
+      gsap.fromTo(words,
+        { y: '110%', opacity: 0 },
+        { y: '0%', opacity: 1, duration: 1, stagger: 0.08, ease: 'expo.out', delay: 0.2 }
+      );
+    }
+
+    gsap.fromTo('.gs-hero-left',
+      { opacity: 0, x: -50, filter: 'blur(8px)' },
+      { opacity: 1, x: 0, filter: 'blur(0px)', duration: 1.1, ease: 'expo.out', delay: 0.1 }
+    );
+    gsap.fromTo('.gs-hero-center',
+      { opacity: 0, scale: 0.85, filter: 'blur(12px)' },
+      { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.4, ease: 'back.out(1.4)', delay: 0.3 }
+    );
+    gsap.fromTo('.gs-hero-right',
+      { opacity: 0, x: 50, filter: 'blur(8px)' },
+      { opacity: 1, x: 0, filter: 'blur(0px)', duration: 1.1, ease: 'expo.out', delay: 0.5 }
+    );
+
+    // Hero model subtle parallax (HANYA posisi Y, TANPA opacity fade out agar model tetap 100% terlihat jelas)
     const heroModel = document.getElementById('hero-model-wrap');
     if (heroModel) {
       gsap.to(heroModel, {
-        y: 80,
-        opacity: 0.7,
+        y: 50,
         ease: 'none',
         scrollTrigger: {
           trigger: '#hero',
           start: 'top top',
           end: 'bottom top',
-          scrub: true,
+          scrub: 1,
         },
       });
     }
 
-    let mm = gsap.matchMedia();
+    // ── 3. EXPERIENCE TIMELINE LINE ──────────────
 
     const expLine = document.querySelector('.gs-timeline-line');
     if (expLine) {
-      gsap.fromTo(expLine, 
+      gsap.fromTo(expLine,
         { scaleY: 0 },
         {
           scaleY: 1,
           ease: 'none',
-          scrollTrigger: { trigger: '#experience', start: 'top 60%', end: 'bottom 80%', scrub: true }
+          scrollTrigger: {
+            trigger: '#experience',
+            start: 'top 60%',
+            end: 'bottom 80%',
+            scrub: true,
+          }
         }
       );
     }
 
+    // ── 4. SECTION HEADERS — word-by-word reveal ─
+
+    document.querySelectorAll<HTMLElement>('.gs-section-header h2').forEach((h2) => {
+      const words = splitTextToWords(h2);
+      gsap.fromTo(words,
+        { y: '110%', opacity: 0 },
+        {
+          y: '0%', opacity: 1,
+          duration: 0.9, stagger: 0.06, ease: 'expo.out',
+          scrollTrigger: { trigger: h2, start: 'top 88%', toggleActions: 'play none none reverse' }
+        }
+      );
+    });
+
+    document.querySelectorAll<HTMLElement>('.gs-section-header .inline-flex').forEach((badge) => {
+      gsap.fromTo(badge,
+        { opacity: 0, y: 20, scale: 0.9 },
+        {
+          opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(2)',
+          scrollTrigger: { trigger: badge, start: 'top 90%', toggleActions: 'play none none reverse' }
+        }
+      );
+    });
+
+    document.querySelectorAll<HTMLElement>('.gs-section-header p').forEach((p) => {
+      gsap.fromTo(p,
+        { opacity: 0, y: 15 },
+        {
+          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: p, start: 'top 90%', toggleActions: 'play none none reverse' }
+        }
+      );
+    });
+
+    // ── 5. MATCH MEDIA ────────────────────────────
+
+    const mm = gsap.matchMedia();
+
     mm.add({
-      isMobile: "(max-width: 767px)",
-      isDesktop: "(min-width: 768px)"
-    }, (context) => {
-      let { isMobile } = context.conditions;
+      isMobile:  '(max-width: 767px)',
+      isDesktop: '(min-width: 768px)'
+    }, (ctx) => {
+      const { isMobile } = ctx.conditions as { isMobile: boolean };
 
-      // Experience Cards
-      const expCards = gsap.utils.toArray('.experience-card');
-      if (expCards.length) {
-        expCards.forEach((card: any) => {
-          gsap.fromTo(card, 
-            { opacity: 0, x: isMobile ? 20 : 50, y: 20 },
-            {
-              opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power3.out',
-              scrollTrigger: { trigger: card, start: 'top 90%', toggleActions: 'play reverse play reverse' }
-            }
-          );
-        });
-      }
-
-      // Section Headers
-      gsap.utils.toArray('.gs-section-header').forEach((header: any) => {
-        gsap.fromTo(header,
-          { opacity: 0, y: isMobile ? 20 : 30 },
+      // Experience cards
+      gsap.utils.toArray<HTMLElement>('.experience-card').forEach((card, i) => {
+        gsap.fromTo(card,
+          { opacity: 0, x: isMobile ? 30 : 70, y: 10 },
           {
-            opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-            scrollTrigger: { trigger: header, start: 'top 90%', toggleActions: 'play reverse play reverse' }
+            opacity: 1, x: 0, y: 0,
+            duration: 0.9, ease: 'expo.out', delay: i * 0.08,
+            scrollTrigger: {
+              trigger: card, start: 'top 92%',
+              toggleActions: 'play none none reverse',
+            }
           }
         );
       });
 
-      // Services Cards
-      const serviceCards = gsap.utils.toArray('.service-card');
+      // Service cards
+      const serviceCards = gsap.utils.toArray<HTMLElement>('.service-card');
       if (serviceCards.length) {
         gsap.fromTo(serviceCards,
-          { opacity: 0, y: isMobile ? 25 : 40 },
+          { opacity: 0, y: isMobile ? 30 : 60, scale: 0.93 },
           {
-            opacity: 1, y: 0, duration: 0.8, stagger: isMobile ? 0.1 : 0.2, ease: 'back.out(1.7)',
-            scrollTrigger: { trigger: '.gs-services-cards', start: 'top 85%', toggleActions: 'play reverse play reverse' }
+            opacity: 1, y: 0, scale: 1,
+            duration: 0.9, stagger: isMobile ? 0.1 : 0.15, ease: 'expo.out',
+            scrollTrigger: {
+              trigger: '.gs-services-cards', start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            }
           }
         );
       }
 
-      // Projects Cards (KEMBALI KE VERTIKAL / GRID NORMAL)
-      const projectCards = gsap.utils.toArray('.project-card');
+      // Project cards
+      const projectCards = gsap.utils.toArray<HTMLElement>('.project-card');
       if (projectCards.length) {
         gsap.fromTo(projectCards,
-          { opacity: 0, y: isMobile ? 30 : 50 },
+          { opacity: 0, y: isMobile ? 40 : 70, rotateX: isMobile ? 0 : 8 },
           {
-            opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'back.out(1.5)',
-            scrollTrigger: { trigger: '.gs-projects-grid', start: 'top 85%', toggleActions: 'play reverse play reverse' }
+            opacity: 1, y: 0, rotateX: 0,
+            duration: 0.9, stagger: 0.1, ease: 'expo.out',
+            scrollTrigger: {
+              trigger: '.gs-projects-grid', start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            }
           }
         );
       }
 
-      // Certificates Cards
-      const certCards = gsap.utils.toArray('.cert-card');
+      // Certificate cards — flip-in Y
+      const certCards = gsap.utils.toArray<HTMLElement>('.cert-card');
       if (certCards.length) {
         gsap.fromTo(certCards,
-          { opacity: 0, rotationX: isMobile ? 20 : 45, y: isMobile ? 30 : 50, transformPerspective: 1000 },
+          { opacity: 0, rotationY: isMobile ? 20 : 40, y: isMobile ? 30 : 50, transformPerspective: 1000 },
           {
-            opacity: 1, rotationX: 0, y: 0, duration: 1, stagger: 0.1, ease: 'expo.out',
-            scrollTrigger: { trigger: '.gs-certs-grid', start: 'top 90%', toggleActions: 'play reverse play reverse' }
+            opacity: 1, rotationY: 0, y: 0,
+            duration: 1, stagger: 0.08, ease: 'expo.out',
+            scrollTrigger: {
+              trigger: '.gs-certs-grid', start: 'top 88%',
+              toggleActions: 'play none none reverse',
+            }
           }
         );
       }
 
-      // Contact Card
-      const contactCard = document.querySelector('.gs-contact-card');
+      // Contact card — elastic scale-in
+      const contactCard = document.querySelector<HTMLElement>('.gs-contact-card');
       if (contactCard) {
         gsap.fromTo(contactCard,
-          { opacity: 0, scale: isMobile ? 0.95 : 0.85, y: isMobile ? 30 : 50 },
+          { opacity: 0, scale: isMobile ? 0.95 : 0.8, y: isMobile ? 30 : 60 },
           {
-            opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.7)',
-            scrollTrigger: { trigger: contactCard, start: 'top 90%', toggleActions: 'play reverse play reverse' }
+            opacity: 1, scale: 1, y: 0,
+            duration: 1.3, ease: 'elastic.out(1, 0.65)',
+            scrollTrigger: {
+              trigger: contactCard, start: 'top 88%',
+              toggleActions: 'play none none reverse',
+            }
           }
         );
       }
+
+      return () => {};
     });
 
-    gsap.fromTo('.gs-hero-left', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
-    gsap.fromTo('.gs-hero-center', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 1.2, ease: 'back.out(1.5)', delay: 0.4 });
-    gsap.fromTo('.gs-hero-right', { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.6 });
+    // ── 6. HOVER TILT on project / service cards ──
 
-    // === MODAL LOGIC ===
-    const modal = document.getElementById('cert-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalIssuer = document.getElementById('modal-issuer');
-    const modalIframe = document.getElementById('modal-iframe') as HTMLIFrameElement | null;
-    const modalImg = document.getElementById('modal-img') as HTMLImageElement | null;
-    const modalDownload = document.getElementById('modal-download') as HTMLAnchorElement | null;
-    const modalClose = document.getElementById('modal-close');
+    document.querySelectorAll<HTMLElement>('.project-card, .service-card').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 10;
+        const y = ((e.clientY - rect.top)  / rect.height - 0.5) * -10;
+        gsap.to(card, { rotateY: x, rotateX: y, duration: 0.4, ease: 'power2.out', transformPerspective: 800 });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+      });
+    });
+
+    // ── 7. MODAL LOGIC ───────────────────────────
+
+    const modal         = document.getElementById('cert-modal');
+    const modalTitle    = document.getElementById('modal-title');
+    const modalIssuer   = document.getElementById('modal-issuer');
+    const modalIframe   = document.getElementById('modal-iframe')   as HTMLIFrameElement | null;
+    const modalImg      = document.getElementById('modal-img')      as HTMLImageElement   | null;
+    const modalDownload = document.getElementById('modal-download') as HTMLAnchorElement  | null;
+    const modalClose    = document.getElementById('modal-close');
+    const modalContent  = document.getElementById('modal-content');
 
     function openModal(title: string, issuer: string, file: string, isPdf: boolean) {
-      if (!modal) return;
-      if (modalTitle) modalTitle.textContent = title;
-      if (modalIssuer) modalIssuer.textContent = `Issued by: ${issuer}`;
-      if (modalDownload) modalDownload.href = file;
+      if (!modal || !modalContent) return;
+      if (modalTitle)    modalTitle.textContent  = title;
+      if (modalIssuer)   modalIssuer.textContent = `Issued by: ${issuer}`;
+      if (modalDownload) modalDownload.href       = file;
 
       if (isPdf && modalIframe && modalImg) {
         modalIframe.src = file;
@@ -734,47 +1001,128 @@ const certs = [
 
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+
+      gsap.set(modalContent,  { scale: 0.85, opacity: 0, y: 30 });
+      gsap.to(modalContent,   { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' });
     }
 
     function closeModal() {
-      if (!modal) return;
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      if (modalIframe) modalIframe.src = '';
-      if (modalImg) modalImg.src = '';
+      if (!modal || !modalContent) return;
+      gsap.to(modalContent, {
+        scale: 0.9, opacity: 0, y: 20, duration: 0.3, ease: 'power3.in',
+        onComplete: () => {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+          if (modalIframe) modalIframe.src = '';
+          if (modalImg)    modalImg.src    = '';
+        }
+      });
     }
 
     document.querySelectorAll<HTMLElement>('.cert-card').forEach((card) => {
       card.addEventListener('click', () => {
         openModal(
-          card.dataset.title ?? '',
+          card.dataset.title  ?? '',
           card.dataset.issuer ?? '',
-          card.dataset.file ?? '',
+          card.dataset.file   ?? '',
           card.dataset.isPdf === 'true'
         );
       });
     });
 
     modalClose?.addEventListener('click', closeModal);
-    modal?.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
+    modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // ── 8. MOBILE SHOWCASE TAB SWITCHER (SESUAI GAMBAR) ──
+    const mobileTabs = document.querySelectorAll<HTMLButtonElement>('.mobile-showcase-tab');
+    const mobilePanels = document.querySelectorAll<HTMLElement>('.mobile-tab-panel');
+
+    function switchMobileTab(targetId: string) {
+      mobileTabs.forEach((tab) => {
+        const isTarget = tab.dataset.tabTarget === targetId;
+        const iconDiv = tab.querySelector('div');
+        if (isTarget) {
+          tab.classList.add(
+            'active-tab',
+            'text-indigo-600',
+            'bg-white',
+            'border',
+            'border-slate-200/90',
+            'shadow-sm'
+          );
+          tab.classList.remove('text-slate-600', 'hover:bg-white/60');
+          if (iconDiv) {
+            iconDiv.classList.add('text-indigo-600');
+            iconDiv.classList.remove('text-slate-500');
+          }
+        } else {
+          tab.classList.remove(
+            'active-tab',
+            'text-indigo-600',
+            'bg-white',
+            'border',
+            'border-slate-200/90',
+            'shadow-sm'
+          );
+          tab.classList.add('text-slate-600', 'hover:bg-white/60');
+          if (iconDiv) {
+            iconDiv.classList.remove('text-indigo-600');
+            iconDiv.classList.add('text-slate-500');
+          }
+        }
+      });
+
+      mobilePanels.forEach((panel) => {
+        if (panel.id === targetId) {
+          panel.classList.remove('hidden');
+          gsap.fromTo(
+            panel.children,
+            { opacity: 0, y: 15 },
+            { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, ease: 'power2.out' }
+          );
+        } else {
+          panel.classList.add('hidden');
+        }
+      });
+
+      ScrollTrigger.refresh();
+    }
+
+    mobileTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tabTarget;
+        if (target) switchMobileTab(target);
+      });
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
-  }
+    // Sinkronisasi jika link navbar diklik di mobile (#projects, #certificates, #services)
+    function checkHashForMobileTab() {
+      const hash = window.location.hash;
+      if (hash === '#projects') switchMobileTab('tab-projects');
+      else if (hash === '#certificates') switchMobileTab('tab-certificates');
+      else if (hash === '#services') switchMobileTab('tab-tech');
+    }
+
+    window.addEventListener('hashchange', checkHashForMobileTab);
+    checkHashForMobileTab();
+
+  } // end initAnimations
+
+  // ─────────────────────────────────────────────
+  //  BOOT
+  // ─────────────────────────────────────────────
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       window.addEventListener('loaderComplete', initAnimations, { once: true });
-      setTimeout(initAnimations, 3000); 
+      setTimeout(initAnimations, 3500);
     });
   } else {
     window.addEventListener('loaderComplete', initAnimations, { once: true });
-    setTimeout(initAnimations, 3000);
+    setTimeout(initAnimations, 3500);
   }
-  
+
   document.addEventListener('astro:page-load', () => {
     initAnimations();
     ScrollTrigger.refresh();

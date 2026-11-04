@@ -40,7 +40,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
         d="M10 10.5a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2V18a6 6 0 0 0 12 0v-5a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"
       ></path></svg
     >
-    Drag to rotate · Scroll to zoom
+    Drag to rotate 3D Model
   </div>
 </div>
 
@@ -53,6 +53,10 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Isolasi compositing layer — model tidak terganggu overlay CSS */
+    isolation: isolate;
+    transform: translateZ(0);
+    will-change: transform;
   }
 
   .model-aura-glow {
@@ -274,6 +278,7 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
       controls.maxPolarAngle = Math.PI * 0.75;
       controls.minPolarAngle = Math.PI * 0.25;
       controls.enablePan = false;
+      controls.enableZoom = false;
 
       let userInteracting = false;
       canvas.addEventListener("pointerdown", () => {
