@@ -7,11 +7,13 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  noLoader?: boolean;
 }
 
 const {
   title = "Vio Azuhri | Cross-Platform Developer",
   description = "Portfolio of Vio Azuhri — Cross-Platform Developer specializing in Kotlin, Flutter, React, Vue, and modern architectures.",
+  noLoader = false,
 } = Astro.props;
 ---
 
@@ -31,66 +33,68 @@ const {
   >
     <!-- Scroll Progress Bar -->
     <div id="scroll-progress"></div>
-    <div
-      id="loader"
-      class="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center overflow-hidden"
-    >
-      <!-- Decorative background elements -->
+    {!noLoader && (
       <div
-        class="loader-circle absolute w-[150vw] h-[150vw] rounded-full bg-slate-50 -z-10 scale-0"
+        id="loader"
+        class="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center overflow-hidden"
       >
-      </div>
-
-      <div class="loader-content flex flex-col items-center relative z-10">
-        <!-- Modern spinning abstract logo -->
-        <div class="loader-icon mb-10 relative w-20 h-20">
-          <div
-            class="absolute inset-0 border-[3px] border-indigo-100 rounded-full"
-          >
-          </div>
-          <div
-            class="absolute inset-0 border-[3px] border-amber-500 rounded-full border-t-transparent animate-spin"
-          >
-          </div>
-          <div
-            class="absolute inset-2 border-[3px] border-indigo-500 rounded-full border-b-transparent animate-[spin_1.5s_linear_infinite_reverse]"
-          >
-          </div>
-          <div
-            class="absolute inset-4 bg-slate-900 rounded-full flex items-center justify-center"
-          >
-            <span class="w-1.5 h-1.5 bg-white rounded-full animate-ping"></span>
-          </div>
-        </div>
-
-        <!-- Animated typography -->
-        <div class="overflow-hidden mb-6 flex space-x-1">
-          <h1
-            class="loader-title text-xl font-black text-slate-800 tracking-[0.2em] uppercase translate-y-full"
-          >
-            Sabar Rek
-          </h1>
-        </div>
-
+        <!-- Decorative background elements -->
         <div
-          class="loader-bar-wrap w-56 md:w-72 h-1 bg-slate-100 rounded-full overflow-hidden shadow-inner relative"
+          class="loader-circle absolute w-[150vw] h-[150vw] rounded-full bg-slate-50 -z-10 scale-0"
         >
-          <div
-            class="loader-bar absolute left-0 top-0 bottom-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-500 w-0"
-          >
-          </div>
         </div>
 
-        <div
-          class="loader-percentage text-[10px] font-bold text-slate-400 mt-4 tracking-widest flex items-center gap-2"
-        >
-          <span
-            class="inline-block w-1 h-1 bg-amber-500 rounded-full animate-pulse"
-          ></span>
-          <span id="perc-text">0%</span>
+        <div class="loader-content flex flex-col items-center relative z-10">
+          <!-- Modern spinning abstract logo -->
+          <div class="loader-icon mb-10 relative w-20 h-20">
+            <div
+              class="absolute inset-0 border-[3px] border-indigo-100 rounded-full"
+            >
+            </div>
+            <div
+              class="absolute inset-0 border-[3px] border-amber-500 rounded-full border-t-transparent animate-spin"
+            >
+            </div>
+            <div
+              class="absolute inset-2 border-[3px] border-indigo-500 rounded-full border-b-transparent animate-[spin_1.5s_linear_infinite_reverse]"
+            >
+            </div>
+            <div
+              class="absolute inset-4 bg-slate-900 rounded-full flex items-center justify-center"
+            >
+              <span class="w-1.5 h-1.5 bg-white rounded-full animate-ping"></span>
+            </div>
+          </div>
+
+          <!-- Animated typography -->
+          <div class="overflow-hidden mb-6 flex space-x-1">
+            <h1
+              class="loader-title text-xl font-black text-slate-800 tracking-[0.2em] uppercase translate-y-full"
+            >
+              Sabar Rek
+            </h1>
+          </div>
+
+          <div
+            class="loader-bar-wrap w-56 md:w-72 h-1 bg-slate-100 rounded-full overflow-hidden shadow-inner relative"
+          >
+            <div
+              class="loader-bar absolute left-0 top-0 bottom-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-500 w-0"
+            >
+            </div>
+          </div>
+
+          <div
+            class="loader-percentage text-[10px] font-bold text-slate-400 mt-4 tracking-widest flex items-center gap-2"
+          >
+            <span
+              class="inline-block w-1 h-1 bg-amber-500 rounded-full animate-pulse"
+            ></span>
+            <span id="perc-text">0%</span>
+          </div>
         </div>
       </div>
-    </div>
+    )}
     <Navbar />
     <main class="w-full max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12" id="main-content">
       <slot />
