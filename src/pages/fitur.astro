@@ -66,17 +66,7 @@ const featureList = [
     gradient: "from-indigo-500/10 via-blue-500/5 to-transparent",
     borderHover: "hover:border-indigo-400",
   },
-  {
-    id: "upcoming-tools",
-    title: "Fitur Mendatang (Under Development)",
-    badge: "Segera Hadir",
-    badgeColor: "bg-amber-50 text-amber-600 border-amber-200",
-    description: "Saat ini saya sedang merancang beberapa utilitas tambahan seperti PDF tools, image compressor cerdas, dan bot scraping otomatis yang akan diintegrasikan secara berkala.",
-    highlights: ["PDF Manipulation", "Smart Image Compress", "AI Helper Utilities", "API Endpoints"],
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
-    gradient: "from-amber-500/10 via-yellow-500/5 to-transparent",
-    borderHover: "hover:border-amber-400",
-  },
+  
 ];
 ---
 
@@ -203,7 +193,7 @@ const featureList = [
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
         {featureList.map((fitur) => (
           <div class={`bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl ${fitur.borderHover} transition-all duration-300 flex flex-col justify-between relative overflow-hidden group`}>
             <!-- Top Gradient Accent -->
@@ -342,3 +332,4 @@ const featureList = [
   updateServerStatus();
   setInterval(updateServerStatus, 1000);
 </script>
+
