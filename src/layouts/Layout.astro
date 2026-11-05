@@ -15,6 +15,8 @@ const {
   description = "Portfolio of Vio Azuhri — Cross-Platform Developer specializing in Kotlin, Flutter, React, Vue, and modern architectures.",
   noLoader = false,
 } = Astro.props;
+
+const ADSENSE_CLIENT_ID = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID ?? "";
 ---
 
 <!doctype html>
@@ -27,6 +29,16 @@ const {
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <title>{title}</title>
+
+    <!-- Google AdSense Verification Script -->
+    {ADSENSE_CLIENT_ID && (
+      <script
+        is:inline
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+        crossorigin="anonymous"
+      ></script>
+    )}
   </head>
   <body
     class="bg-white text-slate-900 antialiased selection:bg-amber-400 selection:text-slate-900 overflow-x-hidden"

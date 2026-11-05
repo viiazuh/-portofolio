@@ -356,12 +356,6 @@ const featureList = [
   </div>
 
   {ADSENSE_CLIENT_ID && ADSENSE_CLIENT_ID.length > 0 && (
-    <script
-      is:inline
-      async
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-      crossorigin="anonymous"
-    ></script>
     <script is:inline>
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
