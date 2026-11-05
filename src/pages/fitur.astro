@@ -1,0 +1,344 @@
+---
+// src/pages/fitur.astro
+// Halaman Penjelasan & Portal Akses Web Fitur (TikTok Downloader, Web Converter, dll)
+// Anda dapat dengan mudah mengedit link server, jam operasional, dan daftar fitur di bawah ini!
+
+import Layout from '../layouts/Layout.astro';
+
+// ==========================================
+// 1. KONFIGURASI URL WEB FITUR & SERVER
+// ==========================================
+const EXTERNAL_WEB_URL = "https://struck-powers-maybe-oem.trycloudflare.com/";
+
+// ==========================================
+// 2. JADWAL AKTIF SERVER (WIB)
+// ==========================================
+const operationalSchedules = [
+  {
+    sesi: "Sesi Pagi",
+    jam: "07:00 - 12:00 WIB",
+    startHour: 7,
+    endHour: 12,
+    icon: "🌅",
+    keterangan: "Online untuk aktivitas pagi & unduhan cepat",
+  },
+  {
+    sesi: "Sesi Siang / Sore",
+    jam: "13:00 - 17:00 WIB",
+    startHour: 13,
+    endHour: 17,
+    icon: "☀️",
+    keterangan: "Online untuk konversi file & kebutuhan kerja",
+  },
+  {
+    sesi: "Sesi Malam",
+    jam: "19:00 - 24:00 WIB",
+    startHour: 19,
+    endHour: 24,
+    icon: "🌙",
+    keterangan: "Online santai hingga tengah malam",
+  },
+];
+
+// ==========================================
+// 3. DAFTAR FITUR UTAMA YANG TERSEDIA
+// ==========================================
+const featureList = [
+  {
+    id: "tiktok-downloader",
+    title: "TikTok Video Downloader",
+    badge: "Populer",
+    badgeColor: "bg-rose-50 text-rose-600 border-rose-200",
+    description: "Unduh video TikTok favoritmu tanpa watermark secara instan dan mudah. Hasil unduhan jernih kualitas HD langsung tersimpan di perangkatmu tanpa aplikasi tambahan.",
+    highlights: ["Tanpa Watermark (No-WM)", "Kualitas HD Asli", "Cepat & Praktis", "Gratis Tanpa Batas"],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-600"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>`,
+    gradient: "from-rose-500/10 via-pink-500/5 to-transparent",
+    borderHover: "hover:border-rose-400",
+  },
+  {
+    id: "web-converter",
+    title: "Web & Media Converter",
+    badge: "Multifungsi",
+    badgeColor: "bg-indigo-50 text-indigo-600 border-indigo-200",
+    description: "Alat konversi serbaguna untuk mengubah berbagai format dokumen, gambar, atau media langsung di browser. Proses konversi cepat, aman, dan mudah tanpa perlu instal software berat.",
+    highlights: ["Multi-Format Support", "Proses Cepat & Ringan", "Privasi Aman", "Langsung di Browser"],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>`,
+    gradient: "from-indigo-500/10 via-blue-500/5 to-transparent",
+    borderHover: "hover:border-indigo-400",
+  },
+  {
+    id: "upcoming-tools",
+    title: "Fitur Mendatang (Under Development)",
+    badge: "Segera Hadir",
+    badgeColor: "bg-amber-50 text-amber-600 border-amber-200",
+    description: "Saat ini saya sedang merancang beberapa utilitas tambahan seperti PDF tools, image compressor cerdas, dan bot scraping otomatis yang akan diintegrasikan secara berkala.",
+    highlights: ["PDF Manipulation", "Smart Image Compress", "AI Helper Utilities", "API Endpoints"],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
+    gradient: "from-amber-500/10 via-yellow-500/5 to-transparent",
+    borderHover: "hover:border-amber-400",
+  },
+];
+---
+
+<Layout
+  title="Web Fitur & Layanan Tools | Vio Azuhri"
+  description="Portal informasi dan akses layanan web utilities Vio Azuhri: TikTok Video Downloader, Web Converter, dan jadwal jam operasional server."
+>
+  <div class="py-12 md:py-16 max-w-5xl mx-auto space-y-12">
+    
+    <!-- Top Navigation Breadcrumb / Back Link -->
+    <div class="flex items-center justify-between">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-slate-500 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-full border border-slate-200/80 transition-all duration-200 group"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>Kembali ke Portofolio</span>
+      </a>
+
+      <div class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+        <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+        <span>Portal Informasi Fitur</span>
+      </div>
+    </div>
+
+    <!-- Hero Header -->
+    <header class="text-center space-y-4 max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-black tracking-wide uppercase">
+        <span class="w-2 h-2 rounded-full bg-indigo-600 animate-ping"></span>
+        Web Utilities & Fitur Eksperimental
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+        Selamat Datang di <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-500 bg-clip-text text-transparent">Layanan Web Fitur</span>
+      </h1>
+
+      <p class="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed">
+        Halaman ini dibuat agar kamu mengetahui informasi lengkap mengenai fitur apa saja yang tersedia, jadwal jam aktif server, serta status pengembangannya sebelum langsung membuka aplikasi.
+      </p>
+    </header>
+
+    <!-- LIVE SERVER STATUS & JAM OPERASIONAL WIDGET -->
+    <section class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden border border-slate-800">
+      <!-- Glow ambient background effect -->
+      <div class="absolute -top-24 -right-24 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-8">
+        <!-- Status Bar Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+          <div>
+            <div class="flex items-center gap-2 text-xs font-mono tracking-widest text-indigo-300 uppercase mb-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Server Monitoring (WIB)</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white">Jadwal Jam Aktif Server</h2>
+          </div>
+
+          <!-- Dynamic Live Badge (Dihitung Realtime oleh Script di bawah) -->
+          <div class="flex flex-col sm:items-end gap-1.5">
+            <div id="live-server-status" class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="live-status-text">MENGECEK JADWAL SERVER...</span>
+            </div>
+            <span id="live-clock-text" class="text-[11px] font-mono text-slate-400">Waktu WIB: Memuat...</span>
+          </div>
+        </div>
+
+        <!-- 3 Sesi Jam Aktif -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {operationalSchedules.map((item) => (
+            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-indigo-400/50 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-2xl">{item.icon}</span>
+                  <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
+                    {item.sesi}
+                  </span>
+                </div>
+                <div class="text-xl font-black text-white font-mono tracking-tight group-hover:text-amber-300 transition-colors">
+                  {item.jam}
+                </div>
+              </div>
+              <p class="text-xs text-slate-300 mt-3 leading-relaxed border-t border-white/5 pt-3">
+                {item.keterangan}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Callout Penjelasan Server Gratis & Mandiri -->
+        <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-5 flex items-start gap-4 text-slate-200">
+          <div class="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 flex-shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="space-y-1 text-xs sm:text-sm">
+            <h3 class="font-bold text-amber-300 text-sm sm:text-base">Catatan Penting: Server Free Uji Coba</h3>
+            <p class="text-slate-300 leading-relaxed">
+              Layanan ini disediakan <strong>100% Free / Uji Coba Publik</strong> yang saya jalankan dari local host melalui Cloudflare Tunnel. Karena menggunakan daya mesin lokal, server sementara diaktifkan pada jadwal di atas sembari saya <strong>menabung untuk membeli server cloud/VPS mandiri agar ke depannya bisa aktif 24 jam nonstop</strong>. Terima kasih atas pengertiannya!
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DAFTAR FITUR YANG TERSEDIA -->
+    <section class="space-y-6">
+      <div class="text-center max-w-xl mx-auto space-y-2">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          Apa Saja Fitur yang Ada?
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500">
+          Berikut kumpulan tools praktis yang siap kamu coba dan gunakan:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {featureList.map((fitur) => (
+          <div class={`bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl ${fitur.borderHover} transition-all duration-300 flex flex-col justify-between relative overflow-hidden group`}>
+            <!-- Top Gradient Accent -->
+            <div class={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${fitur.gradient}`}></div>
+
+            <div class="space-y-4">
+              <!-- Top bar icon & badge -->
+              <div class="flex items-center justify-between">
+                <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100 group-hover:scale-110 transition-transform" set:html={fitur.icon} />
+                <span class={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border ${fitur.badgeColor}`}>
+                  {fitur.badge}
+                </span>
+              </div>
+
+              <!-- Title & Description -->
+              <div class="space-y-2">
+                <h3 class="text-lg font-black text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  {fitur.title}
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {fitur.description}
+                </p>
+              </div>
+
+              <!-- Key Highlights / Tags -->
+              <div class="flex flex-wrap gap-1.5 pt-2">
+                {fitur.highlights.map((tag) => (
+                  <span class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">
+                    ✓ {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <!-- Footer note inside card -->
+            <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] font-medium text-slate-400 flex items-center justify-between">
+              <span>Siap digunakan di Web App</span>
+              <span class="text-indigo-500 font-bold group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- TOMBOL AKSES UTAMA MENUJU WEB CLOUDFLARE -->
+    <section class="bg-gradient-to-r from-indigo-50 via-white to-amber-50 rounded-3xl p-8 sm:p-10 border border-indigo-100 text-center space-y-6 shadow-sm">
+      <div class="max-w-2xl mx-auto space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-600/20">
+          <span>Siap Mencoba?</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900">
+          Akses Aplikasi Web Fitur Sekarang
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Klik tombol di bawah untuk langsung menuju aplikasi web. Jika server sedang dalam jadwal jam aktif di atas, aplikasi akan terbuka dan siap kamu gunakan.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <!-- Tombol Menuju Web Utama Eksternal -->
+        <a
+          href={EXTERNAL_WEB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-sm font-black text-white bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:from-indigo-500 hover:to-purple-600 shadow-xl shadow-indigo-600/25 hover:shadow-2xl hover:shadow-indigo-600/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group"
+        >
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 group-hover:bg-white animate-pulse"></span>
+          <span>BUKA WEB FITUR SEKARANG</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+
+        <!-- Tombol Kembali ke Portofolio -->
+        <a
+          href="/"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-sm font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-sm transition-all duration-200"
+        >
+          Kembali ke Portofolio
+        </a>
+      </div>
+
+      <!-- Informasi Tambahan jika Terjadi Kendala -->
+      <div class="pt-4 max-w-lg mx-auto">
+        <p class="text-[11px] text-slate-400 leading-normal">
+          *Jika halaman Cloudflare menampilkan error "Web server is down", artinya server sedang berada di luar jadwal aktif atau sedang restart koneksi. Coba akses kembali sesuai jam di atas.
+        </p>
+      </div>
+    </section>
+
+  </div>
+</Layout>
+
+<!-- Client Script untuk Menghitung Status Jadwal Aktif Server Secara Realtime -->
+<script>
+  function updateServerStatus() {
+    const statusContainer = document.getElementById("live-server-status");
+    const statusText = document.getElementById("live-status-text");
+    const clockText = document.getElementById("live-clock-text");
+
+    if (!statusContainer || !statusText || !clockText) return;
+
+    // Ambil waktu saat ini dalam WIB (UTC+7)
+    const now = new Date();
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const wibDate = new Date(utc + (3600000 * 7));
+
+    const hours = wibDate.getHours();
+    const minutes = wibDate.getMinutes();
+    const seconds = wibDate.getSeconds();
+
+    const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} WIB`;
+    clockText.textContent = `Waktu Sekarang: ${timeString}`;
+
+    // Jadwal Operasional:
+    // 1. Pagi: 07:00 - 12:00 (hours >= 7 && hours < 12)
+    // 2. Siang/Sore: 13:00 - 17:00 (hours >= 13 && hours < 17)
+    // 3. Malam: 19:00 - 24:00 (hours >= 19 && hours < 24)
+    const isOnline = 
+      (hours >= 7 && hours < 12) ||
+      (hours >= 13 && hours < 17) ||
+      (hours >= 19 && hours < 24);
+
+    if (isOnline) {
+      statusContainer.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+      statusText.textContent = "SERVER STATUS: ONLINE (SEDANG AKTIF)";
+    } else {
+      statusContainer.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black bg-amber-500/20 text-amber-300 border border-amber-500/40";
+      statusText.textContent = "SERVER STATUS: STANDBY / DI LUAR JADWAL";
+    }
+  }
+
+  // Update pertama kali & jalankan interval tiap detik
+  updateServerStatus();
+  setInterval(updateServerStatus, 1000);
+</script>
