@@ -108,14 +108,13 @@ const {
       gsap.registerPlugin(ScrollTrigger);
 
       document.addEventListener("DOMContentLoaded", () => {
-        document.body.style.overflow = "hidden";
-
+        const loader = document.getElementById("loader");
         const loaderBar = document.querySelector(".loader-bar");
         const percText = document.getElementById("perc-text");
-        const loader = document.getElementById("loader");
         const mainContent = document.getElementById("main-content");
 
-        if (loaderBar && percText && loader && mainContent) {
+        if (loader && loaderBar && percText && mainContent) {
+          document.body.style.overflow = "hidden";
           gsap.set(mainContent, { opacity: 0, y: 30, scale: 0.98 });
 
           gsap.to(".loader-title", {
@@ -169,6 +168,8 @@ const {
               clearProps: "transform",
             }, "-=0.7");
         } else {
+          document.body.style.overflow = "";
+          ScrollTrigger.refresh();
           window.dispatchEvent(new Event("loaderComplete"));
         }
 
