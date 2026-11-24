@@ -23,28 +23,28 @@ const ADSENSE_SLOT_ID   = import.meta.env.PUBLIC_ADSENSE_SLOT_ID   || "325223163
 // ==========================================
 const operationalSchedules = [
   {
-    sesi: "Sesi Pagi",
-    jam: "07:00 - 10:00 WIB",
-    startHour: 7,
-    endHour: 10,
-    icon: "🌅",
-    keterangan: "Server STB aktif untuk aktivitas pagi & download cepat",
-  },
-  {
-    sesi: "Jeda Istirahat Mesin",
-    jam: "10:00 - 12:00 WIB",
-    startHour: 10,
-    endHour: 12,
-    icon: "☕",
-    keterangan: "Pendinginan hardware STB agar performa tetap prima",
-  },
-  {
-    sesi: "Sesi Siang s/d Malam",
-    jam: "12:00 - 24:00 WIB",
-    startHour: 12,
-    endHour: 24,
+    sesi: "Jam Aktif Utama (ON)",
+    jam: "Aktif Hampir 24 Jam",
     icon: "⚡",
-    keterangan: "Online penuh hingga tengah malam untuk konversi & unduhan",
+    badge: "AKTIF",
+    badgeColor: "bg-emerald-500/30 text-emerald-200 border-emerald-400/30",
+    keterangan: "Server STB online melayani unduhan TikTok dan konversi file",
+  },
+  {
+    sesi: "Jadwal Istirahat STB (OFF)",
+    jam: "22:00 - 23:00 WIB",
+    icon: "🌙",
+    badge: "OFF (1 JAM)",
+    badgeColor: "bg-amber-500/30 text-amber-200 border-amber-400/30",
+    keterangan: "Pendinginan hardware mesin STB agar performa tetap prima dan awet",
+  },
+  {
+    sesi: "Kondisi Mati Lampu (OFF)",
+    jam: "Pemadaman Listrik",
+    icon: "💡",
+    badge: "KONDISIONAL",
+    badgeColor: "bg-rose-500/30 text-rose-200 border-rose-400/30",
+    keterangan: "Jika server mati di luar jam 22:00–23:00, kemungkinan mati lampu",
   },
 ];
 
@@ -151,8 +151,8 @@ const featureList = [
               <div>
                 <div class="flex items-center justify-between mb-3">
                   <span class="text-2xl">{item.icon}</span>
-                  <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
-                    {item.sesi}
+                  <span class={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${item.badgeColor}`}>
+                    {item.badge}
                   </span>
                 </div>
                 <div class="text-xl font-black text-white font-mono tracking-tight group-hover:text-amber-300 transition-colors">
@@ -176,9 +176,9 @@ const featureList = [
             </svg>
           </div>
           <div class="space-y-1 text-xs sm:text-sm">
-            <h3 class="font-bold text-amber-300 text-sm sm:text-base">Catatan Penting: Server STB Mandiri</h3>
+            <h3 class="font-bold text-amber-300 text-sm sm:text-base">Catatan Penting: Jadwal Off Server STB</h3>
             <p class="text-slate-300 leading-relaxed">
-              Layanan ini dijalankan dari <strong>Server STB (Set-Top Box) pribadi</strong> melalui Cloudflare Tunnel. Server aktif mulai <strong>jam 07:00 – 10:00 WIB</strong>, kemudian istirahat sejenak untuk pendinginan mesin (cooling down) jam 10:00 – 12:00 WIB, dan menyala kembali <strong>jam 12:00 hingga malam (24:00 WIB)</strong>. Jika sewaktu-waktu server tidak bisa diakses di luar jadwal, kemungkinan besar dikarenakan <strong>pemadaman listrik (mati lampu)</strong> setempat. Terima kasih atas pengertiannya!
+              Layanan ini dijalankan dari <strong>Server STB (Set-Top Box) pribadi</strong> via Cloudflare Tunnel. Server beroperasi aktif dan <strong>hanya OFF pada jam 22:00 – 23:00 WIB (10 malam – 11 malam)</strong> untuk waktu istirahat & pendinginan mesin. Jika server tidak dapat diakses di luar jam 22:00–23:00 tersebut, kemungkinan besar sedang terjadi <strong>pemadaman listrik (mati lampu)</strong> setempat. Terima kasih atas pengertiannya!
             </p>
           </div>
         </div>
@@ -485,19 +485,16 @@ const featureList = [
     clockText.textContent = `Waktu Sekarang: ${timeString}`;
 
     // Jadwal Operasional STB Server:
-    // 1. Sesi Pagi: 07:00 - 10:00 (hours >= 7 && hours < 10)
-    // 2. Sesi Siang s/d Malam: 12:00 - 24:00 (hours >= 12 && hours < 24)
-    // (Jeda Istirahat Pendinginan Mesin: 10:00 - 12:00)
-    const isOnline = 
-      (hours >= 7 && hours < 10) ||
-      (hours >= 12 && hours < 24);
+    // Server OFF hanya jam 22:00 - 23:00 WIB (hours === 22)
+    // Di luar jam tersebut: Server ON
+    const isOffHour = (hours === 22);
 
-    if (isOnline) {
+    if (isOffHour) {
+      statusContainer.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black bg-amber-500/20 text-amber-300 border border-amber-500/40";
+      statusText.textContent = "SERVER STATUS: ISTIRAHAT MESIN (OFF 22:00 - 23:00 WIB)";
+    } else {
       statusContainer.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
       statusText.textContent = "SERVER STATUS: ONLINE (SEDANG AKTIF)";
-    } else {
-      statusContainer.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black bg-amber-500/20 text-amber-300 border border-amber-500/40";
-      statusText.textContent = "SERVER STATUS: STANDBY / DI LUAR JADWAL";
     }
   }
 
