@@ -19,32 +19,32 @@ const ADSENSE_CLIENT_ID = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-24
 const ADSENSE_SLOT_ID   = import.meta.env.PUBLIC_ADSENSE_SLOT_ID   || "3252231637";
 
 // ==========================================
-// 3. JADWAL AKTIF SERVER (WIB)
+// 3. JADWAL AKTIF SERVER (WIB) - STB SERVER
 // ==========================================
 const operationalSchedules = [
   {
     sesi: "Sesi Pagi",
-    jam: "07:00 - 12:00 WIB",
+    jam: "07:00 - 10:00 WIB",
     startHour: 7,
-    endHour: 12,
+    endHour: 10,
     icon: "🌅",
-    keterangan: "Online untuk aktivitas pagi & unduhan cepat",
+    keterangan: "Server STB aktif untuk aktivitas pagi & download cepat",
   },
   {
-    sesi: "Sesi Siang / Sore",
-    jam: "13:00 - 17:00 WIB",
-    startHour: 13,
-    endHour: 17,
-    icon: "☀️",
-    keterangan: "Online untuk konversi file & kebutuhan kerja",
+    sesi: "Jeda Istirahat Mesin",
+    jam: "10:00 - 12:00 WIB",
+    startHour: 10,
+    endHour: 12,
+    icon: "☕",
+    keterangan: "Pendinginan hardware STB agar performa tetap prima",
   },
   {
-    sesi: "Sesi Malam",
-    jam: "19:00 - 24:00 WIB",
-    startHour: 19,
+    sesi: "Sesi Siang s/d Malam",
+    jam: "12:00 - 24:00 WIB",
+    startHour: 12,
     endHour: 24,
-    icon: "🌙",
-    keterangan: "Online santai hingga tengah malam",
+    icon: "⚡",
+    keterangan: "Online penuh hingga tengah malam untuk konversi & unduhan",
   },
 ];
 
@@ -105,11 +105,6 @@ const featureList = [
 
     <!-- Hero Header -->
     <header class="text-center space-y-4 max-w-3xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-black tracking-wide uppercase">
-        <span class="w-2 h-2 rounded-full bg-indigo-600 animate-ping"></span>
-        Web Utilities & Fitur Eksperimental
-      </div>
-
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
         Selamat Datang di <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-500 bg-clip-text text-transparent">Layanan Web Fitur</span>
       </h1>
@@ -117,38 +112,10 @@ const featureList = [
       <p class="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed">
         Halaman ini dibuat agar kamu mengetahui informasi lengkap mengenai fitur apa saja yang tersedia, jadwal jam aktif server, serta status pengembangannya sebelum langsung membuka aplikasi.
       </p>
-
-      <!-- Akses Langsung Paling Atas (Tanpa Perlu Scroll) -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
-        <a
-          href={EXTERNAL_WEB_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl text-xs sm:text-sm font-black text-white bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:from-indigo-500 hover:to-purple-600 shadow-xl shadow-indigo-600/25 hover:shadow-2xl hover:shadow-indigo-600/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group"
-        >
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 group-hover:bg-white animate-pulse"></span>
-          <span>BUKA WEB FITUR SEKARANG 🚀</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
-          </svg>
-        </a>
-
-        <a
-          href="#jadwal-dan-panduan"
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
-        >
-          <span>Lihat Jadwal & Panduan</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </a>
-      </div>
     </header>
 
     <!-- LIVE SERVER STATUS & JAM OPERASIONAL WIDGET -->
-    <section id="jadwal-dan-panduan" class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden border border-slate-800">
+    <section class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden border border-slate-800">
       <!-- Glow ambient background effect -->
       <div class="absolute -top-24 -right-24 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -209,9 +176,9 @@ const featureList = [
             </svg>
           </div>
           <div class="space-y-1 text-xs sm:text-sm">
-            <h3 class="font-bold text-amber-300 text-sm sm:text-base">Catatan Penting: Server Free Uji Coba</h3>
+            <h3 class="font-bold text-amber-300 text-sm sm:text-base">Catatan Penting: Server STB Mandiri</h3>
             <p class="text-slate-300 leading-relaxed">
-              Layanan ini disediakan <strong>100% Free / Uji Coba Publik</strong> yang saya jalankan dari local host melalui Cloudflare Tunnel. Karena menggunakan daya mesin lokal, server sementara diaktifkan pada jadwal di atas sembari saya <strong>menabung untuk membeli server cloud/VPS mandiri agar ke depannya bisa aktif 24 jam nonstop</strong>. Terima kasih atas pengertiannya!
+              Layanan ini dijalankan dari <strong>Server STB (Set-Top Box) pribadi</strong> melalui Cloudflare Tunnel. Server aktif mulai <strong>jam 07:00 – 10:00 WIB</strong>, kemudian istirahat sejenak untuk pendinginan mesin (cooling down) jam 10:00 – 12:00 WIB, dan menyala kembali <strong>jam 12:00 hingga malam (24:00 WIB)</strong>. Jika sewaktu-waktu server tidak bisa diakses di luar jadwal, kemungkinan besar dikarenakan <strong>pemadaman listrik (mati lampu)</strong> setempat. Terima kasih atas pengertiannya!
             </p>
           </div>
         </div>
@@ -517,14 +484,13 @@ const featureList = [
     const timeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} WIB`;
     clockText.textContent = `Waktu Sekarang: ${timeString}`;
 
-    // Jadwal Operasional:
-    // 1. Pagi: 07:00 - 12:00 (hours >= 7 && hours < 12)
-    // 2. Siang/Sore: 13:00 - 17:00 (hours >= 13 && hours < 17)
-    // 3. Malam: 19:00 - 24:00 (hours >= 19 && hours < 24)
+    // Jadwal Operasional STB Server:
+    // 1. Sesi Pagi: 07:00 - 10:00 (hours >= 7 && hours < 10)
+    // 2. Sesi Siang s/d Malam: 12:00 - 24:00 (hours >= 12 && hours < 24)
+    // (Jeda Istirahat Pendinginan Mesin: 10:00 - 12:00)
     const isOnline = 
-      (hours >= 7 && hours < 12) ||
-      (hours >= 13 && hours < 17) ||
-      (hours >= 19 && hours < 24);
+      (hours >= 7 && hours < 10) ||
+      (hours >= 12 && hours < 24);
 
     if (isOnline) {
       statusContainer.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
