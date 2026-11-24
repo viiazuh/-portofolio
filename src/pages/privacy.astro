@@ -1,0 +1,139 @@
+---
+// src/pages/privacy.astro
+// Halaman Kebijakan Privasi (Privacy Policy) Resmi
+// Memenuhi Standar Persyaratan Google AdSense, GDPR, dan Perlindungan Data Pengguna
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Privacy Policy | Vio Azuhri"
+  description="Kebijakan Privasi resmi website Vio Azuhri (vioazuhri.online). Pelajari bagaimana kami mengelola data, cookies Google AdSense, dan privasi pengguna."
+  noLoader={true}
+>
+  <div class="py-12 md:py-16 max-w-4xl mx-auto space-y-10">
+
+    <!-- Header Breadcrumb -->
+    <div class="flex items-center justify-between">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-slate-500 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-full border border-slate-200/80 transition-all duration-200 group"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>Kembali ke Beranda</span>
+      </a>
+
+      <div class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+        <span>Terakhir Diperbarui: November 2026</span>
+      </div>
+    </div>
+
+    <!-- Title Header -->
+    <header class="space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold uppercase tracking-wider">
+        <span>🛡️ Legal & Transparansi</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+        Kebijakan Privasi (Privacy Policy)
+      </h1>
+      <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+        Privasi Anda sangat penting bagi kami. Kebijakan Privasi ini menjelaskan bagaimana <strong>vioazuhri.online</strong> mengumpulkan, menggunakan, dan melindungi informasi pribadi pengunjung, termasuk kepatuhan terhadap standar periklanan Google AdSense.
+      </p>
+    </header>
+
+    <!-- Main Content Cards -->
+    <div class="space-y-8 bg-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-200/90 shadow-sm text-slate-700 text-sm leading-relaxed">
+
+      <!-- Section 1 -->
+      <section class="space-y-3">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="text-indigo-600">1.</span> Informasi yang Kami Kumpulkan
+        </h2>
+        <p>
+          Seperti kebanyakan situs web standar lainnya, <strong>vioazuhri.online</strong> menggunakan file log (*log files*). Informasi dalam file log mencakup alamat protokol internet (IP address), jenis peramban (browser), penyedia layanan internet (ISP), tanggal dan cap waktu (*timestamp*), serta halaman rujukan (*referring pages*) untuk menganalisis tren, mengelola situs, dan mengoptimalkan performa web. Data ini tidak terhubung dengan informasi yang dapat mengidentifikasi identitas pribadi Anda secara langsung.
+        </p>
+      </section>
+
+      <!-- Section 2: Cookies & Google AdSense -->
+      <section class="space-y-3 pt-6 border-t border-slate-100">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="text-indigo-600">2.</span> Cookies dan Mitra Periklanan Google (AdSense)
+        </h2>
+        <p>
+          Situs kami menggunakan *cookies* untuk menyimpan preferensi pengunjung dan mencatat informasi sesi.
+        </p>
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+          <h3 class="font-bold text-slate-900 text-xs uppercase tracking-wider text-indigo-700">Kebijakan Google AdSense & Cookie DART:</h3>
+          <ul class="list-disc list-inside space-y-1.5 text-xs text-slate-600 leading-relaxed">
+            <li>Google sebagai vendor pihak ketiga menggunakan cookies untuk menayangkan iklan di situs kami.</li>
+            <li>Penggunaan cookie DART oleh Google memungkinkan penayangan iklan kepada pengunjung berdasarkan kunjungan mereka ke situs ini dan situs lainnya di internet.</li>
+            <li>Pengguna dapat memilih untuk menonaktifkan penggunaan cookie DART dengan mengunjungi Kebijakan Privasi Jaringan Iklan dan Konten Google di URL: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-semibold">https://policies.google.com/technologies/ads</a> atau melalui <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-semibold">Google Ads Settings</a>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 3: Web Tools Privacy -->
+      <section class="space-y-3 pt-6 border-t border-slate-100">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="text-indigo-600">3.</span> Privasi Layanan Web Utilities (Tools)
+        </h2>
+        <p>
+          Pada bagian layanan web fitur (seperti pengunduh video TikTok dan konversi berkas):
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-slate-600 pl-2">
+          <li><strong>Zero-Storage Retention:</strong> Kami tidak menyimpan file, dokumen, atau konten video yang Anda unggah/proses di server kami. Semua pemrosesan berkas bersifat instan di memori sementara (*in-memory*) dan langsung dihapus setelah proses selesai.</li>
+          <li>Kami tidak menjual, menyewakan, atau membagikan data berkas yang Anda konversi kepada pihak ketiga manapun.</li>
+        </ul>
+      </section>
+
+      <!-- Section 4: Third Party Links -->
+      <section class="space-y-3 pt-6 border-t border-slate-100">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="text-indigo-600">4.</span> Tautan ke Situs Pihak Ketiga
+        </h2>
+        <p>
+          Situs web ini dapat berisi tautan ke situs eksternal (misalnya GitHub, LinkedIn, Cloudflare Tunnel, dan media sosial). Harap diperhatikan bahwa kami tidak memiliki kendali atas konten dan praktik privasi dari situs-situs tersebut, serta tidak dapat menerima tanggung jawab atas kebijakan privasi mereka masing-masing.
+        </p>
+      </section>
+
+      <!-- Section 5: Children's Privacy -->
+      <section class="space-y-3 pt-6 border-t border-slate-100">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="text-indigo-600">5.</span> Privasi Anak (*Children's Information*)
+        </h2>
+        <p>
+          Melindungi privasi anak-anak di internet adalah prioritas kami. Kami tidak secara sengaja mengumpulkan informasi pribadi yang dapat diidentifikasi dari anak-anak di bawah usia 13 tahun. Jika Anda meyakini bahwa anak Anda memberikan informasi semacam itu di situs web kami, harap segera hubungi kami agar kami dapat menghapus data tersebut dari catatan kami.
+        </p>
+      </section>
+
+      <!-- Section 6: Contact -->
+      <section class="space-y-3 pt-6 border-t border-slate-100">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="text-indigo-600">6.</span> Hubungi Kami
+        </h2>
+        <p>
+          Jika Anda memiliki pertanyaan lebih lanjut, saran, atau memerlukan informasi tambahan mengenai Kebijakan Privasi kami, jangan ragu untuk menghubungi kami melalui:
+        </p>
+        <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 text-xs sm:text-sm space-y-1">
+          <p><strong>Pengelola Situs:</strong> Vio Azuhri</p>
+          <p><strong>Email Resmi:</strong> <a href="mailto:sequadtaswan@gmail.com" class="text-indigo-600 font-semibold underline">sequadtaswan@gmail.com</a></p>
+          <p><strong>Website:</strong> <a href="https://vioazuhri.online" class="text-indigo-600 font-semibold underline">https://vioazuhri.online</a></p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Bottom Action -->
+    <div class="text-center pt-4">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-sm"
+      >
+        <span>← Kembali ke Halaman Utama</span>
+      </a>
+    </div>
+
+  </div>
+</Layout>
