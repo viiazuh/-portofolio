@@ -1,5 +1,5 @@
 ---
-// ModelViewer.astro — Interactive 3D Astronaut Monkey & Mini Solar System in Three.js
+// ModelViewer.astro — Cute Astronaut Monkey RIDING a White Rocket, Scroll-Driven 3D Flight
 interface Props {
   modelPath?: string;
   height?: string;
@@ -18,9 +18,9 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
   <canvas class="model-canvas"></canvas>
 
   <!-- Interactive Hint -->
-  <div class="model-hint">
+  <div class="model-hint" id="model-hint-label">
     <span class="hint-dot"></span>
-    <span>Drag to rotate • Click for Space Spin</span>
+    <span>Scroll to fly • Click to spin</span>
   </div>
 </div>
 
@@ -39,28 +39,28 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
 
   .model-aura-glow {
     position: absolute;
-    width: 320px;
-    height: 320px;
+    width: 380px;
+    height: 380px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: radial-gradient(
       circle,
-      rgba(168, 85, 247, 0.28) 0%,
-      rgba(59, 130, 246, 0.18) 40%,
-      rgba(6, 182, 212, 0.08) 60%,
+      rgba(168, 85, 247, 0.22) 0%,
+      rgba(56, 189, 248, 0.14) 40%,
+      rgba(6, 182, 212, 0.06) 60%,
       transparent 75%
     );
-    filter: blur(40px);
+    filter: blur(48px);
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
-    animation: cosmic-aura 7s ease-in-out infinite alternate;
+    animation: cosmic-aura 8s ease-in-out infinite alternate;
   }
 
   @keyframes cosmic-aura {
-    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
-    100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.95; }
+    0%  { transform: translate(-50%, -50%) scale(0.88); opacity: 0.55; }
+    100%{ transform: translate(-50%, -50%) scale(1.18); opacity: 1.0;  }
   }
 
   .model-canvas {
@@ -73,13 +73,11 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     cursor: grab;
   }
 
-  .model-canvas:active {
-    cursor: grabbing;
-  }
+  .model-canvas:active { cursor: grabbing; }
 
   .model-hint {
     position: absolute;
-    bottom: 8px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -87,19 +85,18 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     gap: 8px;
     font-size: 11px;
     font-weight: 700;
-    color: rgba(226, 232, 240, 0.85);
-    background: rgba(15, 12, 38, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 6px 16px;
+    color: rgba(226, 232, 240, 0.9);
+    background: rgba(15, 12, 38, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 6px 18px;
     border-radius: 9999px;
-    border: 1px solid rgba(168, 85, 247, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.32);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 14px rgba(168,85,247,0.15);
     letter-spacing: 0.03em;
     white-space: nowrap;
     pointer-events: none;
     z-index: 5;
-    transition: opacity 0.5s ease;
   }
 
   .hint-dot {
@@ -108,20 +105,28 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     border-radius: 50%;
     background: #38bdf8;
     box-shadow: 0 0 8px #38bdf8;
-    animation: pulse 1.8s infinite;
+    animation: hpulse 1.8s infinite;
   }
 
-  @keyframes pulse {
+  @keyframes hpulse {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.8); }
+    50%       { opacity: 0.4; transform: scale(0.75); }
   }
 </style>
 
 <script>
   import * as THREE from "three";
-  import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-  function initAstronautMonkeyViewers() {
+  /* ─────────────────────────────────────────────────────────────────────────
+   *  HELPER: build a smooth tube tail from an array of points
+   * ───────────────────────────────────────────────────────────────────────── */
+  function makeTail(points: THREE.Vector3[], radius: number, mat: THREE.Material) {
+    const curve = new THREE.CatmullRomCurve3(points);
+    const geo   = new THREE.TubeGeometry(curve, 14, radius, 8, false);
+    return new THREE.Mesh(geo, mat);
+  }
+
+  function initRocketScene() {
     const containers = document.querySelectorAll(".model-container");
 
     containers.forEach((container) => {
@@ -134,555 +139,453 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
 
       const isMobile = window.innerWidth < 768;
 
-      // ── Renderer ───────────────────────────────────────────────────────────
-      const renderer = new THREE.WebGLRenderer({
-        canvas,
-        alpha: true,
-        antialias: true,
-        powerPreference: "high-performance",
-      });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      /* ── Renderer ─────────────────────────────────────────────────────── */
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !isMobile });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
       renderer.setSize(container.clientWidth, container.clientHeight);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.25;
+      renderer.toneMappingExposure = 1.3;
 
-      const scene = new THREE.Scene();
-
+      const scene  = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(
-        42,
+        40,
         container.clientWidth / container.clientHeight,
         0.1,
-        100
+        120
       );
-      camera.position.set(0, 0.2, 5.2);
+      camera.position.set(0, 0.6, 7.2);
 
-      // ── Space Lighting ─────────────────────────────────────────────────────
-      const ambientLight = new THREE.AmbientLight(0xd8b4fe, 0.85); // soft cosmic violet
-      scene.add(ambientLight);
+      /* ── Lighting ──────────────────────────────────────────────────────── */
+      scene.add(new THREE.AmbientLight(0xd8b4fe, 1.0));
 
-      const mainLight = new THREE.DirectionalLight(0xffffff, 2.0); // key star light
-      mainLight.position.set(4, 5, 4);
-      scene.add(mainLight);
+      const sun = new THREE.DirectionalLight(0xffffff, 2.8);
+      sun.position.set(5, 6, 4);
+      scene.add(sun);
 
-      const cyanRim = new THREE.DirectionalLight(0x06b6d4, 2.2); // cyan space reflection
-      cyanRim.position.set(-4, 2, -2);
+      const cyanRim = new THREE.DirectionalLight(0x06b6d4, 2.2);
+      cyanRim.position.set(-5, 2, -2);
       scene.add(cyanRim);
 
-      const purpleRim = new THREE.DirectionalLight(0xa855f7, 2.5); // purple nebula back rim
-      purpleRim.position.set(0, -3, -3);
+      const purpleRim = new THREE.DirectionalLight(0xa855f7, 2.4);
+      purpleRim.position.set(0, -4, -3);
       scene.add(purpleRim);
 
-      // ── Master Group for Astronaut Monkey & System ─────────────────────────
-      const monkeySystem = new THREE.Group();
-      scene.add(monkeySystem);
-
-      // ───────────────────────────────────────────────────────────────────────
-      //  BUILDING PROCEDURAL 3D ASTRONAUT MONKEY
-      // ───────────────────────────────────────────────────────────────────────
-      const astronaut = new THREE.Group();
-
-      // Materials
-      const furMaterial = new THREE.MeshStandardMaterial({
-        color: 0x6b3e26, // rich warm monkey brown
-        roughness: 0.8,
-        metalness: 0.1,
+      /* ── Materials ─────────────────────────────────────────────────────── */
+      const rocketMat = new THREE.MeshStandardMaterial({
+        color: 0xf1f5f9,
+        roughness: 0.18,
+        metalness: 0.65,
+        envMapIntensity: 1.1,
       });
-
-      const faceMaterial = new THREE.MeshStandardMaterial({
-        color: 0xfbd2a4, // peach/cream muzzle
-        roughness: 0.6,
+      const finMat = new THREE.MeshStandardMaterial({
+        color: 0x7c3aed,
+        roughness: 0.22,
+        metalness: 0.78,
       });
-
-      const eyeMaterial = new THREE.MeshStandardMaterial({
-        color: 0x050505,
-        roughness: 0.1,
-        metalness: 0.9,
+      const nozzleMat = new THREE.MeshStandardMaterial({
+        color: 0x1e1b4b,
+        roughness: 0.28,
+        metalness: 0.88,
       });
+      const cyanGlow  = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+      const purpleGlow= new THREE.MeshBasicMaterial({ color: 0xc084fc });
+      const goldMat   = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.18, metalness: 0.9 });
+      const flameMat  = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.90 });
+      const innerFlameMat = new THREE.MeshBasicMaterial({ color: 0xfef08a, transparent: true, opacity: 0.98 });
 
-      const eyeHighlightMat = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-      });
-
-      const suitMaterial = new THREE.MeshStandardMaterial({
-        color: 0xf8fafc, // crisp spacesuit white
-        roughness: 0.35,
-        metalness: 0.25,
-      });
-
-      const goldVisorCollarMat = new THREE.MeshStandardMaterial({
-        color: 0xf59e0b, // amber gold collar
-        roughness: 0.2,
-        metalness: 0.85,
-      });
-
-      const glassMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0xbae6fd,
-        transmission: 0.85,
+      // Monkey materials
+      const furMat  = new THREE.MeshStandardMaterial({ color: 0x7c4a1e, roughness: 0.82, metalness: 0.05 });
+      const faceMat = new THREE.MeshStandardMaterial({ color: 0xf5c8a0, roughness: 0.65 });
+      const noseMat = new THREE.MeshStandardMaterial({ color: 0x3d1f0a, roughness: 0.9 });
+      const eyeMat  = new THREE.MeshStandardMaterial({ color: 0x060606, roughness: 0.1, metalness: 0.9 });
+      const eyeShine= new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const suitMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.32, metalness: 0.28 });
+      const helmetMat = new THREE.MeshPhysicalMaterial({
+        color: 0xbfdbfe,
+        transmission: 0.88,
         opacity: 0.38,
         transparent: true,
-        roughness: 0.08,
+        roughness: 0.04,
         ior: 1.45,
         reflectivity: 0.9,
         clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
+        clearcoatRoughness: 0.04,
       });
 
-      const cyanEmissiveMat = new THREE.MeshBasicMaterial({
-        color: 0x38bdf8,
-      });
+      /* ── Master Group ─────────────────────────────────────────────────── */
+      const rocketGroup = new THREE.Group();
+      scene.add(rocketGroup);
 
-      const purpleEmissiveMat = new THREE.MeshBasicMaterial({
-        color: 0xc084fc,
-      });
+      // ── 1. ROCKET BODY ──────────────────────────────────────────────────
+      const rocketPivot = new THREE.Group();
+      // Rotate so rocket points left-to-right (horizontal, tilted upward ~35°)
+      rocketPivot.rotation.z = Math.PI / 2;  // lay it on its side
+      rocketPivot.rotation.x = -0.55;         // nose tilted up
+      rocketGroup.add(rocketPivot);
 
-      // 1. Monkey Head & Face
-      const headGroup = new THREE.Group();
-      headGroup.position.set(0, 0.45, 0);
-
-      // Head Base Sphere
-      const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.52, 28, 28), furMaterial);
-      headGroup.add(headMesh);
-
-      // Muzzle / Snout (Cream face)
-      const snout = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 24), faceMaterial);
-      snout.scale.set(1.15, 0.85, 0.9);
-      snout.position.set(0, -0.1, 0.3);
-      headGroup.add(snout);
-
-      // Nose tip
-      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 12), new THREE.MeshBasicMaterial({ color: 0x27170e }));
-      nose.position.set(0, -0.02, 0.58);
-      headGroup.add(nose);
-
-      // Eyes (left & right)
-      [-0.17, 0.17].forEach((x) => {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 16), eyeMaterial);
-        eye.position.set(x, 0.07, 0.46);
-        headGroup.add(eye);
-
-        // Catchlight (white highlight)
-        const shine = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), eyeHighlightMat);
-        shine.position.set(x + 0.025, 0.095, 0.53);
-        headGroup.add(shine);
-      });
-
-      // Ears (left & right)
-      [-0.52, 0.52].forEach((x) => {
-        const ear = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 16), furMaterial);
-        ear.scale.set(0.4, 0.9, 0.9);
-        ear.position.set(x, 0.05, 0);
-        headGroup.add(ear);
-
-        const innerEar = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), faceMaterial);
-        innerEar.scale.set(0.3, 0.7, 0.7);
-        innerEar.position.set(x > 0 ? x - 0.03 : x + 0.03, 0.05, 0.05);
-        headGroup.add(innerEar);
-      });
-
-      // 2. Astronaut Helmet (Glass Bubble Dome)
-      const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), glassMaterial);
-      helmet.position.set(0, 0.45, 0);
-      astronaut.add(helmet);
-
-      // Helmet Base Rim Collar (Gold)
-      const helmetCollar = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.08, 16, 32), goldVisorCollarMat);
-      helmetCollar.rotation.x = Math.PI / 2;
-      helmetCollar.position.set(0, -0.22 + 0.45, 0);
-      astronaut.add(helmetCollar);
-
-      // Astronaut Antenna on Helmet
-      const antennaStem = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.28, 8), goldVisorCollarMat);
-      antennaStem.position.set(0.25, 1.25, 0);
-      antennaStem.rotation.z = -0.25;
-      astronaut.add(antennaStem);
-
-      const antennaTip = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 12), cyanEmissiveMat);
-      antennaTip.position.set(0.31, 1.38, 0);
-      astronaut.add(antennaTip);
-
-      astronaut.add(headGroup);
-
-      // 3. Astronaut Spacesuit (Body) sitting atop Rocket Cockpit
-      const suitBody = new THREE.Group();
-      suitBody.position.set(0, -0.32, 0);
-
-      // Torso
-      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.42, 0.75, 24), suitMaterial);
-      suitBody.add(torso);
-
-      // Chest Life Support Control Panel
-      const chestPanel = new THREE.Mesh(
-        new THREE.BoxGeometry(0.36, 0.24, 0.12),
-        new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2, metalness: 0.8 })
-      );
-      chestPanel.position.set(0, 0.12, 0.48);
-      suitBody.add(chestPanel);
-
-      // LED Indicators on chest panel
-      const led1 = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), cyanEmissiveMat);
-      led1.position.set(-0.11, 0.15, 0.55);
-      suitBody.add(led1);
-
-      const led2 = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), new THREE.MeshBasicMaterial({ color: 0x10b981 }));
-      led2.position.set(0, 0.15, 0.55);
-      suitBody.add(led2);
-
-      const led3 = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), new THREE.MeshBasicMaterial({ color: 0xf59e0b }));
-      led3.position.set(0.11, 0.15, 0.55);
-      suitBody.add(led3);
-
-      // 4. Arms Holding Rocket Steering Handles / Waving
-      // Left Arm (waving excitement)
-      const leftArm = new THREE.Group();
-      leftArm.position.set(-0.52, 0.12, 0);
-      const leftUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.11, 0.45, 16), suitMaterial);
-      leftUpperArm.position.set(-0.18, 0.14, 0.12);
-      leftUpperArm.rotation.z = 0.7;
-      leftArm.add(leftUpperArm);
-
-      const leftGlove = new THREE.Mesh(new THREE.SphereGeometry(0.14, 16, 16), goldVisorCollarMat);
-      leftGlove.position.set(-0.35, 0.36, 0.2);
-      leftArm.add(leftGlove);
-      suitBody.add(leftArm);
-
-      // Right Arm (gripping rocket joystick/handle)
-      const rightArm = new THREE.Group();
-      rightArm.position.set(0.52, 0.12, 0);
-      const rightUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.11, 0.42, 16), suitMaterial);
-      rightUpperArm.position.set(0.16, -0.05, 0.18);
-      rightUpperArm.rotation.z = -0.45;
-      rightUpperArm.rotation.x = 0.5;
-      rightArm.add(rightUpperArm);
-
-      const rightGlove = new THREE.Mesh(new THREE.SphereGeometry(0.14, 16, 16), goldVisorCollarMat);
-      rightGlove.position.set(0.26, -0.25, 0.38);
-      rightArm.add(rightGlove);
-      suitBody.add(rightArm);
-
-      astronaut.add(suitBody);
-
-      // ───────────────────────────────────────────────────────────────────────
-      //  5. SLEEK RETRO-CYBER SPACE ROCKET (Monyet Naik Roket!)
-      // ───────────────────────────────────────────────────────────────────────
-      const rocket = new THREE.Group();
-      rocket.position.set(0, -0.75, 0); // Positioned directly under monkey
-
-      // Rocket Main Fuselage Body
-      const rocketBodyMat = new THREE.MeshStandardMaterial({
-        color: 0xede9fe, // futuristic pearl white / lavender
-        roughness: 0.25,
-        metalness: 0.65,
-      });
-
-      const rocketAccentMat = new THREE.MeshStandardMaterial({
-        color: 0x8b5cf6, // cyber purple accent
-        roughness: 0.3,
-        metalness: 0.7,
-      });
-
-      const rocketCyanMat = new THREE.MeshStandardMaterial({
-        color: 0x06b6d4, // cyan racing stripes
-        roughness: 0.3,
-        metalness: 0.8,
-      });
-
-      // Rocket Fuselage (Tapered Cylinder)
+      // Main fuselage — long cylinder, nose end is +Y
       const fuselage = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.65, 0.52, 1.35, 28),
-        rocketBodyMat
+        new THREE.CylinderGeometry(0.52, 0.42, 3.6, 32),
+        rocketMat
       );
-      fuselage.position.set(0, -0.35, 0);
-      rocket.add(fuselage);
+      rocketPivot.add(fuselage);
 
-      // Rocket Nose Cone Top Rim (Cockpit border where monkey sits)
-      const cockpitRim = new THREE.Mesh(
-        new THREE.TorusGeometry(0.66, 0.08, 16, 32),
-        rocketAccentMat
+      // Nose cone
+      const noseCone = new THREE.Mesh(
+        new THREE.ConeGeometry(0.52, 1.1, 32),
+        rocketMat
       );
-      cockpitRim.rotation.x = Math.PI / 2;
-      cockpitRim.position.set(0, 0.32, 0);
-      rocket.add(cockpitRim);
+      noseCone.position.y = 2.35;
+      rocketPivot.add(noseCone);
 
-      // Glowing Neon Stripe Ring around Rocket
-      const neonStripe = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.655, 0.655, 0.08, 28),
-        cyanEmissiveMat
-      );
-      neonStripe.position.set(0, -0.3, 0);
-      rocket.add(neonStripe);
+      // Nose tip glow
+      const noseTip = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), cyanGlow);
+      noseTip.position.y = 2.9;
+      rocketPivot.add(noseTip);
 
-      // Secondary Purple Stripe Ring
-      const purpleStripe = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.61, 0.61, 0.08, 28),
-        purpleEmissiveMat
-      );
-      purpleStripe.position.set(0, -0.55, 0);
-      rocket.add(purpleStripe);
+      // Cyan neon stripe ring
+      const stripe1 = new THREE.Mesh(new THREE.CylinderGeometry(0.535, 0.535, 0.09, 32), cyanGlow);
+      stripe1.position.y = 0.4;
+      rocketPivot.add(stripe1);
 
-      // Rocket Cockpit Porthole Window on Front
-      const portholeRim = new THREE.Mesh(
-        new THREE.TorusGeometry(0.2, 0.04, 12, 24),
-        goldVisorCollarMat
-      );
-      portholeRim.position.set(0, -0.1, 0.63);
-      rocket.add(portholeRim);
+      // Purple neon stripe ring
+      const stripe2 = new THREE.Mesh(new THREE.CylinderGeometry(0.49, 0.49, 0.09, 32), purpleGlow);
+      stripe2.position.y = -0.5;
+      rocketPivot.add(stripe2);
 
-      const portholeGlass = new THREE.Mesh(
-        new THREE.CircleGeometry(0.18, 24),
-        new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.8 })
-      );
-      portholeGlass.position.set(0, -0.1, 0.635);
-      rocket.add(portholeGlass);
+      // Porthole window
+      const portholeRim = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.038, 12, 24), goldMat);
+      portholeRim.rotation.x = Math.PI / 2;
+      portholeRim.position.set(0.54, -0.3, 0);
+      rocketPivot.add(portholeRim);
 
-      // Rocket Control Joystick on Cockpit
-      const stickBase = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.06, 0.15, 12), goldVisorCollarMat);
-      stickBase.position.set(0.22, 0.3, 0.38);
-      stickBase.rotation.x = 0.3;
-      rocket.add(stickBase);
+      const portholeGlass = new THREE.Mesh(new THREE.CircleGeometry(0.15, 24), cyanGlow);
+      portholeGlass.rotation.x = Math.PI / 2;
+      portholeGlass.position.set(0.545, -0.3, 0);
+      rocketPivot.add(portholeGlass);
 
-      const stickKnob = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), cyanEmissiveMat);
-      stickKnob.position.set(0.22, 0.4, 0.42);
-      rocket.add(stickKnob);
-
-      // Rocket Wings / Stabilizer Fins (3 Wings placed around body)
-      const finMat = new THREE.MeshStandardMaterial({
-        color: 0x7c3aed, // deep purple wing
-        roughness: 0.25,
-        metalness: 0.75,
-      });
-
+      // Three swept fins at tail
       const wingShape = new THREE.Shape();
       wingShape.moveTo(0, 0);
-      wingShape.lineTo(0.55, -0.5);
-      wingShape.lineTo(0.48, -0.85);
-      wingShape.lineTo(0, -0.7);
+      wingShape.lineTo(0.7, -0.5);
+      wingShape.lineTo(0.62, -1.05);
+      wingShape.lineTo(0, -0.85);
       wingShape.closePath();
 
-      const extrudeSettings = { depth: 0.05, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.02, bevelThickness: 0.02 };
-      const finGeo = new THREE.ExtrudeGeometry(wingShape, extrudeSettings);
-
-      // Fin 1: Left Wing
-      const fin1 = new THREE.Mesh(finGeo, finMat);
-      fin1.position.set(-0.55, -0.3, 0);
-      fin1.rotation.y = Math.PI;
-      rocket.add(fin1);
-
-      // Fin 2: Right Wing
-      const fin2 = new THREE.Mesh(finGeo, finMat);
-      fin2.position.set(0.55, -0.3, 0);
-      rocket.add(fin2);
-
-      // Fin 3: Back Fin
-      const fin3 = new THREE.Mesh(finGeo, finMat);
-      fin3.position.set(0, -0.3, -0.55);
-      fin3.rotation.y = -Math.PI / 2;
-      rocket.add(fin3);
-
-      // Rocket Engine Thruster Nozzle
-      const rocketNozzle = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.32, 0.46, 0.35, 24),
-        new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.3, metalness: 0.9 })
-      );
-      rocketNozzle.position.set(0, -1.15, 0);
-      rocket.add(rocketNozzle);
-
-      // Rocket Thruster Fire Flame (Pulsing Cone)
-      const flameMat = new THREE.MeshBasicMaterial({
-        color: 0x38bdf8,
-        transparent: true,
-        opacity: 0.9,
+      const finGeo = new THREE.ExtrudeGeometry(wingShape, {
+        depth: 0.055, bevelEnabled: true, bevelSegments: 2, steps: 1,
+        bevelSize: 0.018, bevelThickness: 0.018,
       });
-      const flame = new THREE.Mesh(
-        new THREE.ConeGeometry(0.35, 1.1, 20),
-        flameMat
-      );
-      flame.rotation.x = Math.PI; // pointing downwards
-      flame.position.set(0, -1.8, 0);
-      rocket.add(flame);
 
-      // Inner Core Flame (hot yellow/white core)
-      const innerFlame = new THREE.Mesh(
-        new THREE.ConeGeometry(0.18, 0.75, 16),
-        new THREE.MeshBasicMaterial({ color: 0xfef08a, transparent: true, opacity: 0.95 })
+      // Left fin
+      const fin1 = new THREE.Mesh(finGeo, finMat);
+      fin1.position.set(-0.42, -1.65, 0);
+      fin1.rotation.y = Math.PI;
+      rocketPivot.add(fin1);
+
+      // Right fin
+      const fin2 = new THREE.Mesh(finGeo, finMat);
+      fin2.position.set(0.42, -1.65, 0);
+      rocketPivot.add(fin2);
+
+      // Back fin
+      const fin3 = new THREE.Mesh(finGeo, finMat);
+      fin3.position.set(0, -1.65, -0.42);
+      fin3.rotation.y = -Math.PI / 2;
+      rocketPivot.add(fin3);
+
+      // Nozzle
+      const nozzle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.32, 0.46, 0.5, 28),
+        nozzleMat
       );
+      nozzle.position.y = -2.1;
+      rocketPivot.add(nozzle);
+
+      // Outer flame
+      const flame = new THREE.Mesh(new THREE.ConeGeometry(0.44, 1.5, 24), flameMat);
+      flame.rotation.x = Math.PI;
+      flame.position.y = -2.9;
+      rocketPivot.add(flame);
+
+      // Inner flame
+      const innerFlame = new THREE.Mesh(new THREE.ConeGeometry(0.22, 1.1, 18), innerFlameMat);
       innerFlame.rotation.x = Math.PI;
-      innerFlame.position.set(0, -1.6, 0);
-      rocket.add(innerFlame);
+      innerFlame.position.y = -2.65;
+      rocketPivot.add(innerFlame);
 
-      // Attach rocket directly to astronaut group
-      astronaut.add(rocket);
+      // Small side booster flames
+      const boostL = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.5, 12), flameMat);
+      boostL.rotation.x = Math.PI;
+      boostL.position.set(-0.38, -2.5, 0);
+      rocketPivot.add(boostL);
 
-      // Floating Space Cord / Tail connected behind monkey
-      const curve = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(0, -0.3, -0.4),
-        new THREE.Vector3(-0.25, -0.6, -0.6),
-        new THREE.Vector3(0.1, -0.9, -0.7),
-        new THREE.Vector3(-0.15, -1.2, -0.85),
-      ]);
-      const cordMesh = new THREE.Mesh(
-        new THREE.TubeGeometry(curve, 20, 0.035, 8, false),
-        goldVisorCollarMat
+      const boostR = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.5, 12), flameMat);
+      boostR.rotation.x = Math.PI;
+      boostR.position.set(0.38, -2.5, 0);
+      rocketPivot.add(boostR);
+
+      // ── 2. ASTRONAUT MONKEY — sitting on TOP of fuselage ───────────────
+      const monkeyGroup = new THREE.Group();
+      // Position monkey straddling the rocket: on top (positive X in pivot space because pivot is rotated)
+      // We parent monkey to rocketPivot so it stays on rocket when rocket rotates
+      monkeyGroup.scale.setScalar(0.6);
+      monkeyGroup.position.set(0.78, 0.9, 0); // sit on top of fuselage, slightly toward nose
+      monkeyGroup.rotation.z = -Math.PI / 2;  // upright relative to world
+      rocketPivot.add(monkeyGroup);
+
+      // — Head —
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.5, 28, 28), furMat);
+      monkeyGroup.add(head);
+
+      // Snout
+      const snout = new THREE.Mesh(new THREE.SphereGeometry(0.3, 22, 22), faceMat);
+      snout.scale.set(1.1, 0.78, 0.9);
+      snout.position.set(0, -0.08, 0.3);
+      monkeyGroup.add(snout);
+
+      // Nose
+      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.055, 12, 12), noseMat);
+      nose.position.set(0, -0.0, 0.56);
+      monkeyGroup.add(nose);
+
+      // Eyes
+      ([-0.17, 0.17] as number[]).forEach((x) => {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), eyeMat);
+        eye.position.set(x, 0.08, 0.44);
+        monkeyGroup.add(eye);
+
+        const shine = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), eyeShine);
+        shine.position.set(x + 0.02, 0.1, 0.52);
+        monkeyGroup.add(shine);
+      });
+
+      // Ears
+      ([-0.49, 0.49] as number[]).forEach((x) => {
+        const ear = new THREE.Mesh(new THREE.SphereGeometry(0.19, 16, 16), furMat);
+        ear.scale.set(0.32, 0.9, 0.9);
+        ear.position.set(x, 0.04, 0);
+        monkeyGroup.add(ear);
+
+        const innerEar = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), faceMat);
+        innerEar.scale.set(0.25, 0.65, 0.65);
+        innerEar.position.set(x > 0 ? x - 0.02 : x + 0.02, 0.04, 0.03);
+        monkeyGroup.add(innerEar);
+      });
+
+      // Helmet dome (glass)
+      const helmet = new THREE.Mesh(
+        new THREE.SphereGeometry(0.6, 32, 32, 0, Math.PI * 2, 0, Math.PI * 0.6),
+        helmetMat
       );
-      astronaut.add(cordMesh);
+      helmet.position.y = 0.0;
+      monkeyGroup.add(helmet);
 
-      // Add astronaut + rocket combo to system
-      monkeySystem.add(astronaut);
+      // Helmet gold ring collar
+      const helmetRing = new THREE.Mesh(new THREE.TorusGeometry(0.58, 0.055, 14, 32), goldMat);
+      helmetRing.rotation.x = Math.PI / 2;
+      helmetRing.position.y = 0.0;
+      monkeyGroup.add(helmetRing);
 
-      // ───────────────────────────────────────────────────────────────────────
-      //  MINI SOLAR SYSTEM (PLANETS ORBITING ASTRONAUT MONKEY)
-      // ───────────────────────────────────────────────────────────────────────
-      // 1. Saturn-like Ringed Planet
+      // Torso (spacesuit)
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.33, 0.6, 22), suitMat);
+      torso.position.set(0, -0.6, 0);
+      monkeyGroup.add(torso);
+
+      // Chest badge (decorative panel)
+      const chest = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.14, 0.06), cyanGlow);
+      chest.position.set(0, -0.52, 0.34);
+      monkeyGroup.add(chest);
+
+      // — Left Arm raised WAVING —
+      const leftArmGroup = new THREE.Group();
+      leftArmGroup.position.set(-0.42, -0.42, 0);
+      const leftUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.42, 14), suitMat);
+      leftUpperArm.position.set(-0.14, 0.26, 0);
+      leftUpperArm.rotation.z = 0.85;
+      leftArmGroup.add(leftUpperArm);
+
+      const leftForeArm = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.36, 14), suitMat);
+      leftForeArm.position.set(-0.3, 0.52, 0);
+      leftForeArm.rotation.z = 0.5;
+      leftArmGroup.add(leftForeArm);
+
+      const leftGlove = new THREE.Mesh(new THREE.SphereGeometry(0.11, 14, 14), goldMat);
+      leftGlove.position.set(-0.42, 0.68, 0);
+      leftArmGroup.add(leftGlove);
+      monkeyGroup.add(leftArmGroup);
+
+      // — Right Arm gripping rocket —
+      const rightArmGroup = new THREE.Group();
+      rightArmGroup.position.set(0.38, -0.42, 0);
+      const rightUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.4, 14), suitMat);
+      rightUpperArm.position.set(0.1, -0.08, 0.14);
+      rightUpperArm.rotation.z = -0.4;
+      rightUpperArm.rotation.x = 0.5;
+      rightArmGroup.add(rightUpperArm);
+
+      const rightGlove = new THREE.Mesh(new THREE.SphereGeometry(0.11, 14, 14), goldMat);
+      rightGlove.position.set(0.18, -0.24, 0.3);
+      rightArmGroup.add(rightGlove);
+      monkeyGroup.add(rightArmGroup);
+
+      // — Legs straddling the rocket —
+      ([-0.3, 0.3] as number[]).forEach((z, i) => {
+        const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.1, 0.42, 14), suitMat);
+        thigh.position.set(0, -1.0, z);
+        thigh.rotation.x = i === 0 ? 0.6 : -0.6; // straddle angle
+        monkeyGroup.add(thigh);
+
+        const shin = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.35, 14), suitMat);
+        shin.position.set(0, -1.28, z * 1.4);
+        shin.rotation.x = i === 0 ? 0.9 : -0.9;
+        monkeyGroup.add(shin);
+
+        const boot = new THREE.Mesh(new THREE.SphereGeometry(0.12, 14, 14), goldMat);
+        boot.position.set(0, -1.42, z * 1.7);
+        monkeyGroup.add(boot);
+      });
+
+      // — Curly tail —
+      const tailMat = new THREE.MeshStandardMaterial({ color: 0x7c4a1e, roughness: 0.8, metalness: 0.05 });
+      const tailPts = [
+        new THREE.Vector3(0,  -0.9, -0.3),
+        new THREE.Vector3(-0.3, -1.1, -0.6),
+        new THREE.Vector3(-0.6, -0.8, -0.7),
+        new THREE.Vector3(-0.8, -0.4, -0.5),
+        new THREE.Vector3(-0.7,  0.0, -0.2),
+        new THREE.Vector3(-0.5,  0.3,  0.1),
+      ];
+      const tail = makeTail(tailPts, 0.065, tailMat);
+      monkeyGroup.add(tail);
+
+      // ── 3. ORBITING MINI PLANETS ───────────────────────────────────────
       const saturnOrbit = new THREE.Group();
       const saturnPlanet = new THREE.Mesh(
-        new THREE.SphereGeometry(0.38, 24, 24),
-        new THREE.MeshStandardMaterial({
-          color: 0xf59e0b, // amber
-          roughness: 0.5,
-          metalness: 0.1,
-        })
+        new THREE.SphereGeometry(0.36, 24, 24),
+        new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.5 })
       );
-      // Saturn Ring
-      const ringGeo = new THREE.RingGeometry(0.5, 0.82, 32);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: 0xfde047,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.75,
-      });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.rotation.x = Math.PI / 2.3;
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(0.48, 0.78, 32),
+        new THREE.MeshBasicMaterial({ color: 0xfde047, side: THREE.DoubleSide, transparent: true, opacity: 0.7 })
+      );
+      ring.rotation.x = Math.PI / 2.4;
       saturnPlanet.add(ring);
-
-      saturnPlanet.position.set(2.4, 0.7, -0.6);
+      saturnPlanet.position.set(2.6, 0.9, -0.5);
       saturnOrbit.add(saturnPlanet);
       scene.add(saturnOrbit);
 
-      // 2. Cyan Cyber Gas Planet
-      const cyanPlanetOrbit = new THREE.Group();
+      const cyanOrbit = new THREE.Group();
       const cyanPlanet = new THREE.Mesh(
-        new THREE.SphereGeometry(0.24, 24, 24),
-        new THREE.MeshStandardMaterial({
-          color: 0x06b6d4, // glowing cyan
-          roughness: 0.3,
-          metalness: 0.4,
-          emissive: 0x0891b2,
-          emissiveIntensity: 0.3,
-        })
+        new THREE.SphereGeometry(0.22, 22, 22),
+        new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.28, metalness: 0.4, emissive: 0x0891b2, emissiveIntensity: 0.3 })
       );
-      cyanPlanet.position.set(-2.2, -0.5, 0.4);
-      cyanPlanetOrbit.add(cyanPlanet);
-      scene.add(cyanPlanetOrbit);
+      cyanPlanet.position.set(-2.3, -0.6, 0.5);
+      cyanOrbit.add(cyanPlanet);
+      scene.add(cyanOrbit);
 
-      // 3. Tiny Violet Moon
       const moonOrbit = new THREE.Group();
-      const violetMoon = new THREE.Mesh(
-        new THREE.SphereGeometry(0.12, 16, 16),
-        new THREE.MeshStandardMaterial({
-          color: 0xc084fc, // purple
-          roughness: 0.7,
-        })
+      const moon = new THREE.Mesh(
+        new THREE.SphereGeometry(0.11, 16, 16),
+        new THREE.MeshStandardMaterial({ color: 0xc084fc, roughness: 0.7 })
       );
-      violetMoon.position.set(1.4, -1.2, 0.8);
-      moonOrbit.add(violetMoon);
+      moon.position.set(1.5, -1.3, 0.9);
+      moonOrbit.add(moon);
       scene.add(moonOrbit);
 
-      // ── OrbitControls ──────────────────────────────────────────────────────
-      const controls = new OrbitControls(camera, canvas);
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.08;
-      controls.minDistance = 2.5;
-      controls.maxDistance = 7.0;
-      controls.enablePan = false;
-      controls.enableZoom = false;
+      // ── Scroll-Driven State ────────────────────────────────────────────
+      let scrollProgress = 0;
+      window.addEventListener("scroll", () => {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        if (total > 0) scrollProgress = window.scrollY / total;
+      }, { passive: true });
 
-      let isInteracting = false;
-      canvas.addEventListener("pointerdown", () => { isInteracting = true; });
-      window.addEventListener("pointerup", () => {
-        setTimeout(() => { isInteracting = false; }, 800);
-      });
-
-      // Click to barrel roll / spin!
-      let spinVelocity = 0;
-      canvas.addEventListener("click", () => {
-        spinVelocity = 0.28;
-      });
-
-      // Mouse Looking
+      // Mouse parallax (desktop)
       let mouseX = 0, mouseY = 0;
       if (!isMobile) {
         window.addEventListener("mousemove", (e) => {
-          mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+          mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
           mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-        });
+        }, { passive: true });
       }
 
-      // ── Resize ─────────────────────────────────────────────────────────────
+      // Click to barrel spin
+      let spinVel = 0;
+      canvas.addEventListener("click", () => { spinVel = 0.3; });
+
+      // ── Resize ────────────────────────────────────────────────────────
       function onResize() {
-        if (!container) return;
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
       }
       window.addEventListener("resize", onResize);
 
-      // ── Render Loop ─────────────────────────────────────────────────────────
+      // ── Visibility pause ──────────────────────────────────────────────
       let isVisible = true;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => { isVisible = e.isIntersecting; });
-        },
-        { threshold: 0.1 }
-      );
-      observer.observe(container);
+      new IntersectionObserver(
+        (entries) => entries.forEach((e) => { isVisible = e.isIntersecting; }),
+        { threshold: 0.05 }
+      ).observe(container);
 
+      // ── Animate ───────────────────────────────────────────────────────
       let prevTime = performance.now();
 
       function animate() {
         requestAnimationFrame(animate);
         if (!isVisible) return;
 
-        const now = performance.now();
-        const delta = (now - prevTime) * 0.001;
-        prevTime = now;
-        const time = now * 0.001;
+        const now   = performance.now();
+        const delta = (now - prevTime) * 0.001; // unused but kept for future
+        prevTime    = now;
+        const t     = now * 0.001;
 
-        // Thruster Flame Pulsing Animation
-        const flamePulse = 1 + Math.sin(time * 24) * 0.15;
-        flame.scale.set(flamePulse, 1 + Math.cos(time * 28) * 0.25, flamePulse);
-        innerFlame.scale.set(flamePulse * 0.9, 1 + Math.sin(time * 30) * 0.3, flamePulse * 0.9);
+        // --- Flame pulse (more intense = faster scroll) ---
+        const boost = 1 + scrollProgress * 1.8;
+        const fp = 1 + Math.sin(t * 28) * 0.2 * boost;
+        flame.scale.set(fp, (1 + Math.cos(t * 32) * 0.28) * boost, fp);
+        innerFlame.scale.set(fp * 0.8, (1 + Math.sin(t * 34) * 0.32) * boost, fp * 0.8);
+        boostL.scale.set(fp * 0.7, fp * 0.7 * boost, fp * 0.7);
+        boostR.scale.set(fp * 0.7, fp * 0.7 * boost, fp * 0.7);
 
-        // Zero-G & Thruster Jet Vibration
-        const floatY = Math.sin(time * 2.2) * 0.14;
-        const swayZ = Math.sin(time * 1.5) * 0.05;
-        const engineVibe = (Math.random() - 0.5) * 0.015;
-        astronaut.position.y = floatY + engineVibe;
-        astronaut.rotation.z = swayZ;
+        // --- Hover float + engine vibration ---
+        const floatY  = Math.sin(t * 2.0) * 0.12;
+        const vibrate = (Math.random() - 0.5) * 0.014 * boost;
+        rocketGroup.position.y = floatY + vibrate;
 
-        // Waving Left Arm in excitement
-        leftArm.rotation.z = 0.7 + Math.sin(time * 4) * 0.2;
+        // --- Monkey waving arm ---
+        leftArmGroup.rotation.z = Math.sin(t * 3.8) * 0.3;
 
-        // Interactive Click Spin (Barrel Roll)
-        if (spinVelocity > 0.001) {
-          astronaut.rotation.y += spinVelocity;
-          spinVelocity *= 0.94; // damping
-        } else if (!isInteracting) {
-          // Smooth Mouse Follow Yaw & Pitch
-          const targetY = mouseX * 0.45;
-          const targetX = mouseY * -0.25;
-          astronaut.rotation.y += (targetY - astronaut.rotation.y) * 0.06;
-          astronaut.rotation.x += (targetX - astronaut.rotation.x) * 0.06;
+        // --- SCROLL-DRIVEN 3D FLIGHT MANEUVERS ---
+        if (spinVel > 0.0012) {
+          rocketGroup.rotation.y += spinVel;
+          spinVel *= 0.93;
+        } else {
+          // Banking: rock Z like tilting wings as scroll changes
+          const bankZ  = Math.sin(scrollProgress * Math.PI * 3.5) * 0.5;
+          // Pitching: nose up / down
+          const pitchX = Math.cos(scrollProgress * Math.PI * 2.5) * 0.38;
+          // Yaw: full Y-axis journey rotation (1.5× full spin total)
+          const yawY   = scrollProgress * Math.PI * 1.5;
+
+          // Blend mouse parallax on desktop
+          const targetY = mouseX * 0.38 + yawY;
+          const targetX = mouseY * -0.22 + pitchX;
+          const targetZ = bankZ;
+
+          // Smooth lerp toward targets
+          rocketGroup.rotation.y += (targetY - rocketGroup.rotation.y) * 0.055;
+          rocketGroup.rotation.x += (targetX - rocketGroup.rotation.x) * 0.055;
+          rocketGroup.rotation.z += (targetZ - rocketGroup.rotation.z) * 0.055;
         }
 
-        // Orbiting Mini Solar System
-        saturnOrbit.rotation.y += 0.008;
-        saturnPlanet.rotation.y += 0.015;
+        // --- Orbiting planets ---
+        saturnOrbit.rotation.y += 0.007;
+        saturnPlanet.rotation.y += 0.014;
+        cyanOrbit.rotation.y   -= 0.011;
+        cyanPlanet.rotation.y  += 0.019;
+        moonOrbit.rotation.y   += 0.016;
 
-        cyanPlanetOrbit.rotation.y -= 0.012;
-        cyanPlanet.rotation.y += 0.02;
-
-        moonOrbit.rotation.y += 0.018;
-
-        controls.update();
         renderer.render(scene, camera);
       }
 
@@ -691,9 +594,9 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initAstronautMonkeyViewers);
+    document.addEventListener("DOMContentLoaded", initRocketScene);
   } else {
-    initAstronautMonkeyViewers();
+    initRocketScene();
   }
-  document.addEventListener("astro:page-load", initAstronautMonkeyViewers);
+  document.addEventListener("astro:page-load", initRocketScene);
 </script>
