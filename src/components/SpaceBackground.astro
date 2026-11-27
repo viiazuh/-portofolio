@@ -1,291 +1,391 @@
 ---
-// SpaceBackground.astro — Ultra-optimized Three.js Starfield & Shooting Stars Background
+// SpaceBackground.astro — Ultra-premium Three.js space: galaxy + interactive particles + aurora
 ---
 
-<div id="space-bg-container" class="fixed inset-0 pointer-events-none -z-20 overflow-hidden bg-[#070714]">
+<div id="space-bg-container" class="fixed inset-0 pointer-events-none -z-20 overflow-hidden">
   <canvas id="space-bg-canvas" class="w-full h-full block"></canvas>
-  <!-- Beautiful Soft Cosmic Nebula Clouds (Lebih soft & harmonis di mobile dan desktop) -->
-  <div class="nebula-blob nebula-1 absolute top-[-10%] left-[-10%] w-[70vw] md:w-[55vw] h-[70vw] md:h-[55vw] rounded-full bg-purple-600/18 blur-[100px] md:blur-[140px] pointer-events-none"></div>
-  <div class="nebula-blob nebula-2 absolute top-[35%] right-[-15%] w-[65vw] md:w-[50vw] h-[65vw] md:h-[50vw] rounded-full bg-cyan-600/15 blur-[90px] md:blur-[150px] pointer-events-none"></div>
-  <div class="nebula-blob nebula-3 absolute bottom-[-10%] left-[10%] w-[75vw] md:w-[60vw] h-[75vw] md:h-[60vw] rounded-full bg-violet-600/18 blur-[100px] md:blur-[160px] pointer-events-none"></div>
-  <!-- Mobile-friendly ambient deep space core glow -->
-  <div class="absolute top-[20%] left-[50%] -translate-x-1/2 w-[80vw] h-[80vw] rounded-full bg-indigo-900/20 blur-[80px] pointer-events-none block md:hidden"></div>
+
+  <!-- Aurora / Nebula CSS layers -->
+  <div class="aurora-layer aurora-1"></div>
+  <div class="aurora-layer aurora-2"></div>
+  <div class="aurora-layer aurora-3"></div>
+
+  <!-- Grid overlay subtle -->
+  <div class="grid-overlay"></div>
 </div>
+
+<!-- Custom cursor glow (desktop only) -->
+<div id="cursor-glow" class="pointer-events-none fixed z-[9999] hidden md:block"></div>
 
 <style>
   #space-bg-container {
-    background: radial-gradient(circle at 50% 20%, #0d0a22 0%, #070714 60%, #04030a 100%);
+    background: radial-gradient(ellipse at 20% 10%, #0d0a22 0%, #070714 55%, #040310 100%);
   }
-  @keyframes nebula-drift {
-    0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.7; }
-    50% { transform: scale(1.15) translate(20px, -20px); opacity: 1; }
+
+  /* ── Aurora / Nebula layers ───────────────────── */
+  .aurora-layer {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    filter: blur(90px);
   }
-  .nebula-blob {
-    animation: nebula-drift 18s ease-in-out infinite alternate;
+  .aurora-1 {
+    width: 80vw; height: 70vw;
+    top: -20%; left: -20%;
+    background: radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, rgba(99,102,241,0.08) 50%, transparent 70%);
+    animation: aurora-drift 20s ease-in-out infinite alternate;
   }
-  .nebula-2 { animation-delay: -6s; }
-  .nebula-3 { animation-delay: -12s; }
+  .aurora-2 {
+    width: 70vw; height: 60vw;
+    top: 30%; right: -15%;
+    background: radial-gradient(ellipse, rgba(6,182,212,0.14) 0%, rgba(56,189,248,0.07) 50%, transparent 70%);
+    animation: aurora-drift 25s ease-in-out infinite alternate-reverse;
+    animation-delay: -8s;
+  }
+  .aurora-3 {
+    width: 90vw; height: 60vw;
+    bottom: -25%; left: 5%;
+    background: radial-gradient(ellipse, rgba(168,85,247,0.12) 0%, rgba(236,72,153,0.06) 50%, transparent 70%);
+    animation: aurora-drift 30s ease-in-out infinite alternate;
+    animation-delay: -15s;
+  }
+
+  @keyframes aurora-drift {
+    0%   { transform: scale(1) translate(0, 0) rotate(0deg); opacity: 0.7; }
+    33%  { transform: scale(1.12) translate(30px, -20px) rotate(3deg); opacity: 1; }
+    66%  { transform: scale(0.95) translate(-20px, 30px) rotate(-2deg); opacity: 0.85; }
+    100% { transform: scale(1.08) translate(10px, -15px) rotate(1deg); opacity: 0.9; }
+  }
+
+  /* ── Subtle grid ─────────────────────────────── */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(168,85,247,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(168,85,247,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, transparent 80%);
+  }
+
+  /* ── Custom cursor glow ──────────────────────── */
+  #cursor-glow {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(168,85,247,0.12) 0%, rgba(56,189,248,0.06) 40%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, opacity 0.3s;
+    pointer-events: none;
+  }
 </style>
 
 <script>
   import * as THREE from "three";
 
-  function initSpaceBackground() {
-    const canvas = document.getElementById("space-bg-canvas") as HTMLCanvasElement | null;
-    if (!canvas) return;
+  /* ─────────────────────────── Custom Cursor Glow ─────────────────────────── */
+  const cursorGlow = document.getElementById("cursor-glow");
+  if (cursorGlow && window.innerWidth >= 768) {
+    document.addEventListener("mousemove", (e) => {
+      cursorGlow.style.left = e.clientX + "px";
+      cursorGlow.style.top  = e.clientY + "px";
+    });
+    document.addEventListener("mouseenter", () => { cursorGlow.style.opacity = "1"; });
+    document.addEventListener("mouseleave", () => { cursorGlow.style.opacity = "0"; });
 
-    // Prevent duplicate initialization
+    // Bigger glow on interactive elements
+    document.querySelectorAll("a,button,.cosmic-card,.project-card,.service-card").forEach((el) => {
+      el.addEventListener("mouseenter", () => {
+        cursorGlow.style.width  = "500px";
+        cursorGlow.style.height = "500px";
+        (cursorGlow.style as any).background = "radial-gradient(circle, rgba(56,189,248,0.18) 0%, rgba(168,85,247,0.08) 40%, transparent 70%)";
+      });
+      el.addEventListener("mouseleave", () => {
+        cursorGlow.style.width  = "300px";
+        cursorGlow.style.height = "300px";
+        (cursorGlow.style as any).background = "radial-gradient(circle, rgba(168,85,247,0.12) 0%, rgba(56,189,248,0.06) 40%, transparent 70%)";
+      });
+    });
+  }
+
+  /* ─────────────────────────── Three.js Space Scene ───────────────────────── */
+  function initSpaceBackground() {
+    const canvas = document.getElementById(
+      "space-bg-canvas",
+    ) as HTMLCanvasElement | null;
+    if (!canvas) return;
     if ((canvas as any)._initialized) return;
     (canvas as any)._initialized = true;
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: false,
-      powerPreference: "high-performance",
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    const isMobile = window.innerWidth < 768;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.2 : 1.8));
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-    camera.position.z = 400;
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1500);
+    camera.position.z = 500;
 
-    // ── Starfield (1,200 Stars on a single Points mesh) ─────────────────────
-    const starCount = window.innerWidth < 768 ? 700 : 1400;
-    const starGeometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(starCount * 3);
-    const colors = new Float32Array(starCount * 3);
-    const sizes = new Float32Array(starCount);
-
-    const colorPalette = [
-      new THREE.Color("#ffffff"),
-      new THREE.Color("#c084fc"), // light purple
-      new THREE.Color("#818cf8"), // indigo
-      new THREE.Color("#38bdf8"), // cyan
-      new THREE.Color("#fde047"), // warm star yellow
-    ];
-
-    for (let i = 0; i < starCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 1200;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 1200;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 800;
-
-      const col = colorPalette[Math.floor(Math.random() * colorPalette.length)];
-      colors[i * 3] = col.r;
-      colors[i * 3 + 1] = col.g;
-      colors[i * 3 + 2] = col.b;
-
-      sizes[i] = Math.random() * 2.2 + 0.8;
+    /* ── Shared particle texture ─────────────────────────────────────────── */
+    function makeParticleTex(size = 32, glow = false): THREE.Texture {
+      const c  = document.createElement("canvas");
+      c.width  = size;
+      c.height = size;
+      const ctx = c.getContext("2d")!;
+      const h   = size / 2;
+      const g   = ctx.createRadialGradient(h, h, 0, h, h, h);
+      if (glow) {
+        g.addColorStop(0,   "rgba(255,255,255,1)");
+        g.addColorStop(0.2, "rgba(200,200,255,0.9)");
+        g.addColorStop(0.5, "rgba(150,100,255,0.4)");
+        g.addColorStop(1,   "rgba(0,0,0,0)");
+      } else {
+        g.addColorStop(0,   "rgba(255,255,255,1)");
+        g.addColorStop(0.4, "rgba(255,255,255,0.7)");
+        g.addColorStop(1,   "rgba(0,0,0,0)");
+      }
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, size, size);
+      return new THREE.CanvasTexture(c);
     }
 
-    starGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    starGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    const starTex  = makeParticleTex(16, false);
+    const glowTex  = makeParticleTex(32, true);
 
-    // Particle texture (circle gradient)
-    const textureCanvas = document.createElement("canvas");
-    textureCanvas.width = 16;
-    textureCanvas.height = 16;
-    const ctx = textureCanvas.getContext("2d");
-    if (ctx) {
-      const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
-      grad.addColorStop(0, "rgba(255,255,255,1)");
-      grad.addColorStop(0.3, "rgba(255,255,255,0.8)");
-      grad.addColorStop(1, "rgba(255,255,255,0)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 16, 16);
-    }
-    const starTexture = new THREE.CanvasTexture(textureCanvas);
-
-    const starMaterial = new THREE.PointsMaterial({
-      size: 3.5,
-      map: starTexture,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.85,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-
-    const starField = new THREE.Points(starGeometry, starMaterial);
-    scene.add(starField);
-
-    // ── 3D Spiral Galaxy (Bima Sakti / Andromeda Spiral Arms) ──────────────────
-    const isMobileDevice = window.innerWidth < 768;
-    const galaxyParams = {
-      count: isMobileDevice ? 1200 : 4500, // Di mobile partikel lebih sedikit, lembut & elegan
-      size: isMobileDevice ? 1.8 : 2.5,
-      radius: isMobileDevice ? 320 : 420,
-      branches: 3,
-      spin: 1.2,
-      randomness: 0.45,
-      power: 3.5,
-      insideColor: "#ff77e9",  // Hot pink / core glow
-      outsideColor: "#38bdf8", // Cyber cyan spiral arms
-      midColor: "#a855f7",     // Deep cosmic purple
-    };
-
-    const galaxyGeom = new THREE.BufferGeometry();
-    const galaxyPositions = new Float32Array(galaxyParams.count * 3);
-    const galaxyColors = new Float32Array(galaxyParams.count * 3);
-
-    const colorInside = new THREE.Color(galaxyParams.insideColor);
-    const colorMid = new THREE.Color(galaxyParams.midColor);
-    const colorOutside = new THREE.Color(galaxyParams.outsideColor);
-
-    for (let i = 0; i < galaxyParams.count; i++) {
-      // Position along branches
-      const r = Math.random() * galaxyParams.radius;
-      const spinAngle = r * galaxyParams.spin * 0.01;
-      const branchAngle = ((i % galaxyParams.branches) * 2 * Math.PI) / galaxyParams.branches;
-
-      const randomX = Math.pow(Math.random(), galaxyParams.power) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * r;
-      const randomY = Math.pow(Math.random(), galaxyParams.power) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * r * 0.5;
-      const randomZ = Math.pow(Math.random(), galaxyParams.power) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * r;
-
-      const gx = Math.cos(branchAngle + spinAngle) * r + randomX;
-      const gy = randomY;
-      const gz = Math.sin(branchAngle + spinAngle) * r + randomZ;
-
-      galaxyPositions[i * 3] = gx;
-      galaxyPositions[i * 3 + 1] = gy;
-      galaxyPositions[i * 3 + 2] = gz;
-
-      // Color gradient: Center is hot neon pink/violet -> outer cyber cyan
-      const ratio = r / galaxyParams.radius;
-      const mixedColor = ratio < 0.4 
-        ? colorInside.clone().lerp(colorMid, ratio / 0.4)
-        : colorMid.clone().lerp(colorOutside, (ratio - 0.4) / 0.6);
-
-      galaxyColors[i * 3] = mixedColor.r;
-      galaxyColors[i * 3 + 1] = mixedColor.g;
-      galaxyColors[i * 3 + 2] = mixedColor.b;
-    }
-
-    galaxyGeom.setAttribute("position", new THREE.BufferAttribute(galaxyPositions, 3));
-    galaxyGeom.setAttribute("color", new THREE.BufferAttribute(galaxyColors, 3));
-
-    const galaxyMat = new THREE.PointsMaterial({
-      size: galaxyParams.size,
-      map: starTexture,
-      vertexColors: true,
-      transparent: true,
-      opacity: isMobileDevice ? 0.45 : 0.75, // Lebih redup di mobile agar tidak mengganggu keterbacaan teks
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-
-    const galaxyPoints = new THREE.Points(galaxyGeom, galaxyMat);
-    // Tilt the spiral galaxy beautifully in 3D space
-    galaxyPoints.rotation.x = Math.PI / 3.2; // ~56 degrees tilt
-    galaxyPoints.rotation.z = Math.PI / 6;
-    galaxyPoints.position.set(40, -10, -50);
-    scene.add(galaxyPoints);
-
-    // ── Shooting Star / Meteor System ─────────────────────────────────────────
-    const meteorCount = 2;
-    const meteors: Array<{
-      line: THREE.Line;
-      geom: THREE.BufferGeometry;
-      speed: number;
-      active: boolean;
-      delay: number;
-    }> = [];
-
-    const meteorMat = new THREE.LineBasicMaterial({
-      color: 0xc4b5fd,
-      transparent: true,
-      opacity: 0,
-      blending: THREE.AdditiveBlending,
-    });
-
-    for (let i = 0; i < meteorCount; i++) {
-      const geom = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(50, -30, -20),
-      ]);
-      const line = new THREE.Line(geom, meteorMat.clone());
-      scene.add(line);
-      meteors.push({
-        line,
-        geom,
-        speed: 12 + Math.random() * 8,
-        active: false,
-        delay: Math.random() * 300 + 100,
+    /* ── 1. BASE STARFIELD ───────────────────────────────────────────────── */
+    const starCount = isMobile ? 800 : 2000;
+    {
+      const geo = new THREE.BufferGeometry();
+      const pos = new Float32Array(starCount * 3);
+      const col = new Float32Array(starCount * 3);
+      const palette = [
+        new THREE.Color("#ffffff"), new THREE.Color("#c084fc"),
+        new THREE.Color("#818cf8"), new THREE.Color("#38bdf8"),
+        new THREE.Color("#fde047"), new THREE.Color("#f9a8d4"),
+      ];
+      for (let i = 0; i < starCount; i++) {
+        pos[i*3]   = (Math.random()-0.5) * 1600;
+        pos[i*3+1] = (Math.random()-0.5) * 1600;
+        pos[i*3+2] = (Math.random()-0.5) * 1000;
+        const c = palette[Math.floor(Math.random() * palette.length)];
+        col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b;
+      }
+      geo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+      geo.setAttribute("color",    new THREE.BufferAttribute(col,3));
+      const mat = new THREE.PointsMaterial({
+        size: isMobile ? 2.8 : 3.5, map: starTex, vertexColors: true,
+        transparent: true, opacity: 0.88, blending: THREE.AdditiveBlending, depthWrite: false,
       });
+      scene.add(new THREE.Points(geo, mat));
     }
 
-    function resetMeteor(m: (typeof meteors)[0]) {
-      m.line.position.set(
-        (Math.random() - 0.2) * 800,
-        Math.random() * 400 + 100,
-        (Math.random() - 0.5) * 300,
-      );
-      (m.line.material as THREE.LineBasicMaterial).opacity = 0.9;
+    /* ── 2. SPIRAL GALAXY (tilted Milky Way) ────────────────────────────── */
+    const galaxyCount = isMobile ? 1000 : 4000;
+    const galaxyPoints = (() => {
+      const geo = new THREE.BufferGeometry();
+      const pos = new Float32Array(galaxyCount * 3);
+      const col = new Float32Array(galaxyCount * 3);
+      const R = isMobile ? 300 : 420;
+      const branches = 3, spin = 1.2, power = 3.5;
+      const cIn  = new THREE.Color("#ff66dd");
+      const cMid = new THREE.Color("#a855f7");
+      const cOut = new THREE.Color("#38bdf8");
+      for (let i = 0; i < galaxyCount; i++) {
+        const r = Math.random() * R;
+        const angle = ((i % branches) / branches) * Math.PI * 2 + r * spin * 0.01;
+        const rnd = (v: number) => Math.pow(Math.random(), power) * (Math.random()<0.5?1:-1) * v;
+        pos[i*3]   = Math.cos(angle)*r + rnd(0.45*r);
+        pos[i*3+1] = rnd(0.22*r);
+        pos[i*3+2] = Math.sin(angle)*r + rnd(0.45*r);
+        const t = r/R;
+        const mc = t < 0.4 ? cIn.clone().lerp(cMid, t/0.4) : cMid.clone().lerp(cOut,(t-0.4)/0.6);
+        col[i*3]=mc.r; col[i*3+1]=mc.g; col[i*3+2]=mc.b;
+      }
+      geo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+      geo.setAttribute("color",    new THREE.BufferAttribute(col,3));
+      const mat = new THREE.PointsMaterial({
+        size: isMobile ? 1.6 : 2.4, map: starTex, vertexColors: true,
+        transparent: true, opacity: isMobile ? 0.42 : 0.72,
+        blending: THREE.AdditiveBlending, depthWrite: false,
+      });
+      const pts = new THREE.Points(geo, mat);
+      pts.rotation.x = Math.PI / 3.2;
+      pts.rotation.z = Math.PI / 6;
+      pts.position.set(60, -20, -80);
+      scene.add(pts);
+      return pts;
+    })();
+
+    /* ── 3. INTERACTIVE FLOATING PARTICLES (react to mouse) ─────────────── */
+    const floatCount = isMobile ? 60 : 150;
+    const floatGroup = new THREE.Group();
+    const floatPositions  = new Float32Array(floatCount * 3);
+    const floatVelocities = new Float32Array(floatCount * 3); // vx,vy,vz
+    const floatOriginal   = new Float32Array(floatCount * 3); // home positions
+    for (let i = 0; i < floatCount; i++) {
+      const x = (Math.random()-0.5)*600;
+      const y = (Math.random()-0.5)*600;
+      const z = (Math.random()-0.5)*200;
+      floatPositions[i*3]=x;   floatPositions[i*3+1]=y;   floatPositions[i*3+2]=z;
+      floatOriginal[i*3]=x;    floatOriginal[i*3+1]=y;    floatOriginal[i*3+2]=z;
+      floatVelocities[i*3]=0;  floatVelocities[i*3+1]=0;  floatVelocities[i*3+2]=0;
+    }
+    const floatGeo = new THREE.BufferGeometry();
+    floatGeo.setAttribute("position", new THREE.BufferAttribute(floatPositions,3));
+    const floatMat = new THREE.PointsMaterial({
+      size: isMobile ? 5 : 8, map: glowTex,
+      color: new THREE.Color("#a855f7"),
+      transparent: true, opacity: 0.55,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    });
+    const floatMesh = new THREE.Points(floatGeo, floatMat);
+    floatGroup.add(floatMesh);
+    scene.add(floatGroup);
+
+    /* ── 4. SHOOTING STARS / METEORS ────────────────────────────────────── */
+    type Meteor = { line: THREE.Line; speed: number; active: boolean; delay: number };
+    const meteors: Meteor[] = [];
+    for (let i = 0; i < 3; i++) {
+      const geo  = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(70,-42,-28)]);
+      const mat  = new THREE.LineBasicMaterial({ color: 0xd8b4fe, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+      const line = new THREE.Line(geo, mat);
+      scene.add(line);
+      meteors.push({ line, speed: 14+Math.random()*10, active: false, delay: Math.random()*400+100 });
+    }
+    function resetMeteor(m: Meteor) {
+      m.line.position.set((Math.random()-0.2)*900, Math.random()*500+200, (Math.random()-0.5)*400);
+      (m.line.material as THREE.LineBasicMaterial).opacity = 1.0;
       m.active = true;
     }
 
-    // ── Mouse & Scroll Parallax ───────────────────────────────────────────────
-    let mouseX = 0, mouseY = 0;
-    let targetX = 0, targetY = 0;
-    let scrollY = 0;
+    /* ── 5. FLOATING GEOMETRIC ORBS (Spline-style) ───────────────────────── */
+    if (!isMobile) {
+      const orbData = [
+        { r: 18, pos: [-380, 200, -200], color: 0x7c3aed, emissive: 0x4c1d95, opacity: 0.6 },
+        { r: 12, pos: [ 420,-150, -150], color: 0x0891b2, emissive: 0x0e7490, opacity: 0.5 },
+        { r:  8, pos: [-100, 300, -100], color: 0xc084fc, emissive: 0xa855f7, opacity: 0.4 },
+        { r: 22, pos: [ 300, 280, -300], color: 0xf59e0b, emissive: 0xd97706, opacity: 0.35 },
+      ];
+      orbData.forEach(({ r, pos, color, emissive, opacity }) => {
+        const mesh = new THREE.Mesh(
+          new THREE.SphereGeometry(r, 32, 32),
+          new THREE.MeshStandardMaterial({ color, emissive, emissiveIntensity: 0.5, roughness: 0.1, metalness: 0.9, transparent: true, opacity })
+        );
+        mesh.position.set(...(pos as [number,number,number]));
+        scene.add(mesh);
+
+        // Glow halo around orb
+        const haloMesh = new THREE.Mesh(
+          new THREE.SphereGeometry(r * 1.8, 16, 16),
+          new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.08, side: THREE.BackSide })
+        );
+        haloMesh.position.copy(mesh.position);
+        scene.add(haloMesh);
+      });
+
+      // Ambient point lights to illuminate scene
+      const l1 = new THREE.PointLight(0x7c3aed, 60, 600);
+      l1.position.set(-380, 200, -200);
+      scene.add(l1);
+      const l2 = new THREE.PointLight(0x06b6d4, 50, 500);
+      l2.position.set(420, -150, -150);
+      scene.add(l2);
+    }
+
+    /* ── Mouse & Scroll ─────────────────────────────────────────────────── */
+    let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0, scrollY = 0;
+    let mousePosX = 0, mousePosY = 0; // normalized -1..1
 
     window.addEventListener("mousemove", (e) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 40;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 40;
+      mouseX = (e.clientX / window.innerWidth  - 0.5) * 50;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 50;
+      mousePosX = (e.clientX / window.innerWidth  - 0.5) * 2;
+      mousePosY = (e.clientY / window.innerHeight - 0.5) * 2;
     }, { passive: true });
+    window.addEventListener("scroll", () => { scrollY = window.scrollY * 0.1; }, { passive: true });
+    window.addEventListener(
+      "resize",
+      () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      },
+      { passive: true },
+    );
 
-    window.addEventListener("scroll", () => {
-      scrollY = window.scrollY * 0.08;
-    }, { passive: true });
-
-    window.addEventListener("resize", () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }, { passive: true });
-
-    // ── Render Loop ───────────────────────────────────────────────────────────
-    let prevTime = performance.now();
-
+    /* ── Render loop ────────────────────────────────────────────────────── */
+    let prev = performance.now();
     function animate() {
       requestAnimationFrame(animate);
+      const now   = performance.now();
+      const delta = Math.min((now - prev) * 0.001, 0.05);
+      prev = now;
+      const t = now * 0.001;
 
-      const now = performance.now();
-      const delta = (now - prevTime) * 0.001;
-      prevTime = now;
+      // Starfield gentle rotation
+      scene.children[0]?.rotation && ((scene.children[0] as any).rotation.y += 0.00015);
 
-      // Slow rotation of cosmic starfield & spiral galaxy
-      starField.rotation.y += 0.0002;
-      starField.rotation.x += 0.0001;
+      // Galaxy spin
+      galaxyPoints.rotation.y += 0.00065;
+      galaxyPoints.rotation.z += 0.00022;
 
-      galaxyPoints.rotation.y += 0.0008; // Galaxy spins continuously
-      galaxyPoints.rotation.z += 0.0003;
+      // Interactive floating particles — repel from mouse
+      const fp = floatGeo.getAttribute("position") as THREE.BufferAttribute;
+      for (let i = 0; i < floatCount; i++) {
+        const ox = floatOriginal[i*3], oy = floatOriginal[i*3+1], oz = floatOriginal[i*3+2];
+        // Convert mouse to 3D space (rough mapping)
+        const mwx = mousePosX * 300, mwy = -mousePosY * 300;
+        const dx = fp.getX(i) - mwx, dy = fp.getY(i) - mwy;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const repelRadius = 120;
 
-      // Parallax easing
-      targetX += (mouseX - targetX) * 0.03;
-      targetY += (mouseY - targetY) * 0.03;
-      camera.position.x = targetX;
-      camera.position.y = -targetY - scrollY * 0.5;
+        if (dist < repelRadius) {
+          const force = (repelRadius - dist) / repelRadius * 2.5;
+          floatVelocities[i*3]   += (dx/dist) * force;
+          floatVelocities[i*3+1] += (dy/dist) * force;
+        }
 
-      // Meteors
+        // Spring back to home
+        floatVelocities[i*3]   += (ox - fp.getX(i)) * 0.012;
+        floatVelocities[i*3+1] += (oy - fp.getY(i)) * 0.012;
+        floatVelocities[i*3+2] += (oz - fp.getZ(i)) * 0.012;
+
+        // Damping + gentle float
+        floatVelocities[i*3]   *= 0.88;
+        floatVelocities[i*3+1] *= 0.88;
+
+        fp.setXYZ(i,
+          fp.getX(i) + floatVelocities[i*3]   + Math.sin(t * 0.5 + i) * 0.3,
+          fp.getY(i) + floatVelocities[i*3+1] + Math.cos(t * 0.4 + i) * 0.3,
+          fp.getZ(i) + floatVelocities[i*3+2],
+        );
+      }
+      fp.needsUpdate = true;
+
+      // Pulsing opacity on floating particles
+      floatMat.opacity = 0.45 + Math.sin(t * 1.2) * 0.12;
+
+      // Meteor animation
       meteors.forEach((m) => {
         if (!m.active) {
-          m.delay--;
-          if (m.delay <= 0) {
-            resetMeteor(m);
-            m.delay = 400 + Math.random() * 600;
-          }
+          if (--m.delay <= 0) { resetMeteor(m); m.delay = 500 + Math.random()*700; }
         } else {
           m.line.position.x += m.speed;
           m.line.position.y -= m.speed * 0.6;
           const mat = m.line.material as THREE.LineBasicMaterial;
-          mat.opacity -= delta * 0.9;
-          if (mat.opacity <= 0.02) {
-            m.active = false;
-          }
+          mat.opacity -= delta * 0.85;
+          if (mat.opacity <= 0.02) m.active = false;
         }
       });
+
+      // Camera parallax
+      targetX += (mouseX - targetX) * 0.025;
+      targetY += (mouseY - targetY) * 0.025;
+      camera.position.x = targetX;
+      camera.position.y = -targetY - scrollY * 0.4;
 
       renderer.render(scene, camera);
     }

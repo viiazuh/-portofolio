@@ -180,14 +180,14 @@ const certs = [
 
           <!-- Action Buttons -->
           <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
-            <a href="#projects" class="cosmic-btn-primary relative inline-flex items-center gap-2 px-7 py-3.5 font-bold rounded-full text-sm group">
+            <a href="#projects" class="cosmic-btn-primary btn-shimmer magnetic-btn relative inline-flex items-center gap-2 px-7 py-3.5 font-bold rounded-full text-sm group">
               VIEW PROJECTS
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </a>
 
-            <a href="/VioAzuhri.pdf" download="CV_Azuzu_FullStack.pdf" class="cosmic-btn-secondary inline-flex items-center gap-2 px-6 py-3.5 font-bold rounded-full transition-all text-sm">
+            <a href="/VioAzuhri.pdf" download="CV_Azuzu_FullStack.pdf" class="cosmic-btn-secondary magnetic-btn inline-flex items-center gap-2 px-6 py-3.5 font-bold rounded-full transition-all text-sm">
               Download CV
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -200,7 +200,12 @@ const certs = [
 
         <!-- CENTER: Seamless 3D Astronaut Monkey & Solar System (Responsive Height) -->
         <div id="hero-model-wrap" class="lg:col-span-4 relative flex items-center justify-center order-1 lg:order-2 my-0 gs-hero-center w-full">
-          <div class="w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[500px] relative">
+          <!-- Spline-style Orbital HUD Rings behind 3D Rocket -->
+          <div class="pointer-events-none absolute inset-0 flex items-center justify-center z-0">
+            <div class="w-[290px] h-[290px] sm:w-[360px] sm:h-[360px] lg:w-[440px] lg:h-[440px] rounded-full border border-purple-500/20 border-dashed animate-spin-slow"></div>
+            <div class="absolute w-[230px] h-[230px] sm:w-[290px] sm:h-[290px] lg:w-[350px] lg:h-[350px] rounded-full border border-cyan-400/15 animate-glow-pulse"></div>
+          </div>
+          <div class="w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[500px] relative z-10">
             <div class="block lg:hidden">
               <ModelViewer height="350px" />
             </div>
@@ -811,44 +816,20 @@ const certs = [
     // ── 2. HERO & FULL-PAGE FLIGHT SCROLL ANIMATION ────────────────
     const heroModel = document.getElementById('hero-model-wrap');
     if (heroModel) {
-      // Timeline ScrollTrigger di mana Roket Monyet terbang dinamis melintasi section:
-      // Dari tengah Hero -> meluncur miring ke kanan saat lewat Experience -> miring menukik meluncur anggun
-      const tl = gsap.timeline({
+      // Three.js ModelViewer menangani rotasi 3D (bank/pitch/yaw);
+      // GSAP menggerakkan posisi kontainer secara halus mengikuti scroll.
+      gsap.to(heroModel, {
+        y: 260,
+        x: 35,
+        scale: 0.92,
+        ease: 'power1.out',
         scrollTrigger: {
           trigger: '#hero',
           start: 'top top',
           endTrigger: '#contact',
           end: 'bottom bottom',
           scrub: 1.5,
-        }
-      });
-
-      // Phase 1: Dari Hero meluncur turun ke kanan atas section Experience
-      tl.to(heroModel, {
-        y: 450,
-        x: 60,
-        rotationZ: -8,
-        rotationX: 12,
-        scale: 0.9,
-        ease: 'power1.inOut',
-      })
-      // Phase 2: Meluncur menyeberang ke kiri section Projects
-      .to(heroModel, {
-        y: 950,
-        x: -50,
-        rotationZ: 10,
-        rotationX: -8,
-        scale: 0.85,
-        ease: 'power1.inOut',
-      })
-      // Phase 3: Kembali melaju ke bawah menuju Contact
-      .to(heroModel, {
-        y: 1500,
-        x: 0,
-        rotationZ: -4,
-        rotationX: 8,
-        scale: 0.95,
-        ease: 'power1.out',
+        },
       });
     }
 
@@ -997,7 +978,7 @@ const certs = [
       return () => {};
     });
 
-    // ── 6. HOVER TILT on project / service cards ──
+    // ── 6. HOVER TILT + MAGNETIC BUTTONS ──
 
     document.querySelectorAll<HTMLElement>('.project-card, .service-card').forEach((card) => {
       card.addEventListener('mousemove', (e) => {
@@ -1008,6 +989,18 @@ const certs = [
       });
       card.addEventListener('mouseleave', () => {
         gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+      });
+    });
+
+    document.querySelectorAll<HTMLElement>('.magnetic-btn').forEach((btn) => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const dx = (e.clientX - (rect.left + rect.width / 2)) * 0.22;
+        const dy = (e.clientY - (rect.top + rect.height / 2)) * 0.22;
+        btn.style.transform = `translate(${dx}px, ${dy}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
       });
     });
 
@@ -1085,30 +1078,30 @@ const certs = [
         if (isTarget) {
           tab.classList.add(
             'active-tab',
-            'text-indigo-600',
-            'bg-white',
+            'text-white',
+            'bg-purple-600/40',
             'border',
-            'border-slate-200/90',
-            'shadow-sm'
+            'border-purple-400/50',
+            'shadow-[0_0_15px_rgba(168,85,247,0.4)]'
           );
-          tab.classList.remove('text-slate-600', 'hover:bg-white/60');
+          tab.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-purple-600/20');
           if (iconDiv) {
-            iconDiv.classList.add('text-indigo-600');
-            iconDiv.classList.remove('text-slate-500');
+            iconDiv.classList.add('text-cyan-400');
+            iconDiv.classList.remove('text-slate-400');
           }
         } else {
           tab.classList.remove(
             'active-tab',
-            'text-indigo-600',
-            'bg-white',
+            'text-white',
+            'bg-purple-600/40',
             'border',
-            'border-slate-200/90',
-            'shadow-sm'
+            'border-purple-400/50',
+            'shadow-[0_0_15px_rgba(168,85,247,0.4)]'
           );
-          tab.classList.add('text-slate-600', 'hover:bg-white/60');
+          tab.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-purple-600/20');
           if (iconDiv) {
-            iconDiv.classList.remove('text-indigo-600');
-            iconDiv.classList.add('text-slate-500');
+            iconDiv.classList.remove('text-cyan-400');
+            iconDiv.classList.add('text-slate-400');
           }
         }
       });
