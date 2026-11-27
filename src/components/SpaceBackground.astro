@@ -108,6 +108,77 @@
     const starField = new THREE.Points(starGeometry, starMaterial);
     scene.add(starField);
 
+    // ── 3D Spiral Galaxy (Bima Sakti / Andromeda Spiral Arms) ──────────────────
+    const galaxyParams = {
+      count: window.innerWidth < 768 ? 2000 : 4500,
+      size: 2.5,
+      radius: 420,
+      branches: 3,
+      spin: 1.2,
+      randomness: 0.45,
+      power: 3.5,
+      insideColor: "#ff77e9",  // Hot pink / core glow
+      outsideColor: "#38bdf8", // Cyber cyan spiral arms
+      midColor: "#a855f7",     // Deep cosmic purple
+    };
+
+    const galaxyGeom = new THREE.BufferGeometry();
+    const galaxyPositions = new Float32Array(galaxyParams.count * 3);
+    const galaxyColors = new Float32Array(galaxyParams.count * 3);
+
+    const colorInside = new THREE.Color(galaxyParams.insideColor);
+    const colorMid = new THREE.Color(galaxyParams.midColor);
+    const colorOutside = new THREE.Color(galaxyParams.outsideColor);
+
+    for (let i = 0; i < galaxyParams.count; i++) {
+      // Position along branches
+      const r = Math.random() * galaxyParams.radius;
+      const spinAngle = r * galaxyParams.spin * 0.01;
+      const branchAngle = ((i % galaxyParams.branches) * 2 * Math.PI) / galaxyParams.branches;
+
+      const randomX = Math.pow(Math.random(), galaxyParams.power) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * r;
+      const randomY = Math.pow(Math.random(), galaxyParams.power) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * r * 0.5;
+      const randomZ = Math.pow(Math.random(), galaxyParams.power) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * r;
+
+      const gx = Math.cos(branchAngle + spinAngle) * r + randomX;
+      const gy = randomY;
+      const gz = Math.sin(branchAngle + spinAngle) * r + randomZ;
+
+      galaxyPositions[i * 3] = gx;
+      galaxyPositions[i * 3 + 1] = gy;
+      galaxyPositions[i * 3 + 2] = gz;
+
+      // Color gradient: Center is hot neon pink/violet -> outer cyber cyan
+      const ratio = r / galaxyParams.radius;
+      const mixedColor = ratio < 0.4 
+        ? colorInside.clone().lerp(colorMid, ratio / 0.4)
+        : colorMid.clone().lerp(colorOutside, (ratio - 0.4) / 0.6);
+
+      galaxyColors[i * 3] = mixedColor.r;
+      galaxyColors[i * 3 + 1] = mixedColor.g;
+      galaxyColors[i * 3 + 2] = mixedColor.b;
+    }
+
+    galaxyGeom.setAttribute("position", new THREE.BufferAttribute(galaxyPositions, 3));
+    galaxyGeom.setAttribute("color", new THREE.BufferAttribute(galaxyColors, 3));
+
+    const galaxyMat = new THREE.PointsMaterial({
+      size: galaxyParams.size,
+      map: starTexture,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.75,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+
+    const galaxyPoints = new THREE.Points(galaxyGeom, galaxyMat);
+    // Tilt the spiral galaxy beautifully in 3D space
+    galaxyPoints.rotation.x = Math.PI / 3.2; // ~56 degrees tilt
+    galaxyPoints.rotation.z = Math.PI / 6;
+    galaxyPoints.position.set(40, -10, -50);
+    scene.add(galaxyPoints);
+
     // ── Shooting Star / Meteor System ─────────────────────────────────────────
     const meteorCount = 2;
     const meteors: Array<{
@@ -181,9 +252,12 @@
       const delta = (now - prevTime) * 0.001;
       prevTime = now;
 
-      // Slow rotation of cosmic starfield
-      starField.rotation.y += 0.0003;
-      starField.rotation.x += 0.00015;
+      // Slow rotation of cosmic starfield & spiral galaxy
+      starField.rotation.y += 0.0002;
+      starField.rotation.x += 0.0001;
+
+      galaxyPoints.rotation.y += 0.0008; // Galaxy spins continuously
+      galaxyPoints.rotation.z += 0.0003;
 
       // Parallax easing
       targetX += (mouseX - targetX) * 0.03;
