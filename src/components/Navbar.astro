@@ -16,25 +16,19 @@ const navLinks = [
   <div
     class="w-full max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex justify-between items-center h-20"
   >
-    <!-- Logo -->
+    <!-- Logo & Profile -->
     <a href="/#hero" class="flex items-center gap-2.5 no-underline group">
-      <div
-        class="bg-slate-900 text-white p-2.5 rounded-xl group-hover:scale-105 transition-transform shadow-md shadow-slate-900/10"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
+      <div class="relative shrink-0">
+        <img
+          src="/profil.jpeg"
+          alt="Vio Azuhri"
+          class="w-9 h-9 rounded-full object-cover border-2 border-slate-900 group-hover:scale-105 transition-transform shadow-sm"
+        />
+        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-white"></span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-black tracking-wider text-slate-900 group-hover:text-indigo-600 transition-colors">VIO AZUHRI</span>
+        <span class="text-[9px] font-bold text-slate-400 tracking-tight uppercase">Portfolio</span>
       </div>
     </a>
 
