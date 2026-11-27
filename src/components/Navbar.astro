@@ -11,38 +11,44 @@ const navLinks = [
 ---
 
 <header
-  class="sticky top-0 z-50 w-full bg-white/85 backdrop-blur-md border-b border-slate-100/90 transition-all shadow-[0_2px_15px_rgba(0,0,0,0.03)]"
+  class="sticky top-0 z-50 w-full bg-[#070714]/80 backdrop-blur-xl border-b border-purple-500/20 transition-all shadow-[0_4px_30px_rgba(0,0,0,0.6)]"
 >
   <div
     class="w-full max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-8 lg:px-12 flex justify-between items-center h-20"
   >
-    <!-- Logo & Profile -->
+    <!-- Logo -->
     <a href="/#hero" class="flex items-center gap-2.5 no-underline group">
-      <div class="relative shrink-0">
-        <img
-          src="/profil.jpeg"
-          alt="Vio Azuhri"
-          class="w-9 h-9 rounded-full object-cover border-2 border-slate-900 group-hover:scale-105 transition-transform shadow-sm"
-        />
-        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-white"></span>
-      </div>
-      <div class="flex flex-col">
-        <span class="text-xs font-black tracking-wider text-slate-900 group-hover:text-indigo-600 transition-colors">VIO AZUHRI</span>
-        <span class="text-[9px] font-bold text-slate-400 tracking-tight uppercase">Portfolio</span>
+      <div
+        class="bg-[#13112b] border border-purple-500/40 text-cyan-400 p-2.5 rounded-xl group-hover:scale-105 group-hover:border-cyan-400 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all shadow-md"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
       </div>
     </a>
 
     <!-- Desktop Nav Links -->
     <nav
       id="desktop-nav"
-      class="hidden md:flex items-center gap-1 bg-slate-50/80 p-1.5 rounded-full border border-slate-200/60 shadow-inner"
+      class="hidden md:flex items-center gap-1 bg-[#100e29]/70 p-1.5 rounded-full border border-purple-500/30 backdrop-blur-md shadow-inner"
     >
       {
         navLinks.map((link) => (
           <a
             href={link.href}
             data-section={link.id}
-            class="nav-link px-5 py-2 rounded-full text-xs font-bold tracking-wider text-slate-600 transition-all duration-200 hover:text-slate-900 hover:bg-white/80"
+            class="nav-link px-5 py-2 rounded-full text-xs font-bold tracking-wider text-slate-300 transition-all duration-200 hover:text-white hover:bg-purple-500/20"
           >
             {link.label.toUpperCase()}
           </a>
@@ -55,9 +61,9 @@ const navLinks = [
       <!-- Tombol Menuju Halaman Fitur -->
       <a
         href="/fitur"
-        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black text-indigo-700 bg-indigo-50 border border-indigo-200/90 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 hover:shadow-md hover:shadow-indigo-500/20 transition-all duration-300 group"
+        class="cosmic-badge inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black text-cyan-300 hover:text-white hover:bg-purple-600/30 transition-all duration-300 group"
       >
-        <span class="w-2 h-2 rounded-full bg-indigo-500 group-hover:bg-white animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-cyan-400 group-hover:bg-white animate-pulse shadow-[0_0_8px_#38bdf8]"></span>
         <span>FITUR</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-0.5 transition-transform">
           <polyline points="9 18 15 12 9 6"></polyline>
@@ -66,9 +72,9 @@ const navLinks = [
 
       <a
         href="/#contact"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-white bg-slate-900 hover:bg-amber-600 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300"
+        class="cosmic-btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold"
       >
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-cyan-300 animate-pulse"></span>
         LET'S TALK
       </a>
     </div>
@@ -77,9 +83,9 @@ const navLinks = [
     <div class="md:hidden flex items-center gap-2">
       <a
         href="/fitur"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-indigo-700 bg-indigo-50 border border-indigo-200/90 active:scale-95 transition-all"
+        class="cosmic-badge inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black text-cyan-300 active:scale-95 transition-all"
       >
-        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
         <span>Fitur</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"></polyline>
@@ -88,7 +94,7 @@ const navLinks = [
 
       <button
         id="menu-toggle"
-        class="p-2.5 bg-slate-100/80 border border-slate-200/80 rounded-xl text-slate-700 hover:text-slate-900 transition-colors"
+        class="p-2.5 bg-[#120f30]/80 border border-purple-500/40 rounded-xl text-slate-200 hover:text-white transition-colors"
         aria-label="Toggle menu"
       >
         <svg
@@ -130,14 +136,14 @@ const navLinks = [
   <!-- Mobile Dropdown Menu -->
   <div
     id="nav-menu"
-    class="hidden md:hidden absolute top-full left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-xl px-6 py-6 flex-col gap-2 transition-all animate-fade-in-up"
+    class="hidden md:hidden absolute top-full left-0 right-0 z-50 bg-[#0a081e]/95 backdrop-blur-2xl border-b border-purple-500/30 shadow-2xl px-6 py-6 flex-col gap-2 transition-all animate-fade-in-up"
   >
     {
       navLinks.map((link) => (
         <a
           href={link.href}
           data-section={link.id}
-          class="nav-link block py-3 px-4 rounded-xl text-sm font-bold text-slate-700 hover:text-amber-600 hover:bg-slate-50 transition-colors"
+          class="nav-link block py-3 px-4 rounded-xl text-sm font-bold text-slate-200 hover:text-cyan-400 hover:bg-purple-600/20 transition-colors"
         >
           {link.label}
         </a>
@@ -145,22 +151,22 @@ const navLinks = [
     }
     <a
       href="/fitur"
-      class="flex items-center justify-between py-3 px-4 rounded-xl text-sm font-bold text-indigo-700 bg-indigo-50/80 border border-indigo-200/60 hover:bg-indigo-100 transition-colors"
+      class="flex items-center justify-between py-3 px-4 rounded-xl text-sm font-bold text-cyan-300 bg-purple-950/40 border border-purple-500/30 hover:bg-purple-900/40 transition-colors"
     >
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_#38bdf8]"></span>
         <span>Fitur Web</span>
       </div>
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     </a>
-    <div class="pt-3 mt-2 border-t border-slate-100">
+    <div class="pt-3 mt-2 border-t border-purple-500/20">
       <a
         href="/#contact"
-        class="nav-link flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-bold text-white bg-slate-900 shadow-lg shadow-slate-900/20"
+        class="nav-link cosmic-btn-primary flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-bold text-white shadow-lg"
       >
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span class="w-2 h-2 rounded-full bg-cyan-300"></span>
         LET'S TALK
       </a>
     </div>
@@ -264,11 +270,11 @@ const navLinks = [
       navLinks.forEach((link) => {
         const sec = link.dataset.section;
         if (sec === currentSectionId) {
-          link.classList.add("text-slate-900", "bg-white", "shadow-sm");
-          link.classList.remove("text-slate-600");
+          link.classList.add("text-white", "bg-purple-600/30", "border", "border-purple-400/40", "shadow-[0_0_12px_rgba(168,85,247,0.4)]");
+          link.classList.remove("text-slate-300");
         } else {
-          link.classList.remove("text-slate-900", "bg-white", "shadow-sm");
-          link.classList.add("text-slate-600");
+          link.classList.remove("text-white", "bg-purple-600/30", "border", "border-purple-400/40", "shadow-[0_0_12px_rgba(168,85,247,0.4)]");
+          link.classList.add("text-slate-300");
         }
       });
     }

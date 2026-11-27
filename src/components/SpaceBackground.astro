@@ -1,0 +1,225 @@
+---
+// SpaceBackground.astro — Ultra-optimized Three.js Starfield & Shooting Stars Background
+---
+
+<div id="space-bg-container" class="fixed inset-0 pointer-events-none -z-20 overflow-hidden bg-[#070714]">
+  <canvas id="space-bg-canvas" class="w-full h-full block"></canvas>
+  <!-- Subtle Cosmic Nebula Clouds -->
+  <div class="nebula-blob nebula-1 absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] rounded-full bg-purple-700/15 blur-[140px] pointer-events-none"></div>
+  <div class="nebula-blob nebula-2 absolute top-[35%] right-[-15%] w-[50vw] h-[50vw] rounded-full bg-indigo-600/12 blur-[150px] pointer-events-none"></div>
+  <div class="nebula-blob nebula-3 absolute bottom-[-10%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-violet-600/15 blur-[160px] pointer-events-none"></div>
+</div>
+
+<style>
+  #space-bg-container {
+    background: radial-gradient(circle at 50% 20%, #0d0a22 0%, #070714 60%, #04030a 100%);
+  }
+  @keyframes nebula-drift {
+    0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.7; }
+    50% { transform: scale(1.15) translate(20px, -20px); opacity: 1; }
+  }
+  .nebula-blob {
+    animation: nebula-drift 18s ease-in-out infinite alternate;
+  }
+  .nebula-2 { animation-delay: -6s; }
+  .nebula-3 { animation-delay: -12s; }
+</style>
+
+<script>
+  import * as THREE from "three";
+
+  function initSpaceBackground() {
+    const canvas = document.getElementById("space-bg-canvas") as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    // Prevent duplicate initialization
+    if ((canvas as any)._initialized) return;
+    (canvas as any)._initialized = true;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: false,
+      powerPreference: "high-performance",
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+    camera.position.z = 400;
+
+    // ── Starfield (1,200 Stars on a single Points mesh) ─────────────────────
+    const starCount = window.innerWidth < 768 ? 700 : 1400;
+    const starGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(starCount * 3);
+    const colors = new Float32Array(starCount * 3);
+    const sizes = new Float32Array(starCount);
+
+    const colorPalette = [
+      new THREE.Color("#ffffff"),
+      new THREE.Color("#c084fc"), // light purple
+      new THREE.Color("#818cf8"), // indigo
+      new THREE.Color("#38bdf8"), // cyan
+      new THREE.Color("#fde047"), // warm star yellow
+    ];
+
+    for (let i = 0; i < starCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 1200;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 1200;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 800;
+
+      const col = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+      colors[i * 3] = col.r;
+      colors[i * 3 + 1] = col.g;
+      colors[i * 3 + 2] = col.b;
+
+      sizes[i] = Math.random() * 2.2 + 0.8;
+    }
+
+    starGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    starGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+    // Particle texture (circle gradient)
+    const textureCanvas = document.createElement("canvas");
+    textureCanvas.width = 16;
+    textureCanvas.height = 16;
+    const ctx = textureCanvas.getContext("2d");
+    if (ctx) {
+      const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+      grad.addColorStop(0, "rgba(255,255,255,1)");
+      grad.addColorStop(0.3, "rgba(255,255,255,0.8)");
+      grad.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 16, 16);
+    }
+    const starTexture = new THREE.CanvasTexture(textureCanvas);
+
+    const starMaterial = new THREE.PointsMaterial({
+      size: 3.5,
+      map: starTexture,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+
+    const starField = new THREE.Points(starGeometry, starMaterial);
+    scene.add(starField);
+
+    // ── Shooting Star / Meteor System ─────────────────────────────────────────
+    const meteorCount = 2;
+    const meteors: Array<{
+      line: THREE.Line;
+      geom: THREE.BufferGeometry;
+      speed: number;
+      active: boolean;
+      delay: number;
+    }> = [];
+
+    const meteorMat = new THREE.LineBasicMaterial({
+      color: 0xc4b5fd,
+      transparent: true,
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
+    });
+
+    for (let i = 0; i < meteorCount; i++) {
+      const geom = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(50, -30, -20),
+      ]);
+      const line = new THREE.Line(geom, meteorMat.clone());
+      scene.add(line);
+      meteors.push({
+        line,
+        geom,
+        speed: 12 + Math.random() * 8,
+        active: false,
+        delay: Math.random() * 300 + 100,
+      });
+    }
+
+    function resetMeteor(m: (typeof meteors)[0]) {
+      m.line.position.set(
+        (Math.random() - 0.2) * 800,
+        Math.random() * 400 + 100,
+        (Math.random() - 0.5) * 300,
+      );
+      (m.line.material as THREE.LineBasicMaterial).opacity = 0.9;
+      m.active = true;
+    }
+
+    // ── Mouse & Scroll Parallax ───────────────────────────────────────────────
+    let mouseX = 0, mouseY = 0;
+    let targetX = 0, targetY = 0;
+    let scrollY = 0;
+
+    window.addEventListener("mousemove", (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 40;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 40;
+    }, { passive: true });
+
+    window.addEventListener("scroll", () => {
+      scrollY = window.scrollY * 0.08;
+    }, { passive: true });
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }, { passive: true });
+
+    // ── Render Loop ───────────────────────────────────────────────────────────
+    let prevTime = performance.now();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const now = performance.now();
+      const delta = (now - prevTime) * 0.001;
+      prevTime = now;
+
+      // Slow rotation of cosmic starfield
+      starField.rotation.y += 0.0003;
+      starField.rotation.x += 0.00015;
+
+      // Parallax easing
+      targetX += (mouseX - targetX) * 0.03;
+      targetY += (mouseY - targetY) * 0.03;
+      camera.position.x = targetX;
+      camera.position.y = -targetY - scrollY * 0.5;
+
+      // Meteors
+      meteors.forEach((m) => {
+        if (!m.active) {
+          m.delay--;
+          if (m.delay <= 0) {
+            resetMeteor(m);
+            m.delay = 400 + Math.random() * 600;
+          }
+        } else {
+          m.line.position.x += m.speed;
+          m.line.position.y -= m.speed * 0.6;
+          const mat = m.line.material as THREE.LineBasicMaterial;
+          mat.opacity -= delta * 0.9;
+          if (mat.opacity <= 0.02) {
+            m.active = false;
+          }
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSpaceBackground);
+  } else {
+    initSpaceBackground();
+  }
+  document.addEventListener("astro:page-load", initSpaceBackground);
+</script>

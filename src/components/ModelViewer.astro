@@ -1,5 +1,5 @@
 ---
-// ModelViewer.astro (Full Optimized Version)
+// ModelViewer.astro — Interactive 3D Astronaut Monkey & Mini Solar System in Three.js
 interface Props {
   modelPath?: string;
   height?: string;
@@ -12,35 +12,15 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
   data-model-path={modelPath}
   style={`height: ${height}`}
 >
-  <!-- Ambient Atmospheric Glow -->
+  <!-- Ambient Cosmic Nebula Glow -->
   <div class="model-aura-glow"></div>
 
   <canvas class="model-canvas"></canvas>
 
-  <!-- Loading state -->
-  <div class="model-loader">
-    <div class="loader-ring"></div>
-    <span class="loader-text">Loading 3D Model...</span>
-  </div>
-
   <!-- Interactive Hint -->
   <div class="model-hint">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      ><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path><path
-        d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v10"></path><path
-        d="M10 10.5a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2V18a6 6 0 0 0 12 0v-5a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2"
-      ></path></svg
-    >
-    Drag to rotate 3D Model
+    <span class="hint-dot"></span>
+    <span>Drag to rotate • Click for Space Spin</span>
   </div>
 </div>
 
@@ -53,50 +33,34 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Isolasi compositing layer — model tidak terganggu overlay CSS */
     isolation: isolate;
     transform: translateZ(0);
-    will-change: transform;
   }
 
   .model-aura-glow {
     position: absolute;
-    width: 300px;
-    height: 300px;
+    width: 320px;
+    height: 320px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: radial-gradient(
       circle,
-      rgba(147, 51, 234, 0.2) 0%,
-      rgba(59, 130, 246, 0.12) 45%,
-      transparent 70%
+      rgba(168, 85, 247, 0.28) 0%,
+      rgba(59, 130, 246, 0.18) 40%,
+      rgba(6, 182, 212, 0.08) 60%,
+      transparent 75%
     );
-    filter: blur(30px);
+    filter: blur(40px);
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
+    animation: cosmic-aura 7s ease-in-out infinite alternate;
   }
 
-  /* Efek aura yang lebih kompleks hanya diaktifkan pada desktop */
-  @media (min-width: 768px) {
-    .model-aura-glow {
-      width: 380px;
-      height: 380px;
-      filter: blur(50px);
-      animation: aura-pulse 6s ease-in-out infinite alternate;
-    }
-  }
-
-  @keyframes aura-pulse {
-    0% {
-      transform: translate(-50%, -50%) scale(0.92);
-      opacity: 0.7;
-    }
-    100% {
-      transform: translate(-50%, -50%) scale(1.12);
-      opacity: 1;
-    }
+  @keyframes cosmic-aura {
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.95; }
   }
 
   .model-canvas {
@@ -113,41 +77,6 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     cursor: grabbing;
   }
 
-  .model-loader {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    background: transparent;
-    transition: opacity 0.5s ease;
-    z-index: 10;
-  }
-
-  .model-loader.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .loader-ring {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(147, 51, 234, 0.18);
-    border-top-color: #9333ea;
-    border-right-color: #f59e0b;
-    border-radius: 50%;
-    animation: spin 0.85s linear infinite;
-  }
-
-  .loader-text {
-    font-size: 13px;
-    font-weight: 600;
-    color: #64748b;
-    letter-spacing: 0.04em;
-  }
-
   .model-hint {
     position: absolute;
     bottom: 8px;
@@ -155,150 +84,409 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-size: 11px;
-    font-weight: 600;
-    color: rgba(100, 116, 139, 0.8);
-    background: rgba(255, 255, 255, 0.85);
-    padding: 6px 14px;
+    font-weight: 700;
+    color: rgba(226, 232, 240, 0.85);
+    background: rgba(15, 12, 38, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 6px 16px;
     border-radius: 9999px;
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    letter-spacing: 0.02em;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(168, 85, 247, 0.15);
+    letter-spacing: 0.03em;
     white-space: nowrap;
     pointer-events: none;
-    transition: opacity 0.5s ease;
     z-index: 5;
+    transition: opacity 0.5s ease;
   }
 
-  @media (min-width: 768px) {
-    .model-hint {
-      backdrop-filter: blur(8px);
-    }
+  .hint-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 8px #38bdf8;
+    animation: pulse 1.8s infinite;
   }
 
-  .model-hint.fade-out {
-    opacity: 0;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
   }
 </style>
 
 <script>
   import * as THREE from "three";
-  import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-  function initAllViewers() {
+  function initAstronautMonkeyViewers() {
     const containers = document.querySelectorAll(".model-container");
 
     containers.forEach((container) => {
       if (!(container instanceof HTMLElement)) return;
-      if (container.dataset.initialized === "true") return;
-      if (container.clientWidth === 0 || container.clientHeight === 0) return;
-
-      container.dataset.initialized = "true";
+      if ((container as any)._sceneActive) return;
+      (container as any)._sceneActive = true;
 
       const canvas = container.querySelector(".model-canvas");
-      const loader = container.querySelector(".model-loader");
-      const hint = container.querySelector(".model-hint");
+      if (!(canvas instanceof HTMLCanvasElement)) return;
 
-      if (!canvas || !(canvas instanceof HTMLCanvasElement)) return;
-      const modelPath = container.dataset.modelPath || "/model.glb";
-      const txt = loader?.querySelector(".loader-text");
-
-      // Deteksi Tipe Perangkat
       const isMobile = window.innerWidth < 768;
 
-      // ── Renderer Optimization ──────────────────────────────────────────────
+      // ── Renderer ───────────────────────────────────────────────────────────
       const renderer = new THREE.WebGLRenderer({
         canvas,
-        antialias: !isMobile, // Matikan antialias di HP
         alpha: true,
+        antialias: true,
         powerPreference: "high-performance",
       });
-
-      // Batasi DPR max 1.2 di mobile, max 1.5 di desktop
-      renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, isMobile ? 1.2 : 1.5),
-      );
-
-      // Shadow Map dimatikan total di mobile
-      renderer.shadowMap.enabled = !isMobile;
-      if (!isMobile) {
-        renderer.shadowMap.type = THREE.PCFShadowMap;
-      }
-
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(container.clientWidth, container.clientHeight);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.25;
-      renderer.setClearColor(0x000000, 0);
 
-      // ── Scene & Camera ─────────────────────────────────────────────────────
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-      camera.position.set(0, 0.4, 3.2);
 
-      function resize() {
-        const w = container.clientWidth || 320;
-        const h = container.clientHeight || 520;
-        renderer.setSize(w, h, false);
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-      }
+      const camera = new THREE.PerspectiveCamera(
+        42,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        100
+      );
+      camera.position.set(0, 0.2, 5.2);
 
-      // ── Lighting Optimization ──────────────────────────────────────────────
-      scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+      // ── Space Lighting ─────────────────────────────────────────────────────
+      const ambientLight = new THREE.AmbientLight(0xd8b4fe, 0.85); // soft cosmic violet
+      scene.add(ambientLight);
 
-      const keyLight = new THREE.DirectionalLight(0xfff6ea, 2.2);
-      keyLight.position.set(2.5, 3.5, 3);
-      if (!isMobile) keyLight.castShadow = true;
-      scene.add(keyLight);
+      const mainLight = new THREE.DirectionalLight(0xffffff, 2.0); // key star light
+      mainLight.position.set(4, 5, 4);
+      scene.add(mainLight);
 
-      const fillLight = new THREE.DirectionalLight(0x93c5fd, 1.0);
-      fillLight.position.set(-2.5, 1.8, 1.5);
-      scene.add(fillLight);
+      const cyanRim = new THREE.DirectionalLight(0x06b6d4, 2.2); // cyan space reflection
+      cyanRim.position.set(-4, 2, -2);
+      scene.add(cyanRim);
 
-      // Hanya tambahkan Rim Light tambahan pada Desktop
-      if (!isMobile) {
-        const purpleRim = new THREE.DirectionalLight(0xa855f7, 1.5);
-        purpleRim.position.set(-3, 3, -2.5);
-        scene.add(purpleRim);
-      }
+      const purpleRim = new THREE.DirectionalLight(0xa855f7, 2.5); // purple nebula back rim
+      purpleRim.position.set(0, -3, -3);
+      scene.add(purpleRim);
+
+      // ── Master Group for Astronaut Monkey & System ─────────────────────────
+      const monkeySystem = new THREE.Group();
+      scene.add(monkeySystem);
+
+      // ───────────────────────────────────────────────────────────────────────
+      //  BUILDING PROCEDURAL 3D ASTRONAUT MONKEY
+      // ───────────────────────────────────────────────────────────────────────
+      const astronaut = new THREE.Group();
+
+      // Materials
+      const furMaterial = new THREE.MeshStandardMaterial({
+        color: 0x6b3e26, // rich warm monkey brown
+        roughness: 0.8,
+        metalness: 0.1,
+      });
+
+      const faceMaterial = new THREE.MeshStandardMaterial({
+        color: 0xfbd2a4, // peach/cream muzzle
+        roughness: 0.6,
+      });
+
+      const eyeMaterial = new THREE.MeshStandardMaterial({
+        color: 0x050505,
+        roughness: 0.1,
+        metalness: 0.9,
+      });
+
+      const eyeHighlightMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+      });
+
+      const suitMaterial = new THREE.MeshStandardMaterial({
+        color: 0xf8fafc, // crisp spacesuit white
+        roughness: 0.35,
+        metalness: 0.25,
+      });
+
+      const goldVisorCollarMat = new THREE.MeshStandardMaterial({
+        color: 0xf59e0b, // amber gold collar
+        roughness: 0.2,
+        metalness: 0.85,
+      });
+
+      const glassMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xbae6fd,
+        transmission: 0.85,
+        opacity: 0.38,
+        transparent: true,
+        roughness: 0.08,
+        ior: 1.45,
+        reflectivity: 0.9,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
+      });
+
+      const cyanEmissiveMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+      });
+
+      const purpleEmissiveMat = new THREE.MeshBasicMaterial({
+        color: 0xc084fc,
+      });
+
+      // 1. Monkey Head & Face
+      const headGroup = new THREE.Group();
+      headGroup.position.set(0, 0.45, 0);
+
+      // Head Base Sphere
+      const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.52, 28, 28), furMaterial);
+      headGroup.add(headMesh);
+
+      // Muzzle / Snout (Cream face)
+      const snout = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 24), faceMaterial);
+      snout.scale.set(1.15, 0.85, 0.9);
+      snout.position.set(0, -0.1, 0.3);
+      headGroup.add(snout);
+
+      // Nose tip
+      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 12), new THREE.MeshBasicMaterial({ color: 0x27170e }));
+      nose.position.set(0, -0.02, 0.58);
+      headGroup.add(nose);
+
+      // Eyes (left & right)
+      [-0.17, 0.17].forEach((x) => {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 16), eyeMaterial);
+        eye.position.set(x, 0.07, 0.46);
+        headGroup.add(eye);
+
+        // Catchlight (white highlight)
+        const shine = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), eyeHighlightMat);
+        shine.position.set(x + 0.025, 0.095, 0.53);
+        headGroup.add(shine);
+      });
+
+      // Ears (left & right)
+      [-0.52, 0.52].forEach((x) => {
+        const ear = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 16), furMaterial);
+        ear.scale.set(0.4, 0.9, 0.9);
+        ear.position.set(x, 0.05, 0);
+        headGroup.add(ear);
+
+        const innerEar = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), faceMaterial);
+        innerEar.scale.set(0.3, 0.7, 0.7);
+        innerEar.position.set(x > 0 ? x - 0.03 : x + 0.03, 0.05, 0.05);
+        headGroup.add(innerEar);
+      });
+
+      // 2. Astronaut Helmet (Glass Bubble Dome)
+      const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), glassMaterial);
+      helmet.position.set(0, 0.45, 0);
+      astronaut.add(helmet);
+
+      // Helmet Base Rim Collar (Gold)
+      const helmetCollar = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.08, 16, 32), goldVisorCollarMat);
+      helmetCollar.rotation.x = Math.PI / 2;
+      helmetCollar.position.set(0, -0.22 + 0.45, 0);
+      astronaut.add(helmetCollar);
+
+      // Astronaut Antenna on Helmet
+      const antennaStem = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.28, 8), goldVisorCollarMat);
+      antennaStem.position.set(0.25, 1.25, 0);
+      antennaStem.rotation.z = -0.25;
+      astronaut.add(antennaStem);
+
+      const antennaTip = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 12), cyanEmissiveMat);
+      antennaTip.position.set(0.31, 1.38, 0);
+      astronaut.add(antennaTip);
+
+      astronaut.add(headGroup);
+
+      // 3. Astronaut Spacesuit (Body)
+      const suitBody = new THREE.Group();
+      suitBody.position.set(0, -0.42, 0);
+
+      // Torso
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.44, 0.85, 24), suitMaterial);
+      suitBody.add(torso);
+
+      // Chest Life Support Control Panel
+      const chestPanel = new THREE.Mesh(
+        new THREE.BoxGeometry(0.38, 0.26, 0.12),
+        new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2, metalness: 0.8 })
+      );
+      chestPanel.position.set(0, 0.12, 0.5);
+      suitBody.add(chestPanel);
+
+      // LED Indicators on chest panel
+      const led1 = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), cyanEmissiveMat);
+      led1.position.set(-0.11, 0.15, 0.57);
+      suitBody.add(led1);
+
+      const led2 = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), new THREE.MeshBasicMaterial({ color: 0x10b981 }));
+      led2.position.set(0, 0.15, 0.57);
+      suitBody.add(led2);
+
+      const led3 = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), new THREE.MeshBasicMaterial({ color: 0xf59e0b }));
+      led3.position.set(0.11, 0.15, 0.57);
+      suitBody.add(led3);
+
+      // 4. Arms & Gloves in Zero-G
+      // Left Arm (waving softly)
+      const leftArm = new THREE.Group();
+      leftArm.position.set(-0.55, 0.15, 0);
+      const leftUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.12, 0.45, 16), suitMaterial);
+      leftUpperArm.position.set(-0.18, 0.12, 0.1);
+      leftUpperArm.rotation.z = 0.65;
+      leftArm.add(leftUpperArm);
+
+      const leftGlove = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 16), goldVisorCollarMat);
+      leftGlove.position.set(-0.35, 0.32, 0.18);
+      leftArm.add(leftGlove);
+      suitBody.add(leftArm);
+
+      // Right Arm (resting/balancing)
+      const rightArm = new THREE.Group();
+      rightArm.position.set(0.55, 0.15, 0);
+      const rightUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.12, 0.45, 16), suitMaterial);
+      rightUpperArm.position.set(0.18, -0.1, 0.1);
+      rightUpperArm.rotation.z = -0.55;
+      rightArm.add(rightUpperArm);
+
+      const rightGlove = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 16), goldVisorCollarMat);
+      rightGlove.position.set(0.32, -0.3, 0.18);
+      rightArm.add(rightGlove);
+      suitBody.add(rightArm);
+
+      // 5. Jetpack on Back (with glowing ion thrusters)
+      const jetpack = new THREE.Group();
+      jetpack.position.set(0, 0.05, -0.48);
+
+      const packBody = new THREE.Mesh(
+        new THREE.BoxGeometry(0.58, 0.65, 0.28),
+        new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.3, metalness: 0.7 })
+      );
+      jetpack.add(packBody);
+
+      // Thruster nozzles (left & right)
+      [-0.18, 0.18].forEach((x) => {
+        const nozzle = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.08, 0.12, 0.22, 16),
+          goldVisorCollarMat
+        );
+        nozzle.position.set(x, -0.38, 0);
+        jetpack.add(nozzle);
+
+        // Glowing Ion Exhaust Rings
+        const exhaust = new THREE.Mesh(
+          new THREE.TorusGeometry(0.09, 0.035, 12, 24),
+          cyanEmissiveMat
+        );
+        exhaust.rotation.x = Math.PI / 2;
+        exhaust.position.set(x, -0.48, 0);
+        jetpack.add(exhaust);
+      });
+
+      suitBody.add(jetpack);
+      astronaut.add(suitBody);
+
+      // Floating Space Cord / Tail
+      const curve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0, -0.8, -0.2),
+        new THREE.Vector3(-0.25, -1.1, -0.4),
+        new THREE.Vector3(0.1, -1.35, -0.6),
+        new THREE.Vector3(-0.15, -1.6, -0.75),
+      ]);
+      const cordMesh = new THREE.Mesh(
+        new THREE.TubeGeometry(curve, 20, 0.04, 8, false),
+        goldVisorCollarMat
+      );
+      astronaut.add(cordMesh);
+
+      // Add astronaut to system
+      monkeySystem.add(astronaut);
+
+      // ───────────────────────────────────────────────────────────────────────
+      //  MINI SOLAR SYSTEM (PLANETS ORBITING ASTRONAUT MONKEY)
+      // ───────────────────────────────────────────────────────────────────────
+      // 1. Saturn-like Ringed Planet
+      const saturnOrbit = new THREE.Group();
+      const saturnPlanet = new THREE.Mesh(
+        new THREE.SphereGeometry(0.38, 24, 24),
+        new THREE.MeshStandardMaterial({
+          color: 0xf59e0b, // amber
+          roughness: 0.5,
+          metalness: 0.1,
+        })
+      );
+      // Saturn Ring
+      const ringGeo = new THREE.RingGeometry(0.5, 0.82, 32);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xfde047,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.75,
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = Math.PI / 2.3;
+      saturnPlanet.add(ring);
+
+      saturnPlanet.position.set(2.4, 0.7, -0.6);
+      saturnOrbit.add(saturnPlanet);
+      scene.add(saturnOrbit);
+
+      // 2. Cyan Cyber Gas Planet
+      const cyanPlanetOrbit = new THREE.Group();
+      const cyanPlanet = new THREE.Mesh(
+        new THREE.SphereGeometry(0.24, 24, 24),
+        new THREE.MeshStandardMaterial({
+          color: 0x06b6d4, // glowing cyan
+          roughness: 0.3,
+          metalness: 0.4,
+          emissive: 0x0891b2,
+          emissiveIntensity: 0.3,
+        })
+      );
+      cyanPlanet.position.set(-2.2, -0.5, 0.4);
+      cyanPlanetOrbit.add(cyanPlanet);
+      scene.add(cyanPlanetOrbit);
+
+      // 3. Tiny Violet Moon
+      const moonOrbit = new THREE.Group();
+      const violetMoon = new THREE.Mesh(
+        new THREE.SphereGeometry(0.12, 16, 16),
+        new THREE.MeshStandardMaterial({
+          color: 0xc084fc, // purple
+          roughness: 0.7,
+        })
+      );
+      violetMoon.position.set(1.4, -1.2, 0.8);
+      moonOrbit.add(violetMoon);
+      scene.add(moonOrbit);
 
       // ── OrbitControls ──────────────────────────────────────────────────────
       const controls = new OrbitControls(camera, canvas);
       controls.enableDamping = true;
       controls.dampingFactor = 0.08;
-      controls.minDistance = 1.5;
-      controls.maxDistance = 5.5;
-      controls.maxPolarAngle = Math.PI * 0.75;
-      controls.minPolarAngle = Math.PI * 0.25;
+      controls.minDistance = 2.5;
+      controls.maxDistance = 7.0;
       controls.enablePan = false;
       controls.enableZoom = false;
 
-      let userInteracting = false;
-      canvas.addEventListener("pointerdown", () => {
-        userInteracting = true;
-      });
+      let isInteracting = false;
+      canvas.addEventListener("pointerdown", () => { isInteracting = true; });
       window.addEventListener("pointerup", () => {
-        setTimeout(() => {
-          userInteracting = false;
-        }, 800);
+        setTimeout(() => { isInteracting = false; }, 800);
       });
 
-      // ── Mouse Tracking (Hanya Desktop) ─────────────────────────────────────
-      let mouseX = 0,
-        mouseY = 0;
-      let targetRotX = 0,
-        targetRotY = 0;
-      let modelGroup: THREE.Group | null = null;
-      let baseModelY = 0;
-      let baseScale = 1;
+      // Click to barrel roll / spin!
+      let spinVelocity = 0;
+      canvas.addEventListener("click", () => {
+        spinVelocity = 0.28;
+      });
 
+      // Mouse Looking
+      let mouseX = 0, mouseY = 0;
       if (!isMobile) {
         window.addEventListener("mousemove", (e) => {
           mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -306,152 +494,78 @@ const { modelPath = "/model.glb", height = "560px" } = Astro.props;
         });
       }
 
-      // ── Load GLB ───────────────────────────────────────────────────────────
-      const gltfLoader = new GLTFLoader();
-      let mixer: THREE.AnimationMixer | null = null;
+      // ── Resize ─────────────────────────────────────────────────────────────
+      function onResize() {
+        if (!container) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      }
+      window.addEventListener("resize", onResize);
 
-      gltfLoader.load(
-        modelPath,
-        (gltf) => {
-          const model = gltf.scene;
-
-          const box = new THREE.Box3().setFromObject(model);
-          const size = box.getSize(new THREE.Vector3());
-          const center = box.getCenter(new THREE.Vector3());
-
-          const targetH = 2.4;
-          baseScale = size.y > 0 ? targetH / size.y : 1;
-          model.scale.setScalar(baseScale);
-
-          box.setFromObject(model);
-          box.getCenter(center);
-          model.position.x = -center.x;
-          model.position.z = -center.z;
-          model.position.y = -center.y - size.y * baseScale * 0.16;
-          baseModelY = model.position.y;
-
-          if (!isMobile) {
-            model.traverse((child) => {
-              if ((child as THREE.Mesh).isMesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-              }
-            });
-          }
-
-          modelGroup = new THREE.Group();
-          modelGroup.add(model);
-          scene.add(modelGroup);
-
-          camera.position.set(0, 0.35, 3.1);
-          controls.target.set(0, 0.1, 0);
-          controls.update();
-
-          if (gltf.animations && gltf.animations.length > 0) {
-            mixer = new THREE.AnimationMixer(model);
-            gltf.animations.forEach((clip) => mixer?.clipAction(clip).play());
-          }
-
-          if (loader) {
-            loader.classList.add("hidden");
-            setTimeout(() => {
-              loader.style.display = "none";
-            }, 600);
-          }
-
-          if (hint) {
-            setTimeout(() => hint.classList.add("fade-out"), 5000);
-          }
-        },
-        (progress) => {
-          if (txt) {
-            if (progress.total > 0) {
-              const pct = Math.round((progress.loaded / progress.total) * 100);
-              txt.textContent = `Loading 3D Model... ${pct}%`;
-            } else {
-              const mb = (progress.loaded / (1024 * 1024)).toFixed(1);
-              txt.textContent = `Loading 3D Model... ${mb}MB`;
-            }
-          }
-        },
-        (err) => {
-          console.error("GLB load error:", err);
-          if (txt) txt.textContent = "Gagal memuat model 3D";
-        },
-      );
-
-      // ── Resize Observer ────────────────────────────────────────────────────
-      resize();
-      const ro = new ResizeObserver(resize);
-      ro.observe(container);
-
-      // ── Intersection Observer (Paus Render jika tidak terlihat di layar) ──
+      // ── Render Loop ─────────────────────────────────────────────────────────
       let isVisible = true;
       const observer = new IntersectionObserver(
         (entries) => {
-          entries.forEach((entry) => {
-            isVisible = entry.isIntersecting;
-          });
+          entries.forEach((e) => { isVisible = e.isIntersecting; });
         },
-        { threshold: 0.1 },
+        { threshold: 0.1 }
       );
       observer.observe(container);
 
-      // ── FPS Capping & Render Loop ──────────────────────────────────────────
-      const targetFPS = isMobile ? 30 : 60; // Kunci ke 30 FPS di Mobile
-      const fpsInterval = 1000 / targetFPS;
-      let then = performance.now();
       let prevTime = performance.now();
 
-      function animate(currentTime: number) {
+      function animate() {
         requestAnimationFrame(animate);
-
-        // 1. Jangan jalankan render jika kanvas di luar viewport HP
         if (!isVisible) return;
 
-        // 2. Batasi FPS khusus di mobile agar GPU dingin
-        const elapsed = currentTime - then;
-        if (elapsed < fpsInterval) return;
-        then = currentTime - (elapsed % fpsInterval);
+        const now = performance.now();
+        const delta = (now - prevTime) * 0.001;
+        prevTime = now;
+        const time = now * 0.001;
 
-        const delta = (currentTime - prevTime) * 0.001;
-        prevTime = currentTime;
+        // Zero-G Gentle Floating
+        const floatY = Math.sin(time * 1.5) * 0.12;
+        const swayZ = Math.sin(time * 1.0) * 0.04;
+        astronaut.position.y = floatY;
+        astronaut.rotation.z = swayZ;
 
-        if (mixer) mixer.update(delta);
+        // Waving Left Arm
+        leftArm.rotation.z = 0.65 + Math.sin(time * 3.5) * 0.18;
 
-        if (modelGroup) {
-          // Animasi melayang & kalkulasi gerak mouse hanya dijalankan pada Desktop
-          if (!isMobile) {
-            const floatOffset = Math.sin(currentTime * 0.001 * 1.6) * 0.045;
-            const breathScale = 1 + Math.sin(currentTime * 0.001 * 1.2) * 0.006;
-            modelGroup.position.y = baseModelY + floatOffset;
-            modelGroup.scale.set(
-              baseScale * breathScale,
-              baseScale * breathScale,
-              baseScale * breathScale,
-            );
-
-            if (!userInteracting) {
-              targetRotY = mouseX * 0.45;
-              targetRotX = mouseY * -0.22;
-              modelGroup.rotation.y +=
-                (targetRotY - modelGroup.rotation.y) * 0.055;
-              modelGroup.rotation.x +=
-                (targetRotX - modelGroup.rotation.x) * 0.055;
-            }
-          }
+        // Interactive Click Spin (Barrel Roll)
+        if (spinVelocity > 0.001) {
+          astronaut.rotation.y += spinVelocity;
+          spinVelocity *= 0.94; // damping
+        } else if (!isInteracting) {
+          // Smooth Mouse Follow Yaw & Pitch
+          const targetY = mouseX * 0.45;
+          const targetX = mouseY * -0.25;
+          astronaut.rotation.y += (targetY - astronaut.rotation.y) * 0.06;
+          astronaut.rotation.x += (targetX - astronaut.rotation.x) * 0.06;
         }
+
+        // Orbiting Mini Solar System
+        saturnOrbit.rotation.y += 0.008;
+        saturnPlanet.rotation.y += 0.015;
+
+        cyanPlanetOrbit.rotation.y -= 0.012;
+        cyanPlanet.rotation.y += 0.02;
+
+        moonOrbit.rotation.y += 0.018;
 
         controls.update();
         renderer.render(scene, camera);
       }
 
-      requestAnimationFrame(animate);
+      animate();
     });
   }
 
-  window.addEventListener("DOMContentLoaded", initAllViewers);
-  window.addEventListener("resize", initAllViewers);
-  document.addEventListener("astro:page-load", initAllViewers);
-  initAllViewers();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAstronautMonkeyViewers);
+  } else {
+    initAstronautMonkeyViewers();
+  }
+  document.addEventListener("astro:page-load", initAstronautMonkeyViewers);
 </script>

@@ -83,7 +83,7 @@ const featureList = [
     <div class="flex items-center justify-between">
       <a
         href="/"
-        class="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-slate-500 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-full border border-slate-200/80 transition-all duration-200 group"
+        class="cosmic-btn-secondary inline-flex items-center gap-2 text-xs md:text-sm font-bold px-4 py-2 rounded-full transition-all duration-200 group"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
           <polyline points="15 18 9 12 15 6"></polyline>
@@ -91,19 +91,19 @@ const featureList = [
         <span>Kembali ke Portofolio</span>
       </a>
 
-      <div class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
-        <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+      <div class="cosmic-badge inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
         <span>Portal Informasi Fitur</span>
       </div>
     </div>
 
     <!-- Hero Header -->
     <header class="text-center space-y-4 max-w-3xl mx-auto">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-        Selamat Datang di <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-amber-500 bg-clip-text text-transparent">Layanan Web Fitur</span>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+        Selamat Datang di <span class="bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-300 bg-clip-text text-transparent cosmic-glow-text">Layanan Web Fitur</span>
       </h1>
 
-      <p class="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed">
+      <p class="text-sm sm:text-base md:text-lg text-slate-300 leading-relaxed">
         Halaman ini dibuat agar kamu mengetahui informasi lengkap mengenai fitur apa saja yang tersedia, jadwal jam aktif server, serta status pengembangannya sebelum langsung membuka aplikasi.
       </p>
     </header>
@@ -111,39 +111,39 @@ const featureList = [
     <!-- DAFTAR FITUR YANG TERSEDIA (DITARUH DI PALING ATAS UNTUK MEMPERMUDAH PENGGUNA) -->
     <section class="space-y-6 pt-2">
       <div class="text-center max-w-xl mx-auto space-y-2">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold">
+        <div class="cosmic-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold">
           <span>⚡</span>
           <span>PILIH ALAT YANG INGIN DIGUNAKAN</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Alat Bantu & Fitur Online
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          Alat Bantu &amp; Fitur Online
         </h2>
-        <p class="text-xs sm:text-sm text-slate-500">
+        <p class="text-xs sm:text-sm text-slate-400">
           Klik tombol pada kartu di bawah untuk langsung menggunakan alat:
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
         {featureList.map((fitur) => (
-          <div class={`bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl ${fitur.borderHover} transition-all duration-300 flex flex-col justify-between relative overflow-hidden group`}>
+          <div class={`cosmic-card rounded-3xl p-6 sm:p-7 hover:border-purple-400/80 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group`}>
             <!-- Top Gradient Accent -->
-            <div class={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${fitur.gradient}`}></div>
+            <div class={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-indigo-500 opacity-80`}></div>
 
             <div class="space-y-4">
               <!-- Top bar icon & badge -->
               <div class="flex items-center justify-between">
-                <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100 group-hover:scale-110 transition-transform" set:html={fitur.icon} />
-                <span class={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border ${fitur.badgeColor}`}>
+                <div class="p-3 rounded-2xl bg-purple-950/60 border border-purple-500/40 group-hover:scale-110 transition-transform" set:html={fitur.icon} />
+                <span class={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-purple-500/30 bg-purple-950/60 text-purple-300`}>
                   {fitur.badge}
                 </span>
               </div>
 
               <!-- Title & Description -->
               <div class="space-y-2">
-                <h3 class="text-lg font-black text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <h3 class="text-lg font-black text-white group-hover:text-cyan-300 transition-colors">
                   {fitur.title}
                 </h3>
-                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   {fitur.description}
                 </p>
               </div>
@@ -151,7 +151,7 @@ const featureList = [
               <!-- Key Highlights / Tags -->
               <div class="flex flex-wrap gap-1.5 pt-2">
                 {fitur.highlights.map((tag) => (
-                  <span class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">
+                  <span class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-purple-950/50 border border-purple-500/20 text-purple-300">
                     ✓ {tag}
                   </span>
                 ))}
@@ -159,13 +159,13 @@ const featureList = [
             </div>
 
             <!-- Action Button Langsung di Dalam Kartu -->
-            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span class="text-xs font-semibold text-slate-500">Aplikasi Siap Digunakan</span>
+            <div class="mt-6 pt-4 border-t border-purple-500/20 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-400">Aplikasi Siap Digunakan</span>
               <a
                 href={fitur.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-600/20 hover:shadow-lg transition-all"
+                class="cosmic-btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold"
               >
                 <span>Buka Alat</span>
                 <span class="group-hover:translate-x-0.5 transition-transform">→</span>
@@ -249,16 +249,16 @@ const featureList = [
     </section>
 
     <!-- PANDUAN PENGGUNAAN & KONTEN EDUKASI FITUR -->
-    <section class="space-y-8 bg-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-200/90 shadow-sm">
-      <div class="space-y-3 border-b border-slate-100 pb-6">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold">
+    <section class="space-y-8 cosmic-card rounded-3xl p-6 sm:p-8 md:p-10">
+      <div class="space-y-3 border-b border-purple-500/20 pb-6">
+        <div class="cosmic-badge inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold">
           <span>📖</span>
-          <span>Panduan Penggunaan & Informasi Lengkap</span>
+          <span>Panduan Penggunaan &amp; Informasi Lengkap</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
-          Cara Menggunakan Layanan & Keunggulan Fitur
+        <h2 class="text-2xl sm:text-3xl font-black text-white">
+          Cara Menggunakan Layanan &amp; Keunggulan Fitur
         </h2>
-        <p class="text-sm text-slate-600 leading-relaxed max-w-3xl">
+        <p class="text-sm text-slate-300 leading-relaxed max-w-3xl">
           Pelajari bagaimana setiap utilitas di web ini bekerja, panduan langkah demi langkah, serta komitmen kami terhadap privasi dan keamanan data Anda.
         </p>
       </div>
@@ -266,62 +266,62 @@ const featureList = [
       <!-- Artikel Fitur 1: TikTok Downloader -->
       <article class="space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-black">
+          <div class="w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-500/40 text-cyan-400 flex items-center justify-center font-black">
             01
           </div>
-          <h3 class="text-xl font-bold text-slate-900">
+          <h3 class="text-xl font-bold text-white">
             Panduan Mengunduh Video TikTok Tanpa Watermark
           </h3>
         </div>
-        <p class="text-sm text-slate-600 leading-relaxed">
+        <p class="text-sm text-slate-300 leading-relaxed">
           TikTok Downloader adalah utilitas berbasis web yang dirancang khusus untuk membantu konten kreator, pelajar, dan penikmat konten dalam menyimpan video favorit untuk keperluan tontonan offline, analisis konten, atau referensi kreatif.
         </p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-            <span class="text-xs font-black text-indigo-600 font-mono">LANGKAH 1</span>
-            <h4 class="text-sm font-bold text-slate-900">Salin Link Video</h4>
-            <p class="text-xs text-slate-500">Buka aplikasi TikTok, pilih video yang diinginkan, klik tombol Bagikan (Share), lalu tekan opsi Salin Tautan (Copy Link).</p>
+          <div class="p-4 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-1.5">
+            <span class="text-xs font-black text-cyan-400 font-mono">LANGKAH 1</span>
+            <h4 class="text-sm font-bold text-white">Salin Link Video</h4>
+            <p class="text-xs text-slate-300">Buka aplikasi TikTok, pilih video yang diinginkan, klik tombol Bagikan (Share), lalu tekan opsi Salin Tautan (Copy Link).</p>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-            <span class="text-xs font-black text-indigo-600 font-mono">LANGKAH 2</span>
-            <h4 class="text-sm font-bold text-slate-900">Tempel di Kolom Input</h4>
-            <p class="text-xs text-slate-500">Buka aplikasi web fitur kami, tempelkan tautan yang sudah Anda salin ke kolom input yang tersedia di halaman utama.</p>
+          <div class="p-4 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-1.5">
+            <span class="text-xs font-black text-cyan-400 font-mono">LANGKAH 2</span>
+            <h4 class="text-sm font-bold text-white">Tempel di Kolom Input</h4>
+            <p class="text-xs text-slate-300">Buka aplikasi web fitur kami, tempelkan tautan yang sudah Anda salin ke kolom input yang tersedia di halaman utama.</p>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-            <span class="text-xs font-black text-indigo-600 font-mono">LANGKAH 3</span>
-            <h4 class="text-sm font-bold text-slate-900">Simpan Video HD</h4>
-            <p class="text-xs text-slate-500">Klik tombol Proses / Unduh. Video berkualitas tinggi tanpa watermark akan langsung terunduh ke penyimpanan perangkat Anda.</p>
+          <div class="p-4 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-1.5">
+            <span class="text-xs font-black text-cyan-400 font-mono">LANGKAH 3</span>
+            <h4 class="text-sm font-bold text-white">Simpan Video HD</h4>
+            <p class="text-xs text-slate-300">Klik tombol Proses / Unduh. Video berkualitas tinggi tanpa watermark akan langsung terunduh ke penyimpanan perangkat Anda.</p>
           </div>
         </div>
       </article>
 
       <!-- Artikel Fitur 2: Web & Media Converter -->
-      <article class="space-y-4 pt-6 border-t border-slate-100">
+      <article class="space-y-4 pt-6 border-t border-purple-500/20">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black">
+          <div class="w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-500/40 text-cyan-400 flex items-center justify-center font-black">
             02
           </div>
-          <h3 class="text-xl font-bold text-slate-900">
-            Panduan Konversi Berkas & Media Serbaguna
+          <h3 class="text-xl font-bold text-white">
+            Panduan Konversi Berkas &amp; Media Serbaguna
           </h3>
         </div>
-        <p class="text-sm text-slate-600 leading-relaxed">
+        <p class="text-sm text-slate-300 leading-relaxed">
           Mengubah format dokumen atau media sering kali membutuhkan software rumit berukuran besar. Web Converter kami memberikan solusi instan langsung dari browser tanpa perlu menginstal aplikasi tambahan di komputer atau ponsel pintar Anda.
         </p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-            <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <span class="text-emerald-500">✓</span> Kompatibilitas Ragam Format
+          <div class="p-4 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-2">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="text-cyan-400">✓</span> Kompatibilitas Ragam Format
             </h4>
-            <p class="text-xs text-slate-500 leading-relaxed">
+            <p class="text-xs text-slate-300 leading-relaxed">
               Mendukung berbagai ekstensi dokumen populer seperti PDF, DOCX, XLSX, format gambar seperti JPG, PNG, WebP, hingga berkas audio dan video ringan untuk kebutuhan harian.
             </p>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-            <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <span class="text-emerald-500">✓</span> Keamanan & Privasi Maksimal
+          <div class="p-4 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-2">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="text-cyan-400">✓</span> Keamanan &amp; Privasi Maksimal
             </h4>
-            <p class="text-xs text-slate-500 leading-relaxed">
+            <p class="text-xs text-slate-300 leading-relaxed">
               Semua proses konversi berkas dijalankan secara sementara di memori tanpa disimpan di server kami. Privasi dan kerahasiaan dokumen Anda terjamin sepenuhnya.
             </p>
           </div>
@@ -330,17 +330,17 @@ const featureList = [
     </section>
 
     <!-- BANNER IKLAN SPONSOR (ADSTERRA) -->
-    <section class="bg-gradient-to-b from-white to-slate-50/80 rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm relative overflow-hidden space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+    <section class="cosmic-card rounded-3xl p-6 sm:p-7 relative overflow-hidden space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-purple-500/20">
         <div class="space-y-1">
-          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-bold">
+          <div class="cosmic-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold">
             <span>🛡️</span>
             <span>KEMITRAAN SPONSOR</span>
           </div>
-          <h3 class="text-base sm:text-lg font-black text-slate-900">
+          <h3 class="text-base sm:text-lg font-black text-white">
             Dukungan Operasional Layanan
           </h3>
-          <p class="text-xs text-slate-500 max-w-xl leading-relaxed">
+          <p class="text-xs text-slate-300 max-w-xl leading-relaxed">
             Layanan ini disediakan gratis untuk publik dan didukung melalui penayangan iklan sponsor untuk pemeliharaan server.
           </p>
         </div>
@@ -361,41 +361,41 @@ const featureList = [
     </section>
 
     <!-- FAQ SECTION (PERTANYAAN YANG SERING DIAJUKAN) -->
-    <section class="space-y-6 bg-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-200/90 shadow-sm">
+    <section class="space-y-6 cosmic-card rounded-3xl p-6 sm:p-8 md:p-10">
       <div class="space-y-2">
-        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+        <h2 class="text-2xl sm:text-3xl font-black text-white">
           Pertanyaan yang Sering Diajukan (FAQ)
         </h2>
-        <p class="text-sm text-slate-500">
+        <p class="text-sm text-slate-300">
           Jawaban atas beberapa pertanyaan teknis dan operasional terkait situs web fitur:
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-          <h3 class="text-sm font-bold text-slate-900">Apakah layanan ini benar-benar gratis?</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
+        <div class="p-5 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-2">
+          <h3 class="text-sm font-bold text-white">Apakah layanan ini benar-benar gratis?</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
             Ya, seluruh utilitas yang ada di situs ini dapat digunakan secara cuma-cuma tanpa biaya pendaftaran maupun batasan jumlah unduhan atau konversi harian.
           </p>
         </div>
 
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-          <h3 class="text-sm font-bold text-slate-900">Mengapa video hasil unduhan tidak ada watermark?</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
+        <div class="p-5 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-2">
+          <h3 class="text-sm font-bold text-white">Mengapa video hasil unduhan tidak ada watermark?</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
             Sistem kami memproses stream video murni langsung dari sumber aslinya sebelum lapisan watermark disematkan oleh aplikasi, sehingga video yang Anda simpan jernih dan bersih.
           </p>
         </div>
 
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-          <h3 class="text-sm font-bold text-slate-900">Mengapa server hanya aktif pada jam tertentu?</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
+        <div class="p-5 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-2">
+          <h3 class="text-sm font-bold text-white">Mengapa server hanya aktif pada jam tertentu?</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
             Karena saat ini kami masih menggunakan server lokal pribadi via Cloudflare Tunnel untuk tahap uji coba awal. Jadwal di atas disusun agar server bekerja optimal saat jam produktif Anda.
           </p>
         </div>
 
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-          <h3 class="text-sm font-bold text-slate-900">Apakah file yang saya konversi disimpan di server?</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
+        <div class="p-5 rounded-2xl bg-[#0c0a24]/80 border border-purple-500/20 space-y-2">
+          <h3 class="text-sm font-bold text-white">Apakah file yang saya konversi disimpan di server?</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
             Tidak. Kami menerapkan kebijakan zero-storage retention di mana seluruh file dihapus seketika setelah proses konversi selesai dan berhasil diunduh ke browser Anda.
           </p>
         </div>
@@ -403,15 +403,15 @@ const featureList = [
     </section>
 
     <!-- TOMBOL AKSES UTAMA MENUJU WEB CLOUDFLARE -->
-    <section class="bg-gradient-to-r from-indigo-50 via-white to-amber-50 rounded-3xl p-8 sm:p-10 border border-indigo-100 text-center space-y-6 shadow-sm">
+    <section class="cosmic-card rounded-3xl p-8 sm:p-10 text-center space-y-6">
       <div class="max-w-2xl mx-auto space-y-3">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-600/20">
+        <div class="cosmic-badge inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold">
           <span>Siap Mencoba?</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white">
           Akses Aplikasi Web Fitur Sekarang
         </h2>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
           Klik tombol di bawah untuk langsung menuju aplikasi web. Jika server sedang dalam jadwal jam aktif di atas, aplikasi akan terbuka dan siap kamu gunakan.
         </p>
       </div>
@@ -422,9 +422,9 @@ const featureList = [
           href={EXTERNAL_WEB_URL}
           target="_blank"
           rel="noopener noreferrer"
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-sm font-black text-white bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:from-indigo-500 hover:to-purple-600 shadow-xl shadow-indigo-600/25 hover:shadow-2xl hover:shadow-indigo-600/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group"
+          class="w-full sm:w-auto cosmic-btn-primary inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-sm font-black group"
         >
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 group-hover:bg-white animate-pulse"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 group-hover:bg-white animate-pulse"></span>
           <span>BUKA WEB FITUR SEKARANG</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
@@ -436,7 +436,7 @@ const featureList = [
         <!-- Tombol Kembali ke Portofolio -->
         <a
           href="/"
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-sm font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-sm transition-all duration-200"
+          class="w-full sm:w-auto cosmic-btn-secondary inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-200"
         >
           Kembali ke Portofolio
         </a>

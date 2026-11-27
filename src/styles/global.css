@@ -237,9 +237,84 @@ html.lenis body {
   top: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, #6366f1, #a855f7, #f59e0b);
+  background: linear-gradient(90deg, #a855f7, #38bdf8, #f59e0b);
   transform-origin: left;
   transform: scaleX(0);
   z-index: 9998;
   pointer-events: none;
 }
+
+/* =============================================
+   DEEP SPACE COSMIC THEME & GLASSMORPHISM
+   ============================================= */
+
+:root {
+  --space-bg: #070714;
+  --space-surface: rgba(14, 12, 36, 0.75);
+  --space-border: rgba(168, 85, 247, 0.22);
+  --space-cyan: #38bdf8;
+  --space-purple: #a855f7;
+}
+
+body {
+  background-color: #070714;
+  color: #f1f5f9;
+}
+
+.cosmic-card {
+  background: rgba(15, 12, 38, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cosmic-card:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 15px 40px rgba(168, 85, 247, 0.25), 0 0 25px rgba(56, 189, 248, 0.15);
+  transform: translateY(-3px);
+}
+
+.cosmic-badge {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.2);
+}
+
+.cosmic-btn-primary {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #06b6d4 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
+}
+
+.cosmic-btn-primary:hover {
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.6), 0 6px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.cosmic-btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
+}
+
+.cosmic-btn-secondary:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px);
+}
+
+.cosmic-glow-text {
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 0 40px rgba(56, 189, 248, 0.3);
+}
+
