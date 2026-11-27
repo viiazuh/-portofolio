@@ -4,10 +4,12 @@
 
 <div id="space-bg-container" class="fixed inset-0 pointer-events-none -z-20 overflow-hidden bg-[#070714]">
   <canvas id="space-bg-canvas" class="w-full h-full block"></canvas>
-  <!-- Subtle Cosmic Nebula Clouds -->
-  <div class="nebula-blob nebula-1 absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] rounded-full bg-purple-700/15 blur-[140px] pointer-events-none"></div>
-  <div class="nebula-blob nebula-2 absolute top-[35%] right-[-15%] w-[50vw] h-[50vw] rounded-full bg-indigo-600/12 blur-[150px] pointer-events-none"></div>
-  <div class="nebula-blob nebula-3 absolute bottom-[-10%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-violet-600/15 blur-[160px] pointer-events-none"></div>
+  <!-- Beautiful Soft Cosmic Nebula Clouds (Lebih soft & harmonis di mobile dan desktop) -->
+  <div class="nebula-blob nebula-1 absolute top-[-10%] left-[-10%] w-[70vw] md:w-[55vw] h-[70vw] md:h-[55vw] rounded-full bg-purple-600/18 blur-[100px] md:blur-[140px] pointer-events-none"></div>
+  <div class="nebula-blob nebula-2 absolute top-[35%] right-[-15%] w-[65vw] md:w-[50vw] h-[65vw] md:h-[50vw] rounded-full bg-cyan-600/15 blur-[90px] md:blur-[150px] pointer-events-none"></div>
+  <div class="nebula-blob nebula-3 absolute bottom-[-10%] left-[10%] w-[75vw] md:w-[60vw] h-[75vw] md:h-[60vw] rounded-full bg-violet-600/18 blur-[100px] md:blur-[160px] pointer-events-none"></div>
+  <!-- Mobile-friendly ambient deep space core glow -->
+  <div class="absolute top-[20%] left-[50%] -translate-x-1/2 w-[80vw] h-[80vw] rounded-full bg-indigo-900/20 blur-[80px] pointer-events-none block md:hidden"></div>
 </div>
 
 <style>
@@ -109,10 +111,11 @@
     scene.add(starField);
 
     // ── 3D Spiral Galaxy (Bima Sakti / Andromeda Spiral Arms) ──────────────────
+    const isMobileDevice = window.innerWidth < 768;
     const galaxyParams = {
-      count: window.innerWidth < 768 ? 2000 : 4500,
-      size: 2.5,
-      radius: 420,
+      count: isMobileDevice ? 1200 : 4500, // Di mobile partikel lebih sedikit, lembut & elegan
+      size: isMobileDevice ? 1.8 : 2.5,
+      radius: isMobileDevice ? 320 : 420,
       branches: 3,
       spin: 1.2,
       randomness: 0.45,
@@ -167,7 +170,7 @@
       map: starTexture,
       vertexColors: true,
       transparent: true,
-      opacity: 0.75,
+      opacity: isMobileDevice ? 0.45 : 0.75, // Lebih redup di mobile agar tidak mengganggu keterbacaan teks
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });

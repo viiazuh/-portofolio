@@ -573,11 +573,6 @@ const certs = [
                 </span>
               </div>
 
-              <!-- Project number indicator -->
-              <div class="text-[60px] font-black text-purple-950/40 leading-none -mb-4 pointer-events-none select-none">
-                {String(idx + 1).padStart(2, '0')}
-              </div>
-
               <h3 class="text-xl font-black text-white mb-3 group-hover:text-cyan-300 transition-colors relative z-10">
                 {p.title}
               </h3>
@@ -813,22 +808,47 @@ const certs = [
       { opacity: 1, x: 0, filter: 'blur(0px)', duration: 1.1, ease: 'expo.out', delay: 0.5 }
     );
 
-    // Hero rocket monkey dynamic scroll flight animation:
-    // Saat di-scroll ke bawah, roket monyet terbang meluncur dinamis dengan pergeseran Y, sedikit tilt rotasi & scale
+    // ── 2. HERO & FULL-PAGE FLIGHT SCROLL ANIMATION ────────────────
     const heroModel = document.getElementById('hero-model-wrap');
     if (heroModel) {
-      gsap.to(heroModel, {
-        y: 220,
-        rotationZ: -6,
-        rotationX: 10,
-        scale: 1.08,
-        ease: 'power1.out',
+      // Timeline ScrollTrigger di mana Roket Monyet terbang dinamis melintasi section:
+      // Dari tengah Hero -> meluncur miring ke kanan saat lewat Experience -> miring menukik meluncur anggun
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: '#hero',
           start: 'top top',
-          end: 'bottom top',
-          scrub: 1.2,
-        },
+          endTrigger: '#contact',
+          end: 'bottom bottom',
+          scrub: 1.5,
+        }
+      });
+
+      // Phase 1: Dari Hero meluncur turun ke kanan atas section Experience
+      tl.to(heroModel, {
+        y: 450,
+        x: 60,
+        rotationZ: -8,
+        rotationX: 12,
+        scale: 0.9,
+        ease: 'power1.inOut',
+      })
+      // Phase 2: Meluncur menyeberang ke kiri section Projects
+      .to(heroModel, {
+        y: 950,
+        x: -50,
+        rotationZ: 10,
+        rotationX: -8,
+        scale: 0.85,
+        ease: 'power1.inOut',
+      })
+      // Phase 3: Kembali melaju ke bawah menuju Contact
+      .to(heroModel, {
+        y: 1500,
+        x: 0,
+        rotationZ: -4,
+        rotationX: 8,
+        scale: 0.95,
+        ease: 'power1.out',
       });
     }
 
