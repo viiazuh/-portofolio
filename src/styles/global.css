@@ -116,11 +116,8 @@ html.lenis body {
    ============================================= */
 
 .model-canvas {
-  cursor: grab;
-  touch-action: none;
-}
-.model-canvas:active {
-  cursor: grabbing;
+  cursor: pointer;
+  touch-action: pan-y;
 }
 
 .model-container,

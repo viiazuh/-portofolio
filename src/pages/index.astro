@@ -813,11 +813,11 @@ const certs = [
       { opacity: 1, x: 0, filter: 'blur(0px)', duration: 1.1, ease: 'expo.out', delay: 0.5 }
     );
 
-    // ── 2. HERO & FULL-PAGE FLIGHT SCROLL ANIMATION ────────────────
+    // ── 2. HERO & FULL-PAGE FLIGHT SCROLL ANIMATION (Desktop only, agar tidak menimpa teks di mobile) ──
     const heroModel = document.getElementById('hero-model-wrap');
-    if (heroModel) {
+    if (heroModel && window.innerWidth >= 1024) {
       // Three.js ModelViewer menangani rotasi 3D (bank/pitch/yaw);
-      // GSAP menggerakkan posisi kontainer secara halus mengikuti scroll.
+      // GSAP menggerakkan posisi kontainer secara halus mengikuti scroll di layar lebar.
       gsap.to(heroModel, {
         y: 260,
         x: 35,
